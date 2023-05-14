@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Schemio.Data.Core
 {
+    /// <summary>
+    /// Implement IQuery to fetch data using API or database.
+    /// </summary>
     public interface IQuery
     {
         List<IQuery> ChildQueries { get; set; }

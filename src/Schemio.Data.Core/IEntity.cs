@@ -1,7 +1,7 @@
 namespace Schemio.Data.Core
 {
     /// <summary>
-    /// Data entity required to be hydrated.
+    /// Implement Entity required to be hydrated (with data using query/transformer).
     /// </summary>
     public interface IEntity
     {

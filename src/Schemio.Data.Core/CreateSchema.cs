@@ -3,6 +3,25 @@ using System.Collections.Generic;
 
 namespace Schemio.Data.Core
 {
+    #region Helpers
+
+    public class CreateSchema
+    {
+        public static IMappings<T, IQueryResult> For<T>() where T : IEntity => new Mappings<T, IQueryResult> { Order = 1 };
+    }
+
+    public class For
+    {
+        public static ISchemaPaths Paths(params string[] paths) => new SchemaPaths { Paths = paths };
+    }
+
+    public class SchemaPaths : ISchemaPaths
+    {
+        public string[] Paths { get; set; }
+    }
+
+    #endregion Helpers
+
     public class Mappings<T, TD> :
         List<Mapping<T, TD>>,
         IMappings<T, TD>,
@@ -13,26 +32,26 @@ namespace Schemio.Data.Core
         public int Order { get; set; }
 
         /// <summary>
-        /// Map query and transformer for given xpath
+        /// Map query and transformer for given schema path
         /// </summary>
         /// <typeparam name="TQ">query type</typeparam>
         /// <typeparam name="TR">transformer type</typeparam>
-        /// <param name="xpaths">given xpaths</param>
+        /// <param name="paths">given schema paths</param>
         /// <returns></returns>
-        public IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths xpaths)
+        public IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths)
             where TQ : IQuery, new()
             where TR : ITransformer<TD, T>, new() =>
-            Map<TQ, TR>(xpaths, null);
+            Map<TQ, TR>(paths, null);
 
         /// <summary>
-        /// Map query and transformer for given xpath and with dependent query/transform mappings
+        /// Map query and transformer for given schema path and with dependent query/transform mappings
         /// </summary>
         /// <typeparam name="TQ">query type</typeparam>
         /// <typeparam name="TR">transformer type</typeparam>
-        /// <param name="xpaths">given xpaths</param>
+        /// <param name="paths">given schema paths</param>
         /// <param name="dependents">dependent mappings delegate</param>
         /// <returns></returns>
-        public IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths xpaths, Func<IWithDependents<T, TD>, IMap<T, TD>> dependents)
+        public IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths, Func<IWithDependents<T, TD>, IMap<T, TD>> dependents)
             where TQ : IQuery, new()
             where TR : ITransformer<TD, T>, new()
         {
@@ -41,7 +60,7 @@ namespace Schemio.Data.Core
                 Query = new TQ(),
                 Transformer = new TR(),
                 Order = Order,
-                Paths = xpaths,
+                SchemaPaths = paths,
             };
 
             if (dependents != null)
@@ -69,7 +88,7 @@ namespace Schemio.Data.Core
         where TD : IQueryResult
     {
         public int Order { get; set; }
-        public ISchemaPaths Paths { get; set; }
+        public ISchemaPaths SchemaPaths { get; set; }
         public IQuery Query { get; set; }
         public ITransformer<TD, T> Transformer { get; set; }
         public IQuery DependentOn { get; set; }
@@ -81,18 +100,18 @@ namespace Schemio.Data.Core
 
     public interface ISchemaPaths
     {
-        string[] XPath { get; set; }
+        string[] Paths { get; set; }
     }
 
     public interface IMap<T, TD>
         where T : IEntity
         where TD : IQueryResult
     {
-        IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths xpaths)
+        IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths)
             where TQ : IQuery, new()
             where TR : ITransformer<TD, T>, new();
 
-        IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths xpaths, Func<IWithDependents<T, TD>, IMap<T, TD>> dependents)
+        IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths, Func<IWithDependents<T, TD>, IMap<T, TD>> dependents)
             where TQ : IQuery, new()
             where TR : ITransformer<TD, T>, new();
     }
@@ -122,22 +141,4 @@ namespace Schemio.Data.Core
 
     #endregion Fluent Interfaces
 
-    #region Helpers
-
-    public class CreateSchema
-    {
-        public static IMappings<T, IQueryResult> For<T>() where T : IEntity => new Mappings<T, IQueryResult> { Order = 1 };
-    }
-
-    public class For
-    {
-        public static ISchemaPaths Paths(params string[] xpath) => new SchemaPaths { XPath = xpath };
-    }
-
-    public class SchemaPaths : ISchemaPaths
-    {
-        public string[] XPath { get; set; }
-    }
-
-    #endregion Helpers
 }
