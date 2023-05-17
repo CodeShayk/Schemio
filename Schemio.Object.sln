@@ -5,11 +5,11 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F41DA3D8-A0E9-4A05-8A35-78313C0F5804}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.Object.Core", "src\Schemio.Object.Core\Schemio.Object.Core.csproj", "{6F017146-B95A-4081-9CC0-B0245F78D72B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.Object", "src\Schemio.Object\Schemio.Object.csproj", "{6F017146-B95A-4081-9CC0-B0245F78D72B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{07BAE427-96CF-4F9B-80A9-48CFB0A89CF3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.Object.Core.Tests", "tests\Schemio.Object.Core.Tests\Schemio.Object.Core.Tests.csproj", "{FDB00281-8B65-4A17-9F1F-B97865544BEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.Object.Tests", "tests\Schemio.Object.Tests\Schemio.Object.Tests.csproj", "{FDB00281-8B65-4A17-9F1F-B97865544BEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{AF995FEF-BB94-48D0-B02B-6671DA73056B}"
 	ProjectSection(SolutionItems) = preProject
