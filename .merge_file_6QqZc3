@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -17,8 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Schemio.Object\Schemio.Object.csproj" />
+    <ProjectReference Include="..\..\src\Schemio.Data.Core\Schemio.Data.Core.csproj" />
   </ItemGroup>
 
+
+
+ 
 
 </Project>

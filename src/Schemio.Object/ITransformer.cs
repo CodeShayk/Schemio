@@ -3,14 +3,23 @@ namespace Schemio.Data.Core
     /// <summary>
     /// Implement transformer to map data to entity using query result.
     /// </summary>
-    /// <typeparam name="TR"></typeparam>
-    /// <typeparam name="T"></typeparam>
-    public interface ITransformer<TR, T>
-        where TR : IQueryResult
-        where T : IEntity
+    /// <typeparam name="TQueryResult"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    public interface ITransformer<TQueryResult, TEntity>
+        where TQueryResult : IQueryResult
+        where TEntity : IEntity
     {
-        void ResovleContext(IDataContext context);
+        IDataContext Context { get; }
 
-        T TransformToDataEntity(TR queryResult, T entity);
+        void ResolveContext(IDataContext context);
+
+        TEntity Run(TQueryResult queryResult, TEntity entity);
+    }
+
+    internal interface IEntityTransform<TQueryResult, TEntity>
+    where TQueryResult : IQueryResult
+    where TEntity : IEntity
+    {
+        TEntity Transform(TQueryResult queryResult, TEntity entity);
     }
 }

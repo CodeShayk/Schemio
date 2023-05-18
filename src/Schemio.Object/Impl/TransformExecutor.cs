@@ -28,7 +28,7 @@ namespace Schemio.Data.Core.Impl
             var mappings = entitySchemaMapping.Mappings.ToList();
 
             // resolve context of each transformer so it is available inside for transformation if required.
-            mappings.ForEach(mapping => mapping.Transformer.ResovleContext(context));
+            mappings.ForEach(mapping => mapping.Transformer.ResolveContext(context));
 
             var queryDependencyDepth = mappings.Max(x => x.Order);
 
@@ -42,7 +42,7 @@ namespace Schemio.Data.Core.Impl
                     .ToList();
 
                 foreach (var queryResult in queryResults)
-                    transformers.ForEach(transformer => transformer.TransformToDataEntity(queryResult, entity));
+                    transformers.ForEach(transformer => transformer.Run(queryResult, entity));
             }
 
             return entity;

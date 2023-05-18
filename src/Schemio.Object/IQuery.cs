@@ -8,13 +8,13 @@ namespace Schemio.Data.Core
     /// </summary>
     public interface IQuery
     {
-        List<IQuery> ChildQueries { get; set; }
+        List<IQuery> Children { get; set; }
 
         Type GetResultType { get; }
 
-        void ResolveContextAsPrimary(IDataContext context);
+        void ResolveRootQueryParameter(IDataContext context);
 
-        void ResolveContextAsChild(IDataContext context, IQueryResult parentQueryResult);
+        void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
 
         bool IsContextResolved();
     }

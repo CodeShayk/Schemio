@@ -33,7 +33,7 @@ namespace Schemio.Data.Core.Impl
 
                     foreach (var query in unresolved.Queries)
                     {
-                        query.ResolveContextAsChild(context, queryResult);
+                        query.ResolveChildQueryParameter(context, queryResult);
                     }
                 }
             }
@@ -55,7 +55,7 @@ namespace Schemio.Data.Core.Impl
 
                     foreach (var query in unresolved.Queries)
                     {
-                        query.ResolveContextAsChild(context, queryResult);
+                        query.ResolveChildQueryParameter(context, queryResult);
                     }
                 }
             }
