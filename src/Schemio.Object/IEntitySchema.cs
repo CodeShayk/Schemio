@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Schemio.Data.Core
+namespace Schemio.Object.Core
 {
     /// <summary>
     /// Implement to configure entity schema path mappings (using Query/Trasformer pairs).

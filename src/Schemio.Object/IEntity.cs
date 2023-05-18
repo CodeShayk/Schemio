@@ -1,4 +1,4 @@
-namespace Schemio.Data.Core
+namespace Schemio.Object.Core
 {
     /// <summary>
     /// Implement Entity required to be hydrated (using query/transformer).

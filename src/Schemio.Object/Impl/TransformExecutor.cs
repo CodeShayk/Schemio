@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Schemio.Data.Core.Impl
+namespace Schemio.Object.Core.Impl
 {
     public class TransformExecutor<T> : ITransformExecutor<T> where T : IEntity, new()
     {

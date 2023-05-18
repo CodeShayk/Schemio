@@ -1,8 +1,8 @@
-﻿using Schemio.Data.Core.Helpers;
+﻿using Schemio.Object.Core.Helpers;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Schemio.Data.Core.JSON
+namespace Schemio.Object.Core.JSON
 {
     public class JPathMatcher : ISchemaPathMatcher
     {

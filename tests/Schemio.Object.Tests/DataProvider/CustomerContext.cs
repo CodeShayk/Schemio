@@ -1,4 +1,4 @@
-using Schemio.Data.Core;
+using Schemio.Object.Core;
 
 namespace Schemio.Object.Tests.DataProvider
 {

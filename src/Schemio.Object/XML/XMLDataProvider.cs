@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
-using Schemio.Data.Core.Helpers.Xml;
+using Schemio.Object.Core.Helpers.Xml;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace Schemio.Data.Core.XML
+namespace Schemio.Object.Core.XML
 {
     internal class XMLDataProvider<T> where T : IEntity
     {

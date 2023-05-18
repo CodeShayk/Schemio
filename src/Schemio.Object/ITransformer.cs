@@ -1,4 +1,4 @@
-namespace Schemio.Data.Core
+namespace Schemio.Object.Core
 {
     /// <summary>
     /// Implement transformer to map data to entity using query result.

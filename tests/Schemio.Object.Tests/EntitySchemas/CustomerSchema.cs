@@ -1,4 +1,4 @@
-using Schemio.Data.Core;
+using Schemio.Object.Core;
 using Schemio.Object.Tests.Entities;
 
 namespace Schemio.Object.Tests.EntitySchemas

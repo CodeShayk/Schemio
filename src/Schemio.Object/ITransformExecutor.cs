@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Schemio.Data.Core
+namespace Schemio.Object.Core
 {
     public interface ITransformExecutor<out TEntity> where TEntity : IEntity
     {

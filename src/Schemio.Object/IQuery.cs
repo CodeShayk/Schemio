@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Schemio.Data.Core
+namespace Schemio.Object.Core
 {
     /// <summary>
     /// Implement IQuery to fetch data using API or database.

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace Schemio.Data.Core.Impl
+namespace Schemio.Object.Core.Impl
 {
     public class DataProvider<T> : IDataProvider<T> where T : IEntity
     {

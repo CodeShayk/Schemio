@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Schemio.Data.Core
+namespace Schemio.Object.Core
 {
     public class QueryList : IQueryList
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Schemio.Data.Core
+namespace Schemio.Object.Core
 {
     #region Helpers
 
@@ -140,5 +140,4 @@ namespace Schemio.Data.Core
     }
 
     #endregion Fluent Interfaces
-
 }

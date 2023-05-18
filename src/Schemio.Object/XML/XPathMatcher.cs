@@ -1,7 +1,7 @@
-using Schemio.Data.Core.Helpers;
+using Schemio.Object.Core.Helpers;
 using System.Linq;
 
-namespace Schemio.Data.Core.XML
+namespace Schemio.Object.Core.XML
 {
     public class XPathMatcher : ISchemaPathMatcher
     {
