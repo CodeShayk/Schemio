@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Schemio.Object.Core
@@ -6,9 +7,16 @@ namespace Schemio.Object.Core
     /// Implement to configure schema path mappings for an Entity.
     /// </summary>
     /// <typeparam name="TEntity">Entity type</typeparam>
-    public interface IEntitySchema<TEntity> where TEntity : IEntity
+    public abstract class BaseEntitySchema<TEntity> : IEntitySchema<TEntity> where TEntity : IEntity
     {
         public IEnumerable<Mapping<TEntity, IQueryResult>> Mappings { get; }
         public decimal Version { get; }
+
+        public BaseEntitySchema()
+        {
+            Mappings = ConfigureSchema();
+        }
+
+        public abstract Mapping<TEntity, IQueryResult>[] ConfigureSchema();
     }
 }

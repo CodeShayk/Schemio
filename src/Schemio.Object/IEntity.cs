@@ -5,6 +5,6 @@ namespace Schemio.Object.Core
     /// </summary>
     public interface IEntity
     {
-        decimal Version { get; set; }
+        //decimal Version { get; set; }
     }
 }

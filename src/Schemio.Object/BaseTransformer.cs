@@ -2,20 +2,20 @@ using Schemio.Object.Core;
 
 namespace Schemio.Object
 {
-    public abstract class BaseTransformer<TQueryResult, TEntity> : ITransformer<TQueryResult, TEntity>, IEntityTransform<TQueryResult, TEntity>
-        where TQueryResult : IQueryResult
-        where TEntity : IEntity
+    public abstract class BaseTransformer<TD, T> : ITransformer
+        where T : IEntity
+        where TD : IQueryResult
     {
         public IDataContext Context { get; private set; }
 
         public void ResolveContext(IDataContext context) => Context = context;
 
-        public TEntity Run(TQueryResult queryResult, TEntity entity)
+        public IEntity Run(IQueryResult queryResult, IEntity entity)
         {
-            return queryResult.GetType() == typeof(TQueryResult) || queryResult is TQueryResult
-                ? Transform((TQueryResult)queryResult, entity) : entity;
+            return queryResult.GetType() == typeof(TD) || queryResult is TD
+                ? Transform((TD)queryResult, (T)entity) : entity;
         }
 
-        public abstract TEntity Transform(TQueryResult queryResult, TEntity entity);
+        public abstract T Transform(TD queryResult, T entity);
     }
 }

@@ -5,21 +5,23 @@ namespace Schemio.Object.Core
     /// </summary>
     /// <typeparam name="TQueryResult"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
-    public interface ITransformer<TQueryResult, TEntity>
+    public interface ITransformer<TQueryResult, TEntity> : ITransformer
         where TQueryResult : IQueryResult
         where TEntity : IEntity
+    {
+        //IDataContext Context { get; }
+
+        //void ResolveContext(IDataContext context);
+
+        // TEntity Run(TQueryResult queryResult, TEntity entity);
+    }
+
+    public interface ITransformer
     {
         IDataContext Context { get; }
 
         void ResolveContext(IDataContext context);
 
-        TEntity Run(TQueryResult queryResult, TEntity entity);
-    }
-
-    internal interface IEntityTransform<TQueryResult, TEntity>
-    where TQueryResult : IQueryResult
-    where TEntity : IEntity
-    {
-        TEntity Transform(TQueryResult queryResult, TEntity entity);
+        IEntity Run(IQueryResult queryResult, IEntity entity);
     }
 }

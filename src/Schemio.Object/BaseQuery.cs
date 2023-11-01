@@ -15,10 +15,10 @@ namespace Schemio.Object.Core
         /// <summary>
         /// Parameter values for query to execute.
         /// </summary>
-        protected IQueryParameter QueryParameter;
+        protected TQueryParameter QueryParameter;
 
         /// <summary>
-        /// Children queries of this query.
+        /// Children queries dependent on this query.
         /// </summary>
         public List<IQuery> Children { get; set; }
 
@@ -37,18 +37,16 @@ namespace Schemio.Object.Core
         public bool IsContextResolved() => QueryParameter != null;
 
         /// <summary>
-        /// Override this method to resolve query parameter to execute query in parent mode.
-        /// </summary>
-        /// <param name="context">DataContext object passed to dataprovider.</param>
-        public virtual void ResolveRootQueryParameter(IDataContext context)
-        { }
-
-        /// <summary>
-        /// Override this method to resolve query parameter to execute query in child mode to a parent query.
+        /// Implement this method to resolve query parameter to execute query in child mode to a parent query.
         /// </summary>
         /// <param name="context">DataContext object passed to dataprovider.</param>
         /// <param name="parentQueryResult">Query result of parent query.</param>
-        public virtual void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
-        { }
+        public abstract void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult);
+
+        /// <summary>
+        /// Implement this method to resolve query parameter to execute query in parent mode.
+        /// </summary>
+        /// <param name="context">DataContext object passed to dataprovider.</param>
+        public abstract void ResolveParameterInParentMode(IDataContext context);
     }
 }

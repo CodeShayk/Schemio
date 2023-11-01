@@ -1,9 +1,9 @@
 using Schemio.Object.Core;
 
-namespace Schemio.Object.Tests.Entities
+namespace Schemio.Object
 {
-    public class BaseEntity : IEntity
-    {
-        public decimal Version { get; set; } = 1;
-    }
+    //public abstract class BaseEntity : IEntity
+    //{
+    //    public decimal Version { get; set; } = 1;
+    //}
 }

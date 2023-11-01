@@ -1,13 +1,13 @@
+using Schemio.Object.Core;
+
 namespace Schemio.Object.Tests.Entities
 {
-    internal class Customer : BaseEntity
+    public class Customer : IEntity
     {
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerCode { get; set; }
-        public Person Person { get; set; }
-        public Address Address { get; set; }
-        public PhoneNumber PhoneNumber { get; set; }
-        public EmailAddress EmailAddress { get; set; }
+        public string CustomerName { get; set; }
+        public Communication Communication { get; set; }
         public Order[] Orders { get; set; }
     }
 }

@@ -1,22 +1,32 @@
 using Schemio.Object.Core;
 using Schemio.Object.Tests.Entities;
+using Schemio.Object.Tests.Queries;
+using Schemio.Object.Tests.Transforms;
 
 namespace Schemio.Object.Tests.EntitySchemas
 {
     internal class CustomerSchema : IEntitySchema<Customer>
     {
-        public IEnumerable<Mapping<Customer, IQueryResult>> Mappings { get; }
-        public decimal Version => 1;
+        private IEnumerable<Mapping<Customer, IQueryResult>> mappings;
+
+        private decimal version;
+
+        public IEnumerable<Mapping<Customer, IQueryResult>> Mappings => mappings;
+        public decimal Version => version;
 
         public CustomerSchema()
         {
-            //Mappings = CreateSchema.For<Customer>()
-            //    .Map<UserContextQuery, ClientCommonUserContextTransformer>(For.Paths("clients/common/context"), dependantQuery =>
-            //        dependantQuery.Dependents
-            //            .Map<ContextOrganisationLogoQuery, ClientOrganisationLogoTransformer>(For.XPath("clients/common/context/currentuserdetails/groupdetails/organisationlogo"))
-            //            .Map<ContextGroupLogoQuery, ClientGroupLogoTransformer>(For.XPath("clients/common/context/currentuserdetails/groupdetails/grouplogo"))
-            //            .Map<CommonContextAvatarQuery, ClientPhotoTransformer>(For.XPath("clients/common/context/currentuserdetails/photo"))
-            //        );
+            version = 1;
+
+            // Create an object mapping graph of query and transformer pairs using xpaths.
+            mappings = CreateSchema.For<Customer>()
+                .Map<CustomerQuery, CustomerTransform>(For.Paths("customer/id", "customer/customercode", "customer/customername"),
+                 customer => customer.Dependents
+                    .Map<CustomerCommunicationQuery, CustomerCommunicationTransform>(For.Paths("customer/communication"))
+                    .Map<CustomerOrdersQuery, CustomerOrdersTransform>(For.Paths("customer/orders"),
+                        customerOrders => customerOrders.Dependents
+                            .Map<CustomerOrderItemsQuery, CustomerOrderItemsTransform>(For.Paths("customer/orders/order/Items")))
+                ).Complete();
         }
     }
 }

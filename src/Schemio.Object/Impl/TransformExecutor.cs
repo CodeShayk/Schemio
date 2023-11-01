@@ -20,7 +20,7 @@ namespace Schemio.Object.Core.Impl
         /// <returns></returns>
         public T Execute(IDataContext context, IList<IQueryResult> queryResults)
         {
-            var entity = new T { Version = entitySchemaMapping.Version };
+            var entity = new T { /*Version = entitySchemaMapping.Version*/ };
 
             if (queryResults == null || !queryResults.Any())
                 return entity;

@@ -12,10 +12,36 @@ namespace Schemio.Object.Core
 
         Type GetResultType { get; }
 
-        void ResolveRootQueryParameter(IDataContext context);
+        void ResolveParameterInParentMode(IDataContext context);
 
-        void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+        void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult);
 
         bool IsContextResolved();
     }
+
+    //public interface IParentQuery : IQuery
+    //{
+    //    //List<IQuery> Children { get; set; }
+
+    //    //Type GetResultType { get; }
+
+    //    void ResolveRootQueryParameter(IDataContext context);
+
+    //    //void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+
+    //    //bool IsContextResolved();
+    //}
+
+    //public interface IChildQuery : IQuery
+    //{
+    //    //List<IQuery> Children { get; set; }
+
+    //    //Type GetResultType { get; }
+
+    //    //void ResolveRootQueryParameter(IDataContext context);
+
+    //    void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+
+    //    //bool IsContextResolved();
+    //}
 }

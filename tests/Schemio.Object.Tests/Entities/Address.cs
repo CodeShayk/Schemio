@@ -1,8 +1,10 @@
+using Schemio.Object.Core;
+
 namespace Schemio.Object.Tests.Entities
 {
-    internal class Address : BaseEntity
+    public class Address
     {
-        public int Id { get; set; }
+        public int AddressId { get; set; }
         public string HouseNo { get; set; }
         public string City { get; set; }
         public string Region { get; set; }

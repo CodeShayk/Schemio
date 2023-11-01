@@ -24,7 +24,7 @@ namespace Schemio.Object.Core.Impl
             var queries = GetMappedQueries(entitySchema.Mappings.ToList(), context);
 
             foreach (var query in queries.Queries)
-                query.ResolveRootQueryParameter(context);
+                query.ResolveParameterInParentMode(context);
 
             return new QueryList(queries.Queries);
         }

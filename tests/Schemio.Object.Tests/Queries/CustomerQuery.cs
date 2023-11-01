@@ -3,9 +3,9 @@ using Schemio.Object.Tests.DataProvider;
 
 namespace Schemio.Object.Tests.Queries
 {
-    internal class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
+    public class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
     {
-        public override void ResolveRootQueryParameter(IDataContext context)
+        public override void ResolveParameterInParentMode(IDataContext context)
         {
             // Executes as root or level 1 query.
             var customer = (CustomerContext)context;
@@ -15,20 +15,20 @@ namespace Schemio.Object.Tests.Queries
             };
         }
 
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult)
         {
             // Does not execute as child to any query.
         }
     }
 
-    internal class CustomerResult : IQueryResult
+    public class CustomerResult : IQueryResult
     {
         public int Id { get; set; }
         public string CustomerCode { get; set; }
-        public int PersonId { get; set; }
+        public string CustomerName { get; set; }
     }
 
-    internal class CustomerParameter : IQueryParameter
+    public class CustomerParameter : IQueryParameter
     {
         public int CustomerId { get; set; }
     }
