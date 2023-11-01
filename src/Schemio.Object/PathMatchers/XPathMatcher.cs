@@ -1,11 +1,13 @@
 using Schemio.Object.Core;
 using Schemio.Object.Core.Helpers;
-using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Schemio.Object.PathMatchers
 {
     public class XPathMatcher : ISchemaPathMatcher
     {
+        private static readonly Regex ancestorRegex = new Regex(@"=ancestor::(?'path'.*?)(/@|\[.*\]/@)", RegexOptions.Compiled);
+
         public bool IsMatch(string inputXPath, ISchemaPaths configuredXPaths) =>
              // Does the template xpath contain any of the mapping xpaths?
              inputXPath.IsNotNullOrEmpty()
