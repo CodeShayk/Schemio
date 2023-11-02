@@ -3,28 +3,28 @@
 [![CodeQL](https://github.com/NinjaRocks/Schemio.Object/actions/workflows/CodeQL.yml/badge.svg)](https://github.com/NinjaRocks/Schemio.Object/actions/workflows/CodeQL.yml) [![.Net Stardard](https://img.shields.io/badge/.Net%20Standard-2.1-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 --
 ## What is Schemio?
-`Schemio` is a .Net utility to data hydrate an entity by schema paths mapping to object graph of that entity.
-> Supports JsonPath and XPath schemas.
+`Schemio` is a .Net utility to data hydrate an entity by given schema paths of the object graph.
+> Supports XPath & JsonPath schema paths.
 
 ## When to use Schemio?
-Schemio is a perfect utility when you need to fetch a large entity from data source. Ideally, you may not require all of the entity data but only sections of the object graph depending on the usage.
-> Example  use case is document generation which may require only templated sections of client data to be fetched according to document template in context.
+Schemio is a perfect utility when you need to fetch a large entity from data source. Ideally, you may not require all of the entity data but only sections of the object graph by varied fetches.
+> Example  use case is document generation which may require only templated sections of client data to be fetched for a document template in context.
 
 ## How to use Schemio?
 you could use Schemio out of the box or extend the utility to suit your custom needs.
 > To use schemio you need to
-> - Setup the entity to be fetched. 
+> - Setup the entity to be fetched using DataProvider. 
 > - Construct the DataProvider with required dependencies. 
 
 ### Entity Setup
 * Define the `entity` to be fetched using `DataProvider` - which is basically a class with nested typed properties.
-* Define the `entity schema` with `query` and `transformer` pairs mappings to entity object graph. The relevant query and transformer pairs will execute accordingly when their mapped `schema paths` are included in the `request` parameter of the DataProvider. 
+* Define the `entity schema` with `query` and `transformer` pairs mappings to entity's object graph. The relevant query and transformer pairs will execute in the order of their nesting when their mapped `schema paths` are included in the `request` parameter of the DataProvider. 
 * `Query` is an implementation to fetch `data` for the entity object graph from the underlying data storage supported by the chosen `QueryEngine`.  QueryEngine is an implementation of `IQueryEngine` to execute queries against implemented data source.
 * `Transformer` is an implementation to transform the data fetched by the associated query to mapped section of the object graph.
 #### Entity
-> Step 1 - To mark the class as Entity to be fetched using schemio, implement the class from `IEntity` interface. Bear in mind this is the root entity.
+> Step 1 - To mark the class as Entity using schemio, implement the class from `IEntity` interface. Bear in mind this is the root entity to be fetched.
 
-Below is an example Customer entity we want to fetch using schemio.
+Below is an example `Customer` entity we want to fetch using schemio.
 
 ```
  public class Customer : IEntity
@@ -36,11 +36,17 @@ Below is an example Customer entity we want to fetch using schemio.
         public Order[] Orders { get; set; }
     }
 ```
+There are three levels of nesting in the object graph for customer class above.
+- Level 1 with paths: `Customer/CustomerId`, `Customer/CustomerCode`, `Customer/CustomerName`
+- Level 2 with paths: `Customer/Communication` and `Customer/Orders`
+- Level 3 with paths: `Customer/Orders/Order/Items`
+
 #### Entity Schema
 > Step 2 - Define entity schema configuration which is basically a hierarchy of query/transformer pairs mapping to the object graph of the entity in context. 
 
 To define Entity schema, implement `IEntitySchema<T>` interface where T is entity in context. The `query/transformer` mappings can be `nested` to `5 levels` down. You could map multiple schema paths to a given query/transformer pair. 
 
+The above object graph with three levels is configured below with query and transformer pairs nested accordingly, mapping to object graph of customer as defined by the XPath schema.
 
 ```
 internal class CustomerSchema : IEntitySchema<Customer>
