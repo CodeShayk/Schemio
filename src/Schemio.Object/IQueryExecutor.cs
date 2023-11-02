@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Schemio.Object.Core
+namespace Schemio.Object
 {
     public interface IQueryExecutor
     {

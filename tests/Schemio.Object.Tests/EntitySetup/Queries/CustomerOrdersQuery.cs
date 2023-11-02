@@ -1,7 +1,4 @@
-using Schemio.Object.Core;
-using Schemio.Object.Tests.DataProvider;
-
-namespace Schemio.Object.Tests.Queries
+namespace Schemio.Object.Tests.EntitySetup.Queries
 {
     internal class CustomerOrdersQuery : BaseQuery<CustomerParameter, OrderCollectionResult>
     {
@@ -19,18 +16,5 @@ namespace Schemio.Object.Tests.Queries
         {
             // Does not execute as child to any query.
         }
-    }
-
-    public class OrderCollectionResult : IQueryResult
-    {
-        public int CustomerId { get; set; }
-        public OrderValue[] Orders { get; set; }
-    }
-
-    public class OrderValue
-    {
-        public int OrderId { get; set; }
-        public string OrderNo { get; set; }
-        public DateTime Date { get; set; }
     }
 }

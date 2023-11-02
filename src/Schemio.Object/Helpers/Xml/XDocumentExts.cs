@@ -1,7 +1,6 @@
-using System.Linq;
 using System.Xml.Linq;
 
-namespace Schemio.Object.Core.Helpers.Xml
+namespace Schemio.Object.Helpers.Xml
 {
     public static class XDocumentExts
     {

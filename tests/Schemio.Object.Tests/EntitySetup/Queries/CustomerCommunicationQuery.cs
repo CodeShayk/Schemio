@@ -1,6 +1,4 @@
-using Schemio.Object.Core;
-
-namespace Schemio.Object.Tests.Queries
+namespace Schemio.Object.Tests.EntitySetup.Queries
 {
     internal class CustomerCommunicationQuery : BaseQuery<CustomerParameter, CommunicationResult>
     {
@@ -18,17 +16,5 @@ namespace Schemio.Object.Tests.Queries
                 CustomerId = customer.Id
             };
         }
-    }
-
-    public class CommunicationResult : IQueryResult
-    {
-        public int Id { get; set; }
-        public string Telephone { get; set; }
-        public string Email { get; set; }
-        public string HouseNo { get; set; }
-        public string City { get; set; }
-        public string Region { get; set; }
-        public string PostalCode { get; set; }
-        public string Country { get; set; }
     }
 }

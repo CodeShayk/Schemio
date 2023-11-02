@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Schemio.Object.Core
+namespace Schemio.Object
 {
     /// <summary>
     /// Implement this base class to create a data provider query.

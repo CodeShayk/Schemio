@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Schemio.Object.Core
+namespace Schemio.Object
 {
     #region Helpers
 
@@ -66,13 +63,11 @@ namespace Schemio.Object.Core
             };
 
             if (dependents != null)
-            {
                 foreach (var dep in ((IMappings<T, TD>)dependents(mapping)).GetMappings)
                 {
                     dep.DependentOn ??= mapping.Query;
                     Add(dep);
                 }
-            }
 
             Add(mapping);
 

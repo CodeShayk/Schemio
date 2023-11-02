@@ -1,5 +1,3 @@
-using Schemio.Object.Core;
-
 namespace Schemio.Object
 {
     //public abstract class BaseEntity : IEntity

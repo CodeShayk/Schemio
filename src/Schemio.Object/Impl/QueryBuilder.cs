@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Schemio.Object.Core.Impl
+namespace Schemio.Object.Impl
 {
     public class QueryBuilder<T> : IQueryBuilder<T> where T : IEntity
     {
@@ -40,7 +37,7 @@ namespace Schemio.Object.Core.Impl
                 foreach (var map in maps)
                 {
                     var dependentQueries =
-                        mappings.Where(x => x.Order == (index + 1) && x.DependentOn != null && x.DependentOn.GetType() == map.Query.GetType()).ToList();
+                        mappings.Where(x => x.Order == index + 1 && x.DependentOn != null && x.DependentOn.GetType() == map.Query.GetType()).ToList();
 
                     map.Query.Children ??= new List<IQuery>();
 

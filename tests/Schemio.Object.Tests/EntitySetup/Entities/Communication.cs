@@ -1,6 +1,4 @@
-using Schemio.Object.Core;
-
-namespace Schemio.Object.Tests.Entities
+namespace Schemio.Object.Tests.EntitySetup.Entities
 {
     public class Communication
     {

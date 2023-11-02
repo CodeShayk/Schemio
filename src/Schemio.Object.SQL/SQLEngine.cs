@@ -1,5 +1,3 @@
-using Schemio.Object.Core;
-
 namespace Schemio.Object.SQL
 {
     public interface SQLEngine

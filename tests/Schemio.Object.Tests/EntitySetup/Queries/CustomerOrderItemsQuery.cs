@@ -1,6 +1,4 @@
-using Schemio.Object.Core;
-
-namespace Schemio.Object.Tests.Queries
+namespace Schemio.Object.Tests.EntitySetup.Queries
 {
     internal class CustomerOrderItemsQuery : BaseQuery<OrderItemParameter, OrderItemCollectionResult>
     {
@@ -18,21 +16,5 @@ namespace Schemio.Object.Tests.Queries
                 OrderIds = new List<int>(ordersResult.Orders.Select(x => x.OrderId))
             };
         }
-    }
-
-    public class OrderItemCollectionResult : IQueryResult
-    {
-        public List<OrderItemValue> OrderItems { get; set; }
-    }
-
-    public class OrderItemValue
-    {
-        public int OrderId { get; set; }
-        public (int ItemId, string Name, decimal Cost)[] Items { get; set; }
-    }
-
-    internal class OrderItemParameter : IQueryParameter
-    {
-        public List<int> OrderIds { get; set; }
     }
 }

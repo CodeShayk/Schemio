@@ -1,4 +1,4 @@
-namespace Schemio.Object.Core.Helpers
+namespace Schemio.Object.Helpers
 {
     public static class ExtentionMethods
     {

@@ -1,10 +1,10 @@
-using Schemio.Object.Core;
-
-namespace Schemio.Object.Tests.Entities
+namespace Schemio.Object.Tests.EntitySetup.Queries
 {
-    public class Address
+    public class CommunicationResult : IQueryResult
     {
-        public int AddressId { get; set; }
+        public int Id { get; set; }
+        public string Telephone { get; set; }
+        public string Email { get; set; }
         public string HouseNo { get; set; }
         public string City { get; set; }
         public string Region { get; set; }

@@ -1,15 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Schemio.Object.Core.Impl
+namespace Schemio.Object.Impl
 {
     public class TransformExecutor<T> : ITransformExecutor<T> where T : IEntity, new()
     {
-        private readonly IEntitySchema<T> entitySchemaMapping;
+        private readonly IEntitySchema<T> entitySchema;
 
-        public TransformExecutor(IEntitySchema<T> entitySchemaMapping)
+        public TransformExecutor(IEntitySchema<T> entitySchema)
         {
-            this.entitySchemaMapping = entitySchemaMapping;
+            this.entitySchema = entitySchema;
         }
 
         /// <summary>
@@ -25,7 +22,7 @@ namespace Schemio.Object.Core.Impl
             if (queryResults == null || !queryResults.Any())
                 return entity;
 
-            var mappings = entitySchemaMapping.Mappings.ToList();
+            var mappings = entitySchema.Mappings.ToList();
 
             // resolve context of each transformer so it is available inside for transformation if required.
             mappings.ForEach(mapping => mapping.Transformer.ResolveContext(context));
@@ -42,7 +39,8 @@ namespace Schemio.Object.Core.Impl
                     .ToList();
 
                 foreach (var queryResult in queryResults)
-                    transformers.ForEach(transformer => transformer.Run(queryResult, entity));
+                    transformers.Where(transformer => transformer.SupportedQueryResult == queryResult.GetType()).ToList()
+                        .ForEach(supportedtransformer => supportedtransformer.Run(queryResult, entity));
             }
 
             return entity;

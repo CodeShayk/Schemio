@@ -1,8 +1,7 @@
-using Schemio.Object.Core;
-using Schemio.Object.Tests.Entities;
-using Schemio.Object.Tests.Queries;
+using Schemio.Object.Tests.EntitySetup.Entities;
+using Schemio.Object.Tests.EntitySetup.Queries;
 
-namespace Schemio.Object.Tests.Transforms
+namespace Schemio.Object.Tests.EntitySetup.Transforms
 {
     public class CustomerTransform : BaseTransformer<CustomerResult, Customer>
     {

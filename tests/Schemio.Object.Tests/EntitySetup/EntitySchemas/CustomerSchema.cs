@@ -1,9 +1,8 @@
-using Schemio.Object.Core;
-using Schemio.Object.Tests.Entities;
-using Schemio.Object.Tests.Queries;
-using Schemio.Object.Tests.Transforms;
+using Schemio.Object.Tests.EntitySetup.Entities;
+using Schemio.Object.Tests.EntitySetup.Queries;
+using Schemio.Object.Tests.EntitySetup.Transforms;
 
-namespace Schemio.Object.Tests.EntitySchemas
+namespace Schemio.Object.Tests.EntitySetup.EntitySchemas
 {
     internal class CustomerSchema : IEntitySchema<Customer>
     {
@@ -25,7 +24,7 @@ namespace Schemio.Object.Tests.EntitySchemas
                     .Map<CustomerCommunicationQuery, CustomerCommunicationTransform>(For.Paths("customer/communication"))
                     .Map<CustomerOrdersQuery, CustomerOrdersTransform>(For.Paths("customer/orders"),
                         customerOrders => customerOrders.Dependents
-                            .Map<CustomerOrderItemsQuery, CustomerOrderItemsTransform>(For.Paths("customer/orders/order/Items")))
+                            .Map<CustomerOrderItemsQuery, CustomerOrderItemsTransform>(For.Paths("customer/orders/order/items")))
                 ).Complete();
         }
     }

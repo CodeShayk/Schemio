@@ -1,7 +1,4 @@
-using Schemio.Object.Core;
-using Schemio.Object.Tests.DataProvider;
-
-namespace Schemio.Object.Tests.Queries
+namespace Schemio.Object.Tests.EntitySetup.Queries
 {
     public class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
     {
@@ -19,17 +16,5 @@ namespace Schemio.Object.Tests.Queries
         {
             // Does not execute as child to any query.
         }
-    }
-
-    public class CustomerResult : IQueryResult
-    {
-        public int Id { get; set; }
-        public string CustomerCode { get; set; }
-        public string CustomerName { get; set; }
-    }
-
-    public class CustomerParameter : IQueryParameter
-    {
-        public int CustomerId { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-using Schemio.Object.Core;
-using Schemio.Object.Core.Helpers;
+using Schemio.Object.Helpers;
 using System.Text.RegularExpressions;
 
 namespace Schemio.Object.PathMatchers

@@ -1,6 +1,4 @@
-using Schemio.Object.Core;
-
-namespace Schemio.Object.Tests.DataProvider
+namespace Schemio.Object.Tests.EntitySetup
 {
     internal class CustomerContext : IDataContext
     {

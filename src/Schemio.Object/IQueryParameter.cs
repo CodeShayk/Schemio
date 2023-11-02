@@ -1,4 +1,4 @@
-namespace Schemio.Object.Core
+namespace Schemio.Object
 {
     public interface IQueryParameter
     {
