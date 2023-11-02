@@ -57,7 +57,7 @@ public interface ISchemaPathMatcher
 ```
 
 Example Entity Schema Definition
-> The `Customer` object graph with `three` levels of `nesting` is configured in `CustomerSchema` class below to show `query/transformer` pairs nested accordingly to map to object graph using the XPath definitions.
+> The `Customer` entity with `three` levels of `nesting` is configured below in `CustomerSchema` definition to show `query/transformer` pairs nested accordingly mapping to object graph using the XPath definitions.
 
 ```
 internal class CustomerSchema : IEntitySchema<Customer>
