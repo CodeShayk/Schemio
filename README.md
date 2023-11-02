@@ -5,7 +5,10 @@
 Schemio - is a .Net 6 utility to hydrate entities with data conditionally by given list of schema paths mapping to object graph. Support JsonPath and Xpath schema mappings.
 
 ## How to use Schemio?
-> Step 1 - To mark the entity to hydrate data using schemio, derive the entity from `IEntity` interface. Bear in mind this is the root entity.
+> Step 1 - To mark the class as entity to hydrate data using schemio, derive the class from `IEntity` interface. Bear in mind this is the root entity.
+
+Below is the Customer entity we want to conditionally hydrate with data, by passing in schema paths mapping to object graph of customer class.
+
 ```
  public class Customer : IEntity
     {
@@ -16,9 +19,9 @@ Schemio - is a .Net 6 utility to hydrate entities with data conditionally by giv
         public Order[] Orders { get; set; }
     }
 ```
-Above, Customer is the entity we want to hydrate with data conditionaly passing in schema paths mapping to object graph.
 
-> Step 2 - Define schema configuration to map query/transformer pairs to schema paths mapping to the object graph. 
+> Step 2 - Define entity schema configuration to map query/transformer pairs to schema paths mapping to the object graph of the entity in context. 
+
 Derive schema from `IEntitySchema<T>` where T is entity to hydrate. The query/transformer mappings can be nested to 5 levels down. You could map multiple schema paths to a given query/transformer pair. 
 
 
