@@ -21,7 +21,7 @@ You could use Schemio out of the box or extend the utility in order to suit your
 * Define the `entity schema` with `query` and `transformer` pairs mappings to entity's object graph. The relevant query and transformer pairs will execute in the order of their nesting when their mapped `schema paths` are included in the `request` parameter of the DataProvider. 
 * `Query` is an implementation to fetch `data` for the entity object graph from the underlying data storage supported by the chosen `QueryEngine`.  QueryEngine is an implementation of `IQueryEngine` to execute queries against supported data source.
 * `Transformer` is an implementation to transform the data fetched by the associated query to mapped section of the object graph.
-#### Entity
+#### 1. Entity
 > Step 1 - To mark the class as Entity using schemio, implement the class from `IEntity` interface. Bear in mind this is the root entity to be fetched.
 
 Below is an example `Customer` entity we want to fetch using schemio.
@@ -41,7 +41,7 @@ There are three levels of nesting in the object graph for customer class above.
 - Level 2 with paths: `Customer/Communication` and `Customer/Orders`
 - Level 3 with paths: `Customer/Orders/Order/Items`
 
-#### Entity Schema
+#### 2. Entity Schema
 > Step 2 - Define entity schema configuration which is basically a hierarchy of query/transformer pairs mapping to the object graph of the entity in context. 
 
 To define Entity schema, implement `IEntitySchema<T>` interface where T is entity in context. The `query/transformer` mappings can be `nested` to `5` levels down.
@@ -82,7 +82,7 @@ internal class CustomerSchema : IEntitySchema<Customer>
     }
 ```
 
-#### Query Class
+#### 2.1 Query Class
 The purpose of a query class is to execute to fetch data from data source when mapped schema path(s) are included in the request parameter of data provider.
 - To define a query you need to implement from `BaseQuery<TQueryParameter, TQueryResult>` where `TQueryParameter` is the query parameter and `TQueryResult` is the query result. 
 - `TQueryParameter` is basically the class that holds the `inputs` required by the query for execution. 
@@ -140,7 +140,7 @@ Please Note: The above query implementation is basic and could vary with differe
 > Please see Query engine provider specific implementation of queries below.
 
 
-#### Tranformer Class
+#### 2.2 Tranformer Class
 The purpose of the transformer class is to transform the data fetched by the linked query class to mapped object graph of the entity.
 
 To define a transformer class, you need to implement `BaseTransformer<TD, T>`
