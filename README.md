@@ -142,7 +142,7 @@ See example `CustomerCommunicationQuery` implemented to run as child or nested q
 ```
 
 #### Tranformer Class
-The purpose of the transformer class is to map the data fetched by the linked query class to mapped object graph of the entity.
+The purpose of the transformer class is to transform the data fetched by the linked query class to mapped object graph of the entity.
 
 To define a transformer class, you need to implement `BaseTransformer<TD, T>`
 - where T is Entity implementing `IEntity`. eg. Customer. 
