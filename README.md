@@ -92,10 +92,6 @@ The purpose of a query class is to execute to fetch data from data source when m
   - In `parent` mode, the query parameter is resolved using the `request/context` parameter passed to data provider class.
   - In `child` mode, the query parameter is resolved using the `query result` of the `parent query` as stiched in the entity schema configuration. You could have a maximum of `5` levels of children query nestings.
 
-> Please Note: The above query implementation is basic and could vary with different implementations of the QueryEngine.
-Please see Query engine provider specific implementation of queries below.
-
-
 See example `CustomerQuery` implemented to run in parent mode below. 
 ```
 public class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
@@ -140,6 +136,9 @@ See example `CustomerCommunicationQuery` implemented to run as child or nested q
         }
     }
 ```
+Please Note: The above query implementation is basic and could vary with different implementations of the QueryEngine.
+> Please see Query engine provider specific implementation of queries below.
+
 
 #### Tranformer Class
 The purpose of the transformer class is to transform the data fetched by the linked query class to mapped object graph of the entity.
