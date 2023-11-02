@@ -2,12 +2,29 @@
 [![NuGet version](https://badge.fury.io/nu/Schemio.Object.svg)](https://badge.fury.io/nu/Schemio.Object) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/NinjaRocks/Schemio.Object/blob/master/License.md) [![CI](https://github.com/NinjaRocks/Data2Xml/actions/workflows/CI.yml/badge.svg)](https://github.com/NinjaRocks/Data2Xml/actions/workflows/CI.yml) [![GitHub Release](https://img.shields.io/github/v/release/ninjarocks/Data2Xml?logo=github&sort=semver)](https://github.com/ninjarocks/Data2Xml/releases/latest)
 [![CodeQL](https://github.com/NinjaRocks/Schemio.Object/actions/workflows/CodeQL.yml/badge.svg)](https://github.com/NinjaRocks/Schemio.Object/actions/workflows/CodeQL.yml) [![.Net Stardard](https://img.shields.io/badge/.Net%20Standard-2.1-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 --
-Schemio - is a .Net 6 utility to conditionally hydrate entities with data by given list of schema paths mapping to object graph of that entity. Supports JsonPath and XPath schema mappings.
+## What is Schemio?
+`Schemio` is a .Net utility to data hydrate an entity by schema paths mapping to object graph of that entity.
+> Supports JsonPath and XPath schemas.
+
+## When to use Schemio?
+Schemio is a perfect utility when you need to fetch a large entity from data source. Ideally, you may not require all of the entity data but only sections of the object graph depending on the usage.
+> Example  use case is document generation which may require only templated sections of client data to be fetched according to document template in context.
 
 ## How to use Schemio?
-> Step 1 - To mark the class as entity to hydrate data using schemio, derive the class from `IEntity` interface. Bear in mind this is the root entity.
+you could use Schemio out of the box or extend the utility to suit your custom needs.
+> To use schemio you need to
+> - Setup the entity to be fetched. 
+> - Construct the DataProvider with required dependencies. 
 
-Below is the Customer entity we want to conditionally hydrate with data, by passing in schema paths mapping to object graph of customer class.
+### Entity Setup
+* Define the `entity` to be fetched using `DataProvider` - which is basically a class with nested typed properties.
+* Define the `entity schema` with `query` and `transformer` pairs mappings to entity object graph. The relevant query and transformer pairs will execute accordingly when their mapped `schema paths` are included in the `request` parameter of the DataProvider. 
+* `Query` is an implementation to fetch `data` for the entity object graph from the underlying data storage supported by the chosen `QueryEngine`.  QueryEngine is an implementation of `IQueryEngine` to execute queries against implemented data source.
+* `Transformer` is an implementation to transform the data fetched by the associated query to mapped section of the object graph.
+#### Entity
+> Step 1 - To mark the class as Entity to be fetched using schemio, implement the class from `IEntity` interface. Bear in mind this is the root entity.
+
+Below is an example Customer entity we want to fetch using schemio.
 
 ```
  public class Customer : IEntity
@@ -19,27 +36,23 @@ Below is the Customer entity we want to conditionally hydrate with data, by pass
         public Order[] Orders { get; set; }
     }
 ```
+#### Entity Schema
+> Step 2 - Define entity schema configuration which is basically a hierarchy of query/transformer pairs mapping to the object graph of the entity in context. 
 
-> Step 2 - Define entity schema configuration to map query/transformer pairs to schema paths mapping to the object graph of the entity in context. 
-
-Derive schema from `IEntitySchema<T>` where T is entity to hydrate. The query/transformer mappings can be nested to 5 levels down. You could map multiple schema paths to a given query/transformer pair. 
+To define Entity schema, implement `IEntitySchema<T>` interface where T is entity in context. The `query/transformer` mappings can be `nested` to `5 levels` down. You could map multiple schema paths to a given query/transformer pair. 
 
 
 ```
 internal class CustomerSchema : IEntitySchema<Customer>
     {
         private IEnumerable<Mapping<Customer, IQueryResult>> mappings;
-
-        private decimal version;
-
+       
         public IEnumerable<Mapping<Customer, IQueryResult>> Mappings => mappings;
-        public decimal Version => version;
-
+      
         public CustomerSchema()
         {
-            version = 1;
+           // Create an object mapping graph of query and transformer pairs using xpaths.
 
-            // Create an object mapping graph of query and transformer pairs using xpaths.
             mappings = CreateSchema.For<Customer>()
                 .Map<CustomerQuery, CustomerTransform>(For.Paths("customer/id", "customer/customercode", "customer/customername"),
                  customer => customer.Dependents
@@ -113,5 +126,5 @@ var
 
 ```
 
-## Extending Schemio
+### DataProvider Setup
 > coming soon
