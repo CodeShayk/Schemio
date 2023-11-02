@@ -11,7 +11,7 @@ Schemio is a perfect utility when you need to fetch a large entity from data sou
 > Example  use case is document generation which may require only templated sections of client data to be fetched for a document template in context.
 
 ## How to use Schemio?
-you could use Schemio out of the box or extend the utility to suit your custom needs.
+You could use Schemio out of the box or extend the utility in order to suit your custom needs.
 > To use schemio you need to
 > - Setup the entity to be fetched using DataProvider. 
 > - Construct the DataProvider with required dependencies. 
@@ -72,19 +72,28 @@ internal class CustomerSchema : IEntitySchema<Customer>
 ```
 
 #### Query Class
-The purpose of a query class is to execute to fetch data when mapped schema path is included in the context paramer of data provider.
-- To define a query for a schema path, you need to implement the query by deriving from  `BaseQuery<TQueryParameter, TQueryResult> : IQuery where TQueryParameter : IQueryParameter  where TQueryResult : IQueryResult` 
-- You may want to run the query in parent or child mode and define the relevant overrides to resovle the query parameter accordingly.
-- In `parent` mode the query parameter is resolved using `context` parameter passed to data provider class.
-- In `child` mode, the query parameter is resolved using the `query result` of the `parent query` to which the current query is a child. You could have a maximum of `5` levels of children query nesting when defining the Entity schema.
+The purpose of a query class is to execute to fetch data from data source when mapped schema path(s) are included in the request parameter of data provider.
+- To define a query you need to implement from `BaseQuery<TQueryParameter, TQueryResult>` where `TQueryParameter` is the query parameter and `TQueryResult` is the query result. 
+- `TQueryParameter` is basically the class that holds the `inputs` required by the query for execution. 
+- `TQueryResult` is the result that will be obtained from executing the query. 
+- You can run the query in `Parent` or `Child` (nested) mode. The parent/child relationship is achieved by configuring the query accordingly in entity schema definition. See `CustomerSchema` above. 
+- The query parameter needs to be resolved before executing the query with QueryEngine.
+  - In `parent` mode, the query parameter is resolved using the `request/context` parameter passed to data provider class.
+  - In `child` mode, the query parameter is resolved using the `query result` of the `parent query` as stiched in the entity schema configuration. You could have a maximum of `5` levels of children query nestings.
 
-> See example Customer query as parent below. 
+> Please Note: The above query implementation is basic and could vary with different implementations of the QueryEngine.
+Please see Query engine provider specific implementation of queries below.
+
+
+See example Customer query as parent below. 
 ```
 public class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
     {
         public override void ResolveParameterInParentMode(IDataContext context)
         {
-            // Executes as root or level 1 query.
+            // Executes as Parent or Level 1 query.
+            // The query parameter is resolved using context parameter of data provider class.
+
             var customer = (CustomerContext)context;
             QueryParameter = new CustomerParameter
             {
@@ -98,18 +107,20 @@ public class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
         }
     }
 ```
-> see communication query as child to customer query below.
+See example communication query implemented to be used as child or nested query to customer query below. 
 ```
     internal class CustomerCommunicationQuery : BaseQuery<CustomerParameter, CommunicationResult>
     {
         public override void ResolveParameterInParentMode(IDataContext context)
         {
-            // Does not execute as root or level 1 queries.
+            // Does not execute as Parent or Level 1 query. Hence has no implementation.
         }
 
         public override void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
+            // The result from parent customer query is used to resolve the query parameter of the nested communication query.
+
             var customer = (CustomerResult)parentQueryResult;
             QueryParameter = new CustomerParameter
             {
@@ -118,7 +129,7 @@ public class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
         }
     }
 ```
-The parent/child relationship is achieved via entity schema configuration. see CustomerSchema above.
+
 #### Tranformer Class
 The purpose of the transformer is to map the data fetched by the linked query class to relevant schema section of the entity to be data hydrated.
 - To define a transformer class for the schema path, you need to derive from `BaseTransformer<TD, T> : ITransformer
