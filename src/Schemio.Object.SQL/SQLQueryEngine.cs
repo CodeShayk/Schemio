@@ -4,26 +4,32 @@ using Dapper;
 
 namespace Schemio.Object.SQL
 {
-    public class SQLQueryEngine : IQueryEngine, SQLEngine
+    public class SQLQueryEngine : IQueryEngine
     {
         public IQueryResult[] Run(IQueryList queries, IDataContext context)
         {
+            if (queries?.Queries == null)
+                return Array.Empty<IQueryResult>();
+
+            var sqlQueries = queries.Queries.Cast<ISQLQuery>();
+
+            if (!sqlQueries.Any())
+                return Array.Empty<IQueryResult>();
+
             var results = new List<IQueryResult>();
-            if (queries?.Queries != null)
-                foreach (var query in queries.Queries.Cast<ISQLQuery>())
-                {
-                    var result = query.Run((SQLEngine)this);
-                    if (result != null)
-                        results.Add(result);
-                }
+
+            foreach (var query in sqlQueries)
+            {
+                var result = RunQuery(query.ResultType, query.GetSQL());
+                if (result != null)
+                    results.AddRange(result);
+            }
 
             return results.ToArray();
         }
 
-        public T Run<T>(ISQLQuery query) where T : IQueryResult
+        public IEnumerable<IQueryResult> RunQuery(Type type, string sql)
         {
-            var sql = query.GetSQL<T>();
-
             var factory = DbProviderFactories.GetFactory(SqlConfiguration.ConnectionSettings.ProviderName);
 
             if (factory == null)
@@ -33,10 +39,11 @@ namespace Schemio.Object.SQL
             {
                 connection.ConnectionString = SqlConfiguration.ConnectionSettings.ConnectionString;
 
-                connection.Open();
-                var list = connection.Query<T>(sql);
+                var list = connection.Query(type, sql);
 
-                return list.FirstOrDefault();
+                return list != null
+                    ? list.Cast<IQueryResult>()
+                    : Enumerable.Empty<IQueryResult>();
             }
         }
     }

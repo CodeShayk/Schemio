@@ -3,14 +3,14 @@ using Schemio.Object.Tests.EntitySetup.Queries;
 
 namespace Schemio.Object.Tests.EntitySetup.Transforms
 {
-    public class CustomerOrderItemsTransform : BaseTransformer<OrderItemCollectionResult, Customer>
+    public class CustomerOrderItemsTransform : BaseTransformer<CollectionResult<OrderItemValue>, Customer>
     {
-        public override Customer Transform(OrderItemCollectionResult queryResult, Customer entity)
+        public override Customer Transform(CollectionResult<OrderItemValue> queryResult, Customer entity)
         {
-            if (queryResult.OrderItems == null || entity?.Orders == null)
+            if (queryResult?.Items == null || entity?.Orders == null)
                 return entity;
 
-            foreach (var item in queryResult.OrderItems.Where(x => x.Items != null))
+            foreach (var item in queryResult.Items.Where(x => x.Items != null))
                 foreach (var order in entity.Orders)
                     if (order.OrderId == item.OrderId)
                         order.Items = item.Items.Select(x => new OrderItem

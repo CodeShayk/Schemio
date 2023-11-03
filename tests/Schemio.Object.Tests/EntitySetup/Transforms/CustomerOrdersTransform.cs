@@ -3,15 +3,15 @@ using Schemio.Object.Tests.EntitySetup.Queries;
 
 namespace Schemio.Object.Tests.EntitySetup.Transforms
 {
-    public class CustomerOrdersTransform : BaseTransformer<OrderCollectionResult, Customer>
+    public class CustomerOrdersTransform : BaseTransformer<CollectionResult<OrderValue>, Customer>
     {
-        public override Customer Transform(OrderCollectionResult queryResult, Customer entity)
+        public override Customer Transform(CollectionResult<OrderValue> queryResult, Customer entity)
         {
-            if (queryResult.Orders == null)
+            if (queryResult?.Items == null)
                 return entity;
 
             var customer = entity ?? new Customer();
-            customer.Orders = queryResult.Orders.Select(x => new Order
+            customer.Orders = queryResult.Items.Select(x => new Order
             {
                 Date = x.Date,
                 OrderId = x.OrderId,

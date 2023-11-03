@@ -1,6 +1,6 @@
 namespace Schemio.Object.Tests.EntitySetup.Queries
 {
-    internal class CustomerOrdersQuery : BaseQuery<CustomerParameter, OrderCollectionResult>
+    internal class CustomerOrdersQuery : BaseQuery<CustomerParameter, CollectionResult<OrderValue>>
     {
         public override void ResolveParameterInParentMode(IDataContext context)
         {

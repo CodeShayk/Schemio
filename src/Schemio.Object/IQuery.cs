@@ -7,7 +7,7 @@ namespace Schemio.Object
     {
         List<IQuery> Children { get; set; }
 
-        Type GetResultType { get; }
+        Type ResultType { get; }
 
         void ResolveParameterInParentMode(IDataContext context);
 

@@ -30,7 +30,7 @@ namespace Schemio.Object
         public List<ChildrenQueries> GetChildrenQueries()
         {
             var childrenQueries = queryList
-                .Select(x => new ChildrenQueries { ParentQueryResultType = x.GetResultType, Queries = x.Children })
+                .Select(x => new ChildrenQueries { ParentQueryResultType = x.ResultType, Queries = x.Children })
                 .Where(x => x.Queries.Any())
                 .ToList();
 

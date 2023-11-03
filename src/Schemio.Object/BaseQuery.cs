@@ -22,7 +22,7 @@ namespace Schemio.Object
         /// <summary>
         /// Get the result type for the query
         /// </summary>
-        public Type GetResultType
+        public Type ResultType
         {
             get { return typeof(TQueryResult); }
         }

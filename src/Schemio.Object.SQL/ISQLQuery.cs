@@ -2,8 +2,8 @@ namespace Schemio.Object.SQL
 {
     public interface ISQLQuery
     {
-        IQueryResult Run(SQLEngine engine);
+        Type ResultType { get; }
 
-        string GetSQL<T>();
+        string GetSQL();
     }
 }
