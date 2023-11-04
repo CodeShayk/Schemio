@@ -4,6 +4,12 @@ namespace Schemio.Object.SQL
 {
     public class SqlConfiguration
     {
+        public SqlConfiguration()
+        {
+            ConnectionSettings = new ConnectionSettings();
+            QuerySettings = new QuerySettings();
+        }
+
         public ConnectionSettings ConnectionSettings { get; set; }
         public QuerySettings QuerySettings { get; set; }
     }
