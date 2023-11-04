@@ -2,14 +2,21 @@ using System.Data.Common;
 
 namespace Schemio.Object.SQL
 {
-    internal class SqlConfiguration
+    public class SqlConfiguration
     {
-        public static ConnectionSettings ConnectionSettings { get; internal set; }
+        public ConnectionSettings ConnectionSettings { get; set; }
+        public QuerySettings QuerySettings { get; set; }
     }
 
     public class ConnectionSettings
     {
-        public DbConnection ProviderName { get; internal set; }
-        public string ConnectionString { get; internal set; }
+        public DbConnection ProviderName { get; set; }
+        public string ConnectionString { get; set; }
+    }
+
+    public class QuerySettings
+    {
+        public int TimeoutInSecs { get; set; } = 30;
+        public int QueryBatchSize { get; set; } = 10;
     }
 }
