@@ -1,9 +1,9 @@
 namespace Schemio.Object.SQL
 {
-    internal abstract class BaseSQLQuery<TQueryParameter, TQueryResult> : BaseQuery<TQueryParameter, TQueryResult>, ISQLQuery
+    public abstract class BaseSQLQuery<TQueryParameter, TQueryResult> : BaseQuery<TQueryParameter, TQueryResult>, ISQLQuery
            where TQueryParameter : IQueryParameter
            where TQueryResult : IQueryResult
     {
-        public abstract string GetSQL();
+        public abstract string GetQuery();
     }
 }

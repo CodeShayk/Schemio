@@ -1,3 +1,6 @@
+using System.Data.Common;
+using Microsoft.Data.Sqlite;
+
 namespace Schemio.Object.SQL.Tests
 {
     public class Tests
@@ -5,6 +8,7 @@ namespace Schemio.Object.SQL.Tests
         [SetUp]
         public void Setup()
         {
+            DbProviderFactories.RegisterFactory("System.Data.SQLite", SqliteFactory.Instance);
         }
 
         [Test]

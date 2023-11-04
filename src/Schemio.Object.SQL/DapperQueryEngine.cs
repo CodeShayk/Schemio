@@ -6,19 +6,17 @@ using System.Linq;
 
 namespace Schemio.Object.SQL
 {
-    public class SQLQueryEngine : IQueryEngine
+    public class DapperQueryEngine : IQueryEngine
     {
         private readonly SqlConfiguration sqlConfiguration;
 
-        public SQLQueryEngine(SqlConfiguration sqlConfiguration)
+        public DapperQueryEngine(SqlConfiguration sqlConfiguration)
         {
             this.sqlConfiguration = sqlConfiguration;
         }
 
         public IQueryResult[] Run(IQueryList queryList, IDataContext context)
         {
-            var results = new List<IQueryResult>();
-
             if (queryList?.Queries == null)
                 return Array.Empty<IQueryResult>();
 
@@ -26,6 +24,8 @@ namespace Schemio.Object.SQL
 
             if (!queries.Any())
                 return Array.Empty<IQueryResult>();
+
+            var results = new List<IQueryResult>();
 
             var batches = queries.Chunk(sqlConfiguration.QuerySettings.QueryBatchSize);
             foreach (var batch in batches)
@@ -49,12 +49,15 @@ namespace Schemio.Object.SQL
 
             using (var connection = factory.CreateConnection())
             {
+                if (connection == null)
+                    throw new Exception($"Failed to create connection with Provider: {sqlConfiguration.ConnectionSettings.ProviderName}. Please check the connection settings.");
+
                 connection.ConnectionString = sqlConfiguration.ConnectionSettings.ConnectionString;
 
                 var sqlBuilder = new StringBuilder();
 
                 foreach (var query in queryList)
-                    sqlBuilder.Append(query.GetSQL() + ";");
+                    sqlBuilder.Append(query.GetQuery() + ";");
 
                 var queryResults = connection.QueryMultiple(sql: sqlBuilder.ToString(), commandTimeout: sqlConfiguration.QuerySettings.TimeoutInSecs);
 

@@ -4,6 +4,6 @@ namespace Schemio.Object.SQL
     {
         Type ResultType { get; }
 
-        string GetSQL();
+        string GetQuery();
     }
 }
