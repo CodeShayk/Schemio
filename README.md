@@ -81,6 +81,8 @@ internal class CustomerSchema : IEntitySchema<Customer>
         }
     }
 ```
+<img width="1202" alt="image" src="https://github.com/TechNinjaLabs/Schemio.Object/assets/6259981/44af21e3-60d9-4452-b44b-a6aaa1a10d4f">
+
 
 #### 2.1 Query Class
 The purpose of a query class is to execute to fetch data from data source when mapped schema path(s) are included in the request parameter of data provider.
