@@ -36,13 +36,19 @@ Below is an example `Customer` entity we want to fetch using schemio.
         public Order[] Orders { get; set; }
     }
 ```
+Example Customer class with XSD Schema
+```
+To Do
+```
 There are three levels of nesting in the object graph for customer class above.
 - Level 1 with paths: `Customer/CustomerId`, `Customer/CustomerCode`, `Customer/CustomerName`
 - Level 2 with paths: `Customer/Communication` and `Customer/Orders`
 - Level 3 with paths: `Customer/Orders/Order/Items`
 
-#### 2. Entity Schema
-> Step 2 - Define entity schema configuration which is basically a hierarchy of query/transformer pairs mapping to the object graph of the entity in context. 
+#### 2. Entity Schema Definition
+> Step 2 - Define entity schema configuration which is basically a hierarchy of query/transformer pairs mapping to the schema paths pointing to the object graph of the entity in context.
+In query/transformer setup, the output of the query serves as the input to the transformer to map data to linked object graph of the entity in context. 
+You could nest query/transformer pairs in a parent/child setup. In which case the output of the parent query would become the input to the child query to resolve query paramter.
 
 To define Entity schema, implement `IEntitySchema<T>` interface where T is entity in context. The `query/transformer` mappings can be `nested` to `5` levels down.
 
