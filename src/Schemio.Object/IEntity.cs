@@ -1,10 +1,10 @@
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     /// <summary>
-    /// Implement Entity required to be hydrated (with data using query/transformer).
+    /// Implement Entity required to be hydrated (using query/transformer).
     /// </summary>
     public interface IEntity
     {
-        decimal Version { get; set; }
+        //decimal Version { get; set; }
     }
 }

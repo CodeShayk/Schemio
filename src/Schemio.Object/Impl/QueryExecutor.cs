@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Schemio.Data.Core.Impl
+namespace Schemio.Object.Impl
 {
     public class QueryExecutor : IQueryExecutor
     {

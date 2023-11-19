@@ -1,8 +1,8 @@
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     public interface IDataContext
     {
         public string[] Paths { get; set; }
-        string CurrentVersion { get; }
+        decimal CurrentVersion { get; }
     }
 }

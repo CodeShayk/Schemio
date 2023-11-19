@@ -1,14 +1,12 @@
-using System.Collections.Generic;
-
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     /// <summary>
-    /// Implement to configure entity schema path mappings (using Query/Trasformer pairs).
+    /// Implement to configure schema path mappings for an Entity.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IEntitySchema<T> where T : IEntity
+    /// <typeparam name="TEntity">Entity type</typeparam>
+    public interface IEntitySchema<TEntity> where TEntity : IEntity
     {
-        IEnumerable<Mapping<T, IQueryResult>> Mappings { get; }
-        decimal Version { get; }
+        public IEnumerable<Mapping<TEntity, IQueryResult>> Mappings { get; }
+        public decimal Version { get; }
     }
 }

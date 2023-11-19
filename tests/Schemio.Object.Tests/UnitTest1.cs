@@ -1,4 +1,4 @@
-namespace Data2Xml.Tests
+namespace Schemio.Object.Tests
 {
     public class Tests
     {

@@ -1,18 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
-
-
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     public class QueryList : IQueryList
     {
         private readonly List<IQuery> queryList;
+
         public QueryList()
         {
             queryList = new List<IQuery>();
         }
 
-        public IEnumerable<IQuery> Queries { get { return queryList; } }
+        public IEnumerable<IQuery> Queries
+        { get { return queryList; } }
 
         public QueryList(IEnumerable<IQuery> collection)
         {
@@ -32,7 +30,7 @@ namespace Schemio.Data.Core
         public List<ChildrenQueries> GetChildrenQueries()
         {
             var childrenQueries = queryList
-                .Select(x => new ChildrenQueries { ParentQueryResultType = x.GetResultType, Queries = x.ChildQueries })
+                .Select(x => new ChildrenQueries { ParentQueryResultType = x.ResultType, Queries = x.Children })
                 .Where(x => x.Queries.Any())
                 .ToList();
 

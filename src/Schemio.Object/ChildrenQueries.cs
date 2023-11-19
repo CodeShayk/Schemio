@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     public class ChildrenQueries
     {

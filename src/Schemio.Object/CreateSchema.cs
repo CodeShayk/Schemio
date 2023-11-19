@@ -1,18 +1,17 @@
-using System;
-using System.Collections.Generic;
-
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     #region Helpers
 
     public class CreateSchema
     {
-        public static IMappings<T, IQueryResult> For<T>() where T : IEntity => new Mappings<T, IQueryResult> { Order = 1 };
+        public static IMappings<T, IQueryResult> For<T>() where T : IEntity
+            => new Mappings<T, IQueryResult> { Order = 1 };
     }
 
     public class For
     {
-        public static ISchemaPaths Paths(params string[] paths) => new SchemaPaths { Paths = paths };
+        public static ISchemaPaths Paths(params string[] paths)
+            => new SchemaPaths { Paths = paths };
     }
 
     public class SchemaPaths : ISchemaPaths
@@ -40,7 +39,7 @@ namespace Schemio.Data.Core
         /// <returns></returns>
         public IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths)
             where TQ : IQuery, new()
-            where TR : ITransformer<TD, T>, new() =>
+            where TR : ITransformer, new() =>
             Map<TQ, TR>(paths, null);
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace Schemio.Data.Core
         /// <returns></returns>
         public IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths, Func<IWithDependents<T, TD>, IMap<T, TD>> dependents)
             where TQ : IQuery, new()
-            where TR : ITransformer<TD, T>, new()
+            where TR : ITransformer, new()
         {
             var mapping = new Mapping<T, TD>
             {
@@ -64,13 +63,11 @@ namespace Schemio.Data.Core
             };
 
             if (dependents != null)
-            {
                 foreach (var dep in ((IMappings<T, TD>)dependents(mapping)).GetMappings)
                 {
                     dep.DependentOn ??= mapping.Query;
                     Add(dep);
                 }
-            }
 
             Add(mapping);
 
@@ -90,7 +87,7 @@ namespace Schemio.Data.Core
         public int Order { get; set; }
         public ISchemaPaths SchemaPaths { get; set; }
         public IQuery Query { get; set; }
-        public ITransformer<TD, T> Transformer { get; set; }
+        public ITransformer Transformer { get; set; }
         public IQuery DependentOn { get; set; }
 
         public IMappings<T, TD> Dependents => new Mappings<T, TD> { Order = Order + 1 };
@@ -109,11 +106,11 @@ namespace Schemio.Data.Core
     {
         IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths)
             where TQ : IQuery, new()
-            where TR : ITransformer<TD, T>, new();
+            where TR : ITransformer, new();
 
         IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths, Func<IWithDependents<T, TD>, IMap<T, TD>> dependents)
             where TQ : IQuery, new()
-            where TR : ITransformer<TD, T>, new();
+            where TR : ITransformer, new();
     }
 
     public interface IMappings<T, TD> : IMap<T, TD>
@@ -140,5 +137,4 @@ namespace Schemio.Data.Core
     }
 
     #endregion Fluent Interfaces
-
 }

@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace Schemio.Data.Core.Helpers.Xml
+namespace Schemio.Object.Helpers.Xml
 {
     public static class XmlSanitizer
     {

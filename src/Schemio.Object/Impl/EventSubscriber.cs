@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Schemio.Data.Core.Impl
+namespace Schemio.Object.Impl
 {
     public class EventSubscriber : ISubscriber<ExecutorResultArgs>
     {
@@ -32,9 +29,7 @@ namespace Schemio.Data.Core.Impl
                         continue;
 
                     foreach (var query in unresolved.Queries)
-                    {
-                        query.ResolveContextAsChild(context, queryResult);
-                    }
+                        query.ResolveParameterInChildMode(context, queryResult);
                 }
             }
 
@@ -54,9 +49,7 @@ namespace Schemio.Data.Core.Impl
                         continue;
 
                     foreach (var query in unresolved.Queries)
-                    {
-                        query.ResolveContextAsChild(context, queryResult);
-                    }
+                        query.ResolveParameterInChildMode(context, queryResult);
                 }
             }
         }

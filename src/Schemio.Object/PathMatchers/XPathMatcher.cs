@@ -1,10 +1,9 @@
-﻿using Schemio.Data.Core.Helpers;
-using System.Linq;
+using Schemio.Object.Helpers;
 using System.Text.RegularExpressions;
 
-namespace Schemio.Data.Core.JSON
+namespace Schemio.Object.PathMatchers
 {
-    public class JPathMatcher : ISchemaPathMatcher
+    public class XPathMatcher : ISchemaPathMatcher
     {
         private static readonly Regex ancestorRegex = new Regex(@"=ancestor::(?'path'.*?)(/@|\[.*\]/@)", RegexOptions.Compiled);
 

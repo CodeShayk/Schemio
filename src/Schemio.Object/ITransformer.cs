@@ -1,16 +1,16 @@
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     /// <summary>
-    /// Implement transformer to map data to entity using query result.
+    /// Implement transformer to map data to entity using supported query result.
     /// </summary>
-    /// <typeparam name="TR"></typeparam>
-    /// <typeparam name="T"></typeparam>
-    public interface ITransformer<TR, T>
-        where TR : IQueryResult
-        where T : IEntity
+    public interface ITransformer
     {
-        void ResovleContext(IDataContext context);
+        IDataContext Context { get; }
 
-        T TransformToDataEntity(TR queryResult, T entity);
+        Type SupportedQueryResult { get; }
+
+        void ResolveContext(IDataContext context);
+
+        IEntity Run(IQueryResult queryResult, IEntity entity);
     }
 }

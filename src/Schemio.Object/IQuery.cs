@@ -1,21 +1,44 @@
-using System;
-using System.Collections.Generic;
-
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     /// <summary>
     /// Implement IQuery to fetch data using API or database.
     /// </summary>
     public interface IQuery
     {
-        List<IQuery> ChildQueries { get; set; }
+        List<IQuery> Children { get; set; }
 
-        Type GetResultType { get; }
+        Type ResultType { get; }
 
-        void ResolveContextAsPrimary(IDataContext context);
+        void ResolveParameterInParentMode(IDataContext context);
 
-        void ResolveContextAsChild(IDataContext context, IQueryResult parentQueryResult);
+        void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult);
 
         bool IsContextResolved();
     }
+
+    //public interface IParentQuery : IQuery
+    //{
+    //    //List<IQuery> Children { get; set; }
+
+    //    //Type GetResultType { get; }
+
+    //    void ResolveRootQueryParameter(IDataContext context);
+
+    //    //void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+
+    //    //bool IsContextResolved();
+    //}
+
+    //public interface IChildQuery : IQuery
+    //{
+    //    //List<IQuery> Children { get; set; }
+
+    //    //Type GetResultType { get; }
+
+    //    //void ResolveRootQueryParameter(IDataContext context);
+
+    //    void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+
+    //    //bool IsContextResolved();
+    //}
 }

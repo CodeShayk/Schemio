@@ -1,13 +1,24 @@
 using Microsoft.Extensions.Logging;
+using Schemio.Object.Impl;
 
-namespace Schemio.Data.Core.Impl
+namespace Schemio.Object
 {
-    public class DataProvider<T> : IDataProvider<T> where T : IEntity
+    public class DataProvider<T> : IDataProvider<T> where T : IEntity, new()
     {
         private readonly ILogger<DataProvider<T>> logger;
         private readonly IQueryExecutor queryExecutor;
         private readonly IQueryBuilder<T> queryBuilder;
         private readonly ITransformExecutor<T> transformExecutor;
+
+        public DataProvider(
+            ILogger<DataProvider<T>> logger,
+            IEntitySchema<T> entitySchema,
+            ISchemaPathMatcher schemaPathMatcher,
+            IQueryEngine[] queryEngines)
+            : this(logger, new QueryBuilder<T>(entitySchema, schemaPathMatcher),
+              new QueryExecutor(queryEngines), new TransformExecutor<T>(entitySchema))
+        {
+        }
 
         public DataProvider(
             ILogger<DataProvider<T>> logger,

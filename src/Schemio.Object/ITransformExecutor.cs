@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
-    public interface ITransformExecutor<out T> where T : IEntity
+    public interface ITransformExecutor<out TEntity> where TEntity : IEntity
     {
-        T Execute(IDataContext context, IList<IQueryResult> dtos);
+        TEntity Execute(IDataContext context, IList<IQueryResult> results);
     }
 }

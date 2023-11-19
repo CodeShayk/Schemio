@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Schemio.Data.Core.Impl
+namespace Schemio.Object.Impl
 {
     public class QueryBuilder<T> : IQueryBuilder<T> where T : IEntity
     {
@@ -24,7 +21,7 @@ namespace Schemio.Data.Core.Impl
             var queries = GetMappedQueries(entitySchema.Mappings.ToList(), context);
 
             foreach (var query in queries.Queries)
-                query.ResolveContextAsPrimary(context);
+                query.ResolveParameterInParentMode(context);
 
             return new QueryList(queries.Queries);
         }
@@ -40,11 +37,11 @@ namespace Schemio.Data.Core.Impl
                 foreach (var map in maps)
                 {
                     var dependentQueries =
-                        mappings.Where(x => x.Order == (index + 1) && x.DependentOn != null && x.DependentOn.GetType() == map.Query.GetType()).ToList();
+                        mappings.Where(x => x.Order == index + 1 && x.DependentOn != null && x.DependentOn.GetType() == map.Query.GetType()).ToList();
 
-                    map.Query.ChildQueries ??= new List<IQuery>();
+                    map.Query.Children ??= new List<IQuery>();
 
-                    map.Query.ChildQueries.AddRange(FilterByPaths(context, dependentQueries));
+                    map.Query.Children.AddRange(FilterByPaths(context, dependentQueries));
                 }
             }
 

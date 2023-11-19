@@ -1,4 +1,4 @@
-namespace Schemio.Data.Core
+namespace Schemio.Object
 {
     public interface IPolymorphicQueryResult : IQueryResult
     {

@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Schemio.Data.Core.Impl
+namespace Schemio.Object.Impl
 {
     public class EventAggregator
     {
