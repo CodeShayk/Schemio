@@ -1,0 +1,72 @@
+using Microsoft.Extensions.Logging;
+using Schemio.Helpers.Xml;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+
+namespace Schemio.XML
+{
+    internal class XMLDataProvider<T> where T : IEntity
+    {
+        private readonly IDataContextValidator dataContextValidator;
+        private IDataProvider<T> dataProvider;
+        private readonly ILogger<XMLDataProvider<T>> logger;
+
+        private const string AuthorNamespace = "http://www.intelligent-office.net/author/1.0";
+
+        public XMLDataProvider(IDataContextValidator dataContextValidator,
+            IDataProvider<T> dataProvider,
+            ILogger<XMLDataProvider<T>> logger)
+        {
+            this.logger = logger;
+            this.dataProvider = dataProvider;
+            this.dataContextValidator = dataContextValidator;
+        }
+
+        /// <summary>
+        /// Gets the xml document for the data source for given xpaths and context.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>XDocument</returns>
+        public virtual XDocument GetData(IContext context)
+        {
+            // Initialise data context.
+            var dataContext = new SchemioContext(context);
+            // Log Request context.
+            LogRequest(dataContext);
+            // Validate Request context
+            ValidateRequest(dataContext);
+            // Get entity object for given context
+            var entity = dataProvider.GetData(dataContext);
+            // Transform entity object to xml document
+            var doc = TransformToXmlDocument(entity);
+            return doc;
+        }
+
+        /// <summary>
+        /// Gets the xml  document by serializing the data source object.
+        /// </summary>
+        /// <param name="dataSource"></param>
+        /// <returns></returns>
+        private XDocument TransformToXmlDocument(T dataSource)
+        {
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("a", AuthorNamespace);
+            var strXml = XmlHelper.SerializeToXml(dataSource, namespaces, new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                CheckCharacters = false
+            });
+
+            logger.LogInformation(strXml);
+            var xml = XmlSanitizer.Sanitize(strXml);
+            var doc = XDocument.Parse(xml);
+
+            return doc;
+        }
+
+        private void LogRequest(IDataContext context) => logger.LogInformation(context.GetType().Name);
+
+        private void ValidateRequest(IDataContext context) => dataContextValidator.Validate(context);
+    }
+}

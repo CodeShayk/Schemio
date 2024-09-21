@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Schemio.Object.Tests.EntitySetup.Entities.Customer">
+    <Position X="9" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAACAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAIAAAA=</HashCode>
+      <FileName>EntitySetup\Entities\Customer.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Communication" />
+      <Property Name="Orders" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Schemio.Object.Tests.EntitySetup.Entities.Address">
+    <Position X="5.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAgAAAAAAIIAAAAAAAABIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntitySetup\Entities\Address.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Schemio.Object.Tests.EntitySetup.Entities.Communication">
+    <Position X="5.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAECAAAAIAAAAAA=</HashCode>
+      <FileName>EntitySetup\Entities\Communication.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Address" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Schemio.Object.Tests.EntitySetup.Entities.Order">
+    <Position X="9.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAACAAAAAAAAAAAAAAAAAABAAAAAAAAAAI=</HashCode>
+      <FileName>EntitySetup\Entities\Order.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Items" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Schemio.Object.Tests.EntitySetup.Entities.OrderItem">
+    <Position X="12.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAABQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntitySetup\Entities\OrderItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
