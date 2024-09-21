@@ -15,9 +15,11 @@ Few example use cases that require high availability and scalability, such as
 > - Content Management Systems
 
 ## How to use Schemio?
-You could use Schemio out of the box or extend the utility in order to suit your custom needs.
-> To use schemio you need to
-> Step 1 - Setup the entity to be fetched using DataProvider. 
+You could use Schemio out of the box or extend the utility in order to suit your own custom needs.
+
+To use schemio you need to
+> Step 1 - Setup the entity to be fetched using DataProvider.
+> 
 > Step 2 - Construct the DataProvider with required dependencies. 
 
 ### Step 1. Entity Setup
