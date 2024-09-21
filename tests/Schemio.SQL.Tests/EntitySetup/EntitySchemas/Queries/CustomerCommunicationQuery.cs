@@ -3,7 +3,7 @@ using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerCommunicationQuery : BaseSingleResultQuery<CustomerParameter, CommunicationResult>
+    internal class CustomerCommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
     {
         public override void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult)
         {
@@ -15,12 +15,23 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override Func<IDbConnection, IQueryResult> GetQuery()
+        public override CommandDefinition GetCommandDefinition()
         {
-            return (cnn) =>
-                cnn.QuerySingleOrDefault<CommunicationResult>($"select * from TCommunication c " +
-                "join TAddress a on a.CommunicationId = c.CommunicationId " +
-                $"where customerId={QueryParameter.CustomerId}");
+            return new CommandDefinition
+            (
+                "select c.CommunicationId as Id, " +
+                       "c.Phone as Telephone, " +
+                       "c.Email, " +
+                       "a.AddressId, " +
+                       "a.HouseNo, " +
+                       "a.City, " +
+                       "a.Region, " +
+                       "a.PostCode as PostalCode, " +
+                       "a.Country " +
+                "from TCommunication c " +
+                "left join TAddress a on a.CommunicationId = c.CommunicationId " +
+                $"where customerId={QueryParameter.CustomerId}"
+           );
         }
     }
 }

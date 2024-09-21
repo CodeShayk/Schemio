@@ -40,7 +40,7 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestQueryBuilderForCorrectParentQueryList()
         {
-            var context = new DataContext { Paths = new[] { "customer/customercode" } };
+            var context = new DataContext(new CustomerContext { Paths = new[] { "customer/customercode" }, EntityId = 1 });
 
             var result = _queryBuilder.Build(context);
 
@@ -59,7 +59,7 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestQueryBuilderForCorrectParentQueryListWithOneChildren()
         {
-            var context = new DataContext { Paths = new[] { "customer/customercode", "customer/communication" } };
+            var context = new DataContext(new CustomerContext { Paths = new[] { "customer/customercode", "customer/communication" } });
 
             var result = _queryBuilder.Build(context);
 
@@ -81,7 +81,7 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestQueryBuilderForCorrectParentQueryListWithTwoChildren()
         {
-            var context = new DataContext { Paths = new[] { "customer/customercode", "customer/communication", "customer/orders" } };
+            var context = new DataContext(new CustomerContext { Paths = new[] { "customer/customercode", "customer/communication", "customer/orders" } });
 
             var result = _queryBuilder.Build(context);
 
@@ -109,7 +109,7 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestQueryBuilderForCorrectParentQueryListWithTwoChildrenAndOneChildFurtherNestedChildQuery()
         {
-            var context = new DataContext { Paths = new[] { "customer/customercode", "customer/communication", "customer/orders", "customer/orders/order/items" } };
+            var context = new DataContext(new CustomerContext { Paths = new[] { "customer/customercode", "customer/communication", "customer/orders", "customer/orders/order/items" } });
 
             var result = _queryBuilder.Build(context);
 

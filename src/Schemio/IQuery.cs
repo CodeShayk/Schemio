@@ -16,29 +16,38 @@ namespace Schemio
         bool IsContextResolved();
     }
 
-    //public interface IParentQuery : IQuery
-    //{
-    //    //List<IQuery> Children { get; set; }
+    //    public interface IQuery
+    //    {
+    //        List<IQuery> Children { get; set; }
 
-    //    //Type GetResultType { get; }
+    //        Type ResultType { get; }
 
-    //    void ResolveRootQueryParameter(IDataContext context);
+    //        bool IsContextResolved();
+    //    }
 
-    //    //void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+    //    public interface IParentQuery : IQuery
+    //    {
+    //        //List<IQuery> Children { get; set; }
 
-    //    //bool IsContextResolved();
-    //}
+    //        //Type GetResultType { get; }
 
-    //public interface IChildQuery : IQuery
-    //{
-    //    //List<IQuery> Children { get; set; }
+    //        void ResolveRootQueryParameter(IDataContext context);
 
-    //    //Type GetResultType { get; }
+    //        //void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
 
-    //    //void ResolveRootQueryParameter(IDataContext context);
+    //        //bool IsContextResolved();
+    //    }
 
-    //    void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+    //    public interface IChildQuery : IQuery
+    //    {
+    //        //List<IQuery> Children { get; set; }
 
-    //    //bool IsContextResolved();
-    //}
+    //        //Type GetResultType { get; }
+
+    //        //void ResolveRootQueryParameter(IDataContext context);
+
+    //        void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+
+    //        //bool IsContextResolved();
+    //    }
 }

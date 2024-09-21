@@ -1,7 +1,8 @@
-﻿namespace Schemio
+namespace Schemio
 {
-    public class EntityContext : IEntityContext
+    internal class EntityContext : IEntityContext
     {
+        public object EntityId { get; set; }
         public string[] Paths { get; set; }
     }
 }

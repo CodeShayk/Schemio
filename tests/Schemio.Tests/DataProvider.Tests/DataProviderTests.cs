@@ -29,13 +29,13 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestDataProvider()
         {
-            var context = new DataContext(new CustomerContext { CustomerId = 1 });
+            var context = new CustomerContext { CustomerId = 1 };
 
             _provider.GetData(context);
 
-            _queryBuilder.Verify(x => x.Build(context), Times.Once);
-            _queryExecutor.Verify(x => x.Execute(context, It.IsAny<IQueryList>()), Times.Once);
-            _transformExecutor.Verify(x => x.Execute(context, It.IsAny<List<IQueryResult>>()), Times.Once);
+            _queryBuilder.Verify(x => x.Build(It.IsAny<IDataContext>()), Times.Once);
+            _queryExecutor.Verify(x => x.Execute(It.IsAny<IDataContext>(), It.IsAny<IQueryList>()), Times.Once);
+            _transformExecutor.Verify(x => x.Execute(It.IsAny<IDataContext>(), It.IsAny<List<IQueryResult>>()), Times.Once);
         }
     }
 }

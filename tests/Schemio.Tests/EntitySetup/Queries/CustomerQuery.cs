@@ -7,7 +7,7 @@ namespace Schemio.Tests.EntitySetup.Queries
         public override void ResolveParameterInParentMode(IDataContext context)
         {
             // Executes as root or level 1 query.
-            var customer = (CustomerContext)context;
+            var customer = (CustomerContext)context.Entity;
             QueryParameter = new CustomerParameter
             {
                 CustomerId = customer.CustomerId

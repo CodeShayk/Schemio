@@ -3,7 +3,7 @@ using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrderItemsQuery : BaseMultiResultQuery<OrderItemParameter, OrderItemResult>
+    internal class CustomerOrderItemsQuery : BaseSQLQuery<OrderItemParameter, OrderItemResult>
     {
         public override void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult)
         {
@@ -14,10 +14,16 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             QueryParameter.OrderIds.Add(ordersResult.OrderId);
         }
 
-        public override Func<IDbConnection, IEnumerable<IQueryResult>> GetQuery()
+        public override CommandDefinition GetCommandDefinition()
         {
-            return (cnn) =>
-                cnn.Query<OrderItemResult>($"select * from TOrderItem where OrderId in ({QueryParameter.ToCsv()})");
+            return new CommandDefinition
+            (
+                "select OrderId, " +
+                       "OrderItemId as ItemId, " +
+                       "Name, " +
+                       "Cost " +
+                $"from TOrderItem where OrderId in ({QueryParameter.ToCsv()})"
+           );
         }
     }
 }

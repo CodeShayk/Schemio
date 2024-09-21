@@ -3,36 +3,36 @@ using Schemio.PathMatchers;
 
 namespace Schemio.Impl
 {
-    public class DataProvider<T> : IDataProvider<T> where T : IEntity, new()
+    public class DataProvider<TEntity> : IDataProvider<TEntity> where TEntity : IEntity, new()
     {
-        private readonly ILogger<DataProvider<T>> logger;
+        private readonly ILogger<DataProvider<TEntity>> logger;
         private readonly IQueryExecutor queryExecutor;
-        private readonly IQueryBuilder<T> queryBuilder;
-        private readonly ITransformExecutor<T> transformExecutor;
+        private readonly IQueryBuilder<TEntity> queryBuilder;
+        private readonly ITransformExecutor<TEntity> transformExecutor;
 
         public DataProvider(
-            IEntitySchema<T> entitySchema,
+            IEntitySchema<TEntity> entitySchema,
             params IQueryEngine[] queryEngines)
-            : this(null, new QueryBuilder<T>(entitySchema, new XPathMatcher()),
-              new QueryExecutor(queryEngines), new TransformExecutor<T>(entitySchema))
+            : this(null, new QueryBuilder<TEntity>(entitySchema, new XPathMatcher()),
+              new QueryExecutor(queryEngines), new TransformExecutor<TEntity>(entitySchema))
         {
         }
 
         public DataProvider(
-            ILogger<DataProvider<T>> logger,
-            IEntitySchema<T> entitySchema,
+            ILogger<DataProvider<TEntity>> logger,
+            IEntitySchema<TEntity> entitySchema,
             ISchemaPathMatcher schemaPathMatcher,
             params IQueryEngine[] queryEngines)
-            : this(logger, new QueryBuilder<T>(entitySchema, schemaPathMatcher),
-              new QueryExecutor(queryEngines), new TransformExecutor<T>(entitySchema))
+            : this(logger, new QueryBuilder<TEntity>(entitySchema, schemaPathMatcher),
+              new QueryExecutor(queryEngines), new TransformExecutor<TEntity>(entitySchema))
         {
         }
 
         public DataProvider(
-            ILogger<DataProvider<T>> logger,
-            IQueryBuilder<T> queryBuilder,
+            ILogger<DataProvider<TEntity>> logger,
+            IQueryBuilder<TEntity> queryBuilder,
             IQueryExecutor queryExecutor,
-            ITransformExecutor<T> transformExecutor)
+            ITransformExecutor<TEntity> transformExecutor)
         {
             this.logger = logger;
             this.queryBuilder = queryBuilder;
@@ -40,9 +40,8 @@ namespace Schemio.Impl
             this.transformExecutor = transformExecutor;
         }
 
-        public T GetData(IEntityContext entityContext)
+        public TEntity GetData(IEntityContext entityContext)
         {
-            // Initialise data context.
             var context = new DataContext(entityContext);
             // Build queries for the data source based on the included xPaths
             var watch = System.Diagnostics.Stopwatch.StartNew();

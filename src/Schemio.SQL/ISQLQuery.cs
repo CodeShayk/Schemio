@@ -1,24 +1,12 @@
 using System.Data;
+using Dapper;
 
 namespace Schemio.SQL
 {
-    public interface ISQLQuery
+    public interface ISQLQuery : IQuery
     {
-        Type ResultType { get; }
-    }
+        CommandDefinition GetCommandDefinition();
 
-    public interface ISingleResultQuery : ISQLQuery
-    {
-        Func<IDbConnection, IQueryResult> GetQuery();
-    }
-
-    public interface IMultiResultQuery : ISQLQuery
-    {
-        Func<IDbConnection, IEnumerable<IQueryResult>> GetQuery();
-    }
-
-    public interface IRawSqlQuery : ISQLQuery
-    {
-        string GetQuery();
+        IEnumerable<IQueryResult> Run(IDbConnection conn);
     }
 }

@@ -3,22 +3,28 @@ using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrdersQuery : BaseMultiResultQuery<CustomerParameter, OrderResult>
+    internal class CustomerOrdersQuery : BaseSQLQuery<CustomerParameter, OrderResult>
     {
-        public override void ResolveParameterInParentMode(IDataContext context)
+        public override void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult)
         {
-            // Executes as root or level 1 query.
-            var customer = (CustomerContext)context;
+            // Execute as child to customer query.
+            var customer = (CustomerResult)parentQueryResult;
             QueryParameter = new CustomerParameter
             {
-                CustomerId = customer.CustomerId
+                CustomerId = customer.Id
             };
         }
 
-        public override Func<IDbConnection, IEnumerable<IQueryResult>> GetQuery()
+        public override CommandDefinition GetCommandDefinition()
         {
-            return (cnn) =>
-                cnn.Query<OrderResult>($"select * from TOrder where customerId={QueryParameter.CustomerId}");
+            return new CommandDefinition
+            (
+                "select OrderId, " +
+                       "OrderNo, " +
+                       "Date(OrderDate) as Date " +
+                 "from TOrder " +
+                $"where customerId={QueryParameter.CustomerId}"
+           );
         }
     }
 }
