@@ -7,8 +7,12 @@
 > Supports XPath & JsonPath for schema paths.
 
 ## When to use Schemio?
-Schemio is a perfect utility when you need to fetch a large entity from data source. Ideally, you may not want all of the entity data but preferably only sections of the object graph whilst different fetches.
-> An example use case is document generation where you would require only certain sections of entity data to be fetched for a given document template mapped to certain elements of entity data.
+Schemio is a perfect utility when you need to fetch parts of data for a large entity from data source. Ideally, you may not want all of the entity data but preferably only sections of the object graph whilst doing a fetch.
+
+Few example use cases that require high availability and scalability, such as
+> - Reporting
+> - Document Generation ( with templated data)
+> - Content Management Systems
 
 ## How to use Schemio?
 You could use Schemio out of the box or extend the utility in order to suit your custom needs.
