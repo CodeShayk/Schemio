@@ -13,11 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{AF
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		.github\workflows\Build-Master.yml = .github\workflows\Build-Master.yml
-		.github\workflows\CI.yml = .github\workflows\CI.yml
-		.github\workflows\CodeQL.yml = .github\workflows\CodeQL.yml
 		GitVersion.yml = GitVersion.yml
 		LICENSE.md = LICENSE.md
 		README.md = README.md
+		.github\workflows\PullRequest-CodeQL.yml = .github\workflows\PullRequest-CodeQL.yml
+		.github\workflows\PullRequest-CI.yml = .github\workflows\PullRequest-CI.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.SQL", "src\Schemio.SQL\Schemio.SQL.csproj", "{1A0CB973-23C9-4A17-905E-59510CD18932}"

@@ -1,6 +1,6 @@
 # <img src="https://github.com/CodeShayk/Schemio/blob/master/Images/ninja-icon-16.png" alt="ninja" style="width:30px;"/>  Schemio v 1.0 
 [![NuGet version](https://badge.fury.io/nu/Schemio.svg)](https://badge.fury.io/nu/Schemio) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/CodeShayk/Schemio/blob/master/LICENSE.md) [![CI](https://github.com/CodeShayk/Schemio/actions/workflows/CI.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/CI.yml) [![GitHub Release](https://img.shields.io/github/v/release/CodeShayk/Schemio?logo=github&sort=semver)](https://github.com/CodeShayk/Schemio/releases/latest)
-[![CodeQL](https://github.com/CodeShayk/Schemio/actions/workflows/CodeQL.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/CodeQL.yml) [![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+[![CodeQL](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml) [![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 --
 ## What is Schemio?
 `Schemio` is a .Net utility that can be used to data hyderate an entity by specifying schema paths or sections of its object graph.
