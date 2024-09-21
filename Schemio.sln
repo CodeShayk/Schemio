@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{AF
 		.github\workflows\Build-Master.yml = .github\workflows\Build-Master.yml
 		GitVersion.yml = GitVersion.yml
 		LICENSE.md = LICENSE.md
+		.github\workflows\Master-CodeQL.yml = .github\workflows\Master-CodeQL.yml
 		README.md = README.md
 		.github\workflows\PullRequest-CodeQL.yml = .github\workflows\PullRequest-CodeQL.yml
 		.github\workflows\PullRequest-CI.yml = .github\workflows\PullRequest-CI.yml

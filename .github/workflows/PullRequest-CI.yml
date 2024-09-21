@@ -1,4 +1,4 @@
-name: CI
+name: PullRequest-CI
 on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
