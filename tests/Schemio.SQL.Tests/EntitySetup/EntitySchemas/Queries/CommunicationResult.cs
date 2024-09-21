@@ -1,5 +1,6 @@
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
+    [CacheResult]
     public class CommunicationResult : IQueryResult
     {
         public int Id { get; set; }

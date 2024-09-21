@@ -43,6 +43,11 @@ namespace Schemio.Impl
         public TEntity GetData(IEntityContext entityContext)
         {
             var context = new DataContext(entityContext);
+            return GetData(context);
+        }
+
+        internal TEntity GetData(IDataContext context)
+        {
             // Build queries for the data source based on the included xPaths
             var watch = System.Diagnostics.Stopwatch.StartNew();
             var queries = queryBuilder.Build(context);
