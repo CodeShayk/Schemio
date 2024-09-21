@@ -1,11 +1,12 @@
 namespace Schemio
 {
-    public class SchemioContext : IDataContext
+    internal class DataContext : IDataContext
     {
-        public SchemioContext()
-        { }
+        public DataContext()
+        {
+        }
 
-        public SchemioContext(IContext contexts)
+        public DataContext(IEntityContext contexts)
         {
             Paths = contexts.Paths;
             Cache = new Dictionary<string, object>();

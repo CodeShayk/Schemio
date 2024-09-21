@@ -24,7 +24,7 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestQueryExecutorToReturnWhenNoQueries()
         {
-            _queryExecutor.Execute(new CustomerContext(), new QueryList());
+            _queryExecutor.Execute(new DataContext(), new QueryList());
 
             _queryEngine.Verify(x => x.Run(It.IsAny<IQueryList>(), It.IsAny<IDataContext>()), Times.Never());
         }
@@ -32,7 +32,7 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestQueryExecutorToCallEngineWhenQueriesExistForExecution()
         {
-            _queryExecutor.Execute(new CustomerContext(), new QueryList(new[] { new CustomerQuery() }) { });
+            _queryExecutor.Execute(new DataContext(), new QueryList(new[] { new CustomerQuery() }) { });
 
             _queryEngine.Verify(x => x.Run(It.IsAny<IQueryList>(), It.IsAny<IDataContext>()), Times.Once());
         }
@@ -41,9 +41,9 @@ namespace Schemio.Tests.DataProvider.Tests
         public void TestQueryExecutorToExecuteConfiguredQueriesInCorrectOrder()
         {
             var querList = new QueryBuilder<Customer>(new CustomerSchema(), new XPathMatcher())
-                .Build(new CustomerContext());
+                .Build(new DataContext());
 
-            _queryExecutor.Execute(new CustomerContext(), querList);
+            _queryExecutor.Execute(new DataContext(), querList);
 
             _queryEngine.Verify(x => x.Run(It.IsAny<IQueryList>(), It.IsAny<IDataContext>()), Times.Once());
         }

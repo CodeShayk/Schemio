@@ -8,19 +8,19 @@ namespace Schemio.XML
 {
     internal class XMLDataProvider<T> where T : IEntity
     {
-        private readonly IDataContextValidator dataContextValidator;
+        private readonly IEntityContextValidator entityContextValidator;
         private IDataProvider<T> dataProvider;
         private readonly ILogger<XMLDataProvider<T>> logger;
 
         private const string AuthorNamespace = "http://www.intelligent-office.net/author/1.0";
 
-        public XMLDataProvider(IDataContextValidator dataContextValidator,
+        public XMLDataProvider(IEntityContextValidator entityContextValidator,
             IDataProvider<T> dataProvider,
             ILogger<XMLDataProvider<T>> logger)
         {
             this.logger = logger;
             this.dataProvider = dataProvider;
-            this.dataContextValidator = dataContextValidator;
+            this.entityContextValidator = entityContextValidator;
         }
 
         /// <summary>
@@ -28,16 +28,14 @@ namespace Schemio.XML
         /// </summary>
         /// <param name="context"></param>
         /// <returns>XDocument</returns>
-        public virtual XDocument GetData(IContext context)
+        public virtual XDocument GetData(IEntityContext context)
         {
-            // Initialise data context.
-            var dataContext = new SchemioContext(context);
             // Log Request context.
-            LogRequest(dataContext);
+            LogRequest(context);
             // Validate Request context
-            ValidateRequest(dataContext);
+            ValidateRequest(context);
             // Get entity object for given context
-            var entity = dataProvider.GetData(dataContext);
+            var entity = dataProvider.GetData(context);
             // Transform entity object to xml document
             var doc = TransformToXmlDocument(entity);
             return doc;
@@ -65,8 +63,8 @@ namespace Schemio.XML
             return doc;
         }
 
-        private void LogRequest(IDataContext context) => logger.LogInformation(context.GetType().Name);
+        private void LogRequest(IEntityContext context) => logger.LogInformation(context.GetType().Name);
 
-        private void ValidateRequest(IDataContext context) => dataContextValidator.Validate(context);
+        private void ValidateRequest(IEntityContext context) => entityContextValidator.Validate(context);
     }
 }

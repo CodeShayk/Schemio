@@ -4,19 +4,11 @@ using Schemio.Tests.EntitySetup.Transforms;
 
 namespace Schemio.Tests.EntitySetup.EntitySchemas
 {
-    internal class CustomerSchema : IEntitySchema<Customer>
+    internal class CustomerSchema : BaseEntitySchema<Customer>
     {
-        private decimal version;
-
-        public IEnumerable<Mapping<Customer, IQueryResult>> Mappings { get; }
-        public decimal Version => version;
-
-        public CustomerSchema()
+        public override IEnumerable<Mapping<Customer, IQueryResult>> ConfigureSchema()
         {
-            version = 1;
-
-            // Create an object mapping graph of query and transformer pairs using xpaths.
-            Mappings = CreateSchema.For<Customer>()
+            return CreateSchema.For<Customer>()
                 .Map<CustomerQuery, CustomerTransform>(For.Paths("customer/id", "customer/customercode", "customer/customername"),
                  customer => customer.Dependents
                     .Map<CustomerCommunicationQuery, CustomerCommunicationTransform>(For.Paths("customer/communication"))

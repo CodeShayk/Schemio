@@ -32,7 +32,7 @@ namespace Schemio.Tests.DataProvider.Tests
                 new OrderItemCollectionResult()
             };
 
-            var entity = _transformExecutor.Execute(new CustomerContext { CustomerId = 1 }, queryList);
+            var entity = _transformExecutor.Execute(new DataContext(), queryList);
 
             var customerTransforms = TransformerInvocations.Where(x => x.result == typeof(CustomerResult));
             Assert.That(customerTransforms.Count() == 1);

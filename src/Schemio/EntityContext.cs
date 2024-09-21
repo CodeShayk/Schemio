@@ -1,6 +1,6 @@
 ﻿namespace Schemio
 {
-    public interface IContext
+    public class EntityContext : IEntityContext
     {
         public string[] Paths { get; set; }
     }

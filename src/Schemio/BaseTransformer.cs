@@ -1,19 +1,19 @@
 namespace Schemio
 {
-    public abstract class BaseTransformer<TD, T> : ITransformer
-        where T : IEntity
-        where TD : IQueryResult
+    public abstract class BaseTransformer<TQueryResult, TEntity> : ITransformer
+        where TEntity : IEntity
+        where TQueryResult : IQueryResult
     {
         public IDataContext Context { get; private set; }
-        public Type SupportedQueryResult => typeof(TD);
+        public Type SupportedQueryResult => typeof(TQueryResult);
 
         public void ResolveContext(IDataContext context) => Context = context;
 
         public IEntity Run(IQueryResult queryResult, IEntity entity)
         {
-            return Transform((TD)queryResult, (T)entity);
+            return Transform((TQueryResult)queryResult, (TEntity)entity);
         }
 
-        public abstract T Transform(TD queryResult, T entity);
+        public abstract TEntity Transform(TQueryResult queryResult, TEntity entity);
     }
 }

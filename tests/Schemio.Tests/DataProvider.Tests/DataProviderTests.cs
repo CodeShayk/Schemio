@@ -29,7 +29,7 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestDataProvider()
         {
-            var context = new SchemioContext(new CustomerContext { CustomerId = 1 });
+            var context = new DataContext(new CustomerContext { CustomerId = 1 });
 
             _provider.GetData(context);
 

@@ -40,8 +40,10 @@ namespace Schemio.Impl
             this.transformExecutor = transformExecutor;
         }
 
-        public T GetData(IDataContext context)
+        public T GetData(IEntityContext entityContext)
         {
+            // Initialise data context.
+            var context = new DataContext(entityContext);
             // Build queries for the data source based on the included xPaths
             var watch = System.Diagnostics.Stopwatch.StartNew();
             var queries = queryBuilder.Build(context);

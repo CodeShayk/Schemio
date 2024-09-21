@@ -13,6 +13,6 @@ namespace Schemio
             Mappings = ConfigureSchema();
         }
 
-        public abstract Mapping<TEntity, IQueryResult>[] ConfigureSchema();
+        public abstract IEnumerable<Mapping<TEntity, IQueryResult>> ConfigureSchema();
     }
 }

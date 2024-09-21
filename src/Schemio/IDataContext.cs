@@ -1,9 +1,6 @@
 namespace Schemio
 {
-    public interface IDataContext : IContext
+    public interface IDataContext : IEntityContext, ICacheContext
     {
-        string[] Paths { get; set; }
-
-        Dictionary<string, object> Cache { get; set; }
     }
 }
