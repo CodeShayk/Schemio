@@ -6,30 +6,32 @@
 [![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 --
 ## What is Schemio?
-`Schemio` is a .Net utility that can be used to data hyderate an entity by specifying schema paths or sections of its object graph.
+`Schemio` is a .Net utility that can be used to data hydrate an entity by specifying schema paths or sections of its object graph.
 > Supports XPath & JsonPath for schema paths.
 
 ## When to use Schemio?
-Schemio is a perfect utility when you need to fetch parts of data for a large entity from data source. Ideally, you may not want all of the entity data but preferably only sections of the object graph whilst doing a fetch.
+Schemio is a perfect utility when you need to fetch parts of data for a large entity from data source. Ideally, you may not want all of the entity data but preferably only sections of the object graph.
 
-Few example use cases that require high availability and scalability, such as
+Few example schemio use cases that require the service tier to dynamically fetch data for high availability and scalability, such as
 > - Reporting
 > - Document Generation ( with templated data)
 > - Content Management Systems
+> - Many more ...
 
 ## How to use Schemio?
-You could use Schemio out of the box or extend the utility in order to suit your own custom needs.
+You could use Schemio out of the box or extend the utility to suit your own custom needs.
 
 To use schemio you need to
-> Step 1 - Setup the entity to be fetched using DataProvider.
+> Step 1 - Setup the entity to be fetched.
 > 
-> Step 2 - Construct the DataProvider with required dependencies. 
+> Step 2 - Construct the `DataProvider` with required dependencies. 
 
 ### Step 1. Entity Setup
 * Define the `entity` to be fetched using `DataProvider` - which is basically a class with nested typed properties.
 * Define the `entity schema` with `query` and `transformer` pairs mappings to entity's object graph. The relevant query and transformer pairs will execute in the order of their nesting when their mapped `schema paths` are included in the `request` parameter of the DataProvider. 
 * `Query` is an implementation to fetch `data` for the entity object graph from the underlying data storage supported by the chosen `QueryEngine`.  QueryEngine is an implementation of `IQueryEngine` to execute queries against supported data source.
 * `Transformer` is an implementation to transform the data fetched by the associated query to mapped section of the object graph.
+
 #### 1. Entity
 > Step 1 - To mark the class as Entity using schemio, implement the class from `IEntity` interface. Bear in mind this is the root entity to be fetched.
 
@@ -38,15 +40,15 @@ Below is an example `Customer` entity we want to fetch using schemio.
 ```
  public class Customer : IEntity
     {
-        public int CustomerId { get; set; }
-        public string CustomerCode { get; set; }
-        public string CustomerName { get; set; }
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
         public Communication Communication { get; set; }
         public Order[] Orders { get; set; }
     }
 ```
 There are three levels of nesting in the object graph for customer class above.
-- Level 1 with paths: `Customer/CustomerId`, `Customer/CustomerCode`, `Customer/CustomerName`
+- Level 1 with paths: `Customer`
 - Level 2 with paths: `Customer/Communication` and `Customer/Orders`
 - Level 3 with paths: `Customer/Orders/Order/Items`
 
