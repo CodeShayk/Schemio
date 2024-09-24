@@ -42,18 +42,18 @@ namespace Schemio.Impl
             return subscriber.ResolvedDependents;
         }
 
-        private List<IQueryResult> Run(IQueryList queries, IDataContext context)
+        private List<IQueryResult> Run(IQueryList queryList, IDataContext context)
         {
             var output = new List<IQueryResult>();
 
             foreach (var engine in queryEngines)
             {
-                foreach (var query in queries.Queries)
-                {
-                    var results = query.Run(engine, context);
-                    if (results != null)
-                        output.AddRange(results);
-                }
+                var queries = queryList.Queries.Where(x => engine.CanExecute(x));
+
+                var results = engine.Execute(queries, context);
+
+                if (results != null)
+                    output.AddRange(results);
             }
 
             return output;

@@ -14,8 +14,6 @@ namespace Schemio
         void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult);
 
         bool IsContextResolved();
-
-        IQueryResult[] Run(IQueryEngine engine, IDataContext context);
     }
 
     //    public interface IQuery

@@ -18,6 +18,8 @@ namespace Schemio.Tests.DataProvider.Tests
         public void Setup()
         {
             _queryEngine = new Mock<IQueryEngine>();
+            _queryEngine.Setup(x => x.CanExecute(It.IsAny<IQuery>())).Returns(true);
+
             _queryExecutor = new QueryExecutor(new[] { _queryEngine.Object });
         }
 
@@ -26,7 +28,7 @@ namespace Schemio.Tests.DataProvider.Tests
         {
             _queryExecutor.Execute(new DataContext(new EntityContext()), new QueryList());
 
-            _queryEngine.Verify(x => x.Execute(It.IsAny<IQuery>(), It.IsAny<IDataContext>()), Times.Never());
+            _queryEngine.Verify(x => x.Execute(It.IsAny<IEnumerable<IQuery>>(), It.IsAny<IDataContext>()), Times.Never());
         }
 
         [Test]
@@ -34,7 +36,7 @@ namespace Schemio.Tests.DataProvider.Tests
         {
             _queryExecutor.Execute(new DataContext(new EntityContext()), new QueryList(new[] { new CustomerQuery() }) { });
 
-            _queryEngine.Verify(x => x.Execute(It.IsAny<IQuery>(), It.IsAny<IDataContext>()), Times.Once());
+            _queryEngine.Verify(x => x.Execute(It.IsAny<IEnumerable<IQuery>>(), It.IsAny<IDataContext>()), Times.Once());
         }
 
         [Test] // TODO - All sequence assertions
@@ -45,7 +47,7 @@ namespace Schemio.Tests.DataProvider.Tests
 
             _queryExecutor.Execute(new DataContext(new EntityContext()), querList);
 
-            _queryEngine.Verify(x => x.Execute(It.IsAny<IQuery>(), It.IsAny<IDataContext>()), Times.Once());
+            _queryEngine.Verify(x => x.Execute(It.IsAny<IEnumerable<IQuery>>(), It.IsAny<IDataContext>()), Times.Once());
         }
     }
 }

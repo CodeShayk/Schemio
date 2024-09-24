@@ -7,6 +7,6 @@ namespace Schemio.EF
         /// Delegate returns a collection from db.
         /// </summary>
         /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
-        Func<IDbContext, IEnumerable<IQueryResult>> GetQuery();
+        IEnumerable<IQueryResult> Run(IDbContext dbContext);
     }
 }

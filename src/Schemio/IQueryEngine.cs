@@ -2,8 +2,8 @@ namespace Schemio
 {
     public interface IQueryEngine
     {
-        //IQueryResult[] Run(IQueryList queries, IDataContext context);
+        bool CanExecute(IQuery query);
 
-        IQueryResult[] Execute(IQuery query, IDataContext context);
+        IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries, IDataContext context);
     }
 }
