@@ -3,51 +3,35 @@ namespace Schemio
     /// <summary>
     /// Implement IQuery to fetch data using API or database.
     /// </summary>
+    //public interface IQuery
+    //{
+    //    List<IQuery> Children { get; set; }
+
+    //    Type ResultType { get; }
+
+    //    void ResolveParameterInParentMode(IDataContext context);
+
+    //    void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult);
+
+    //    bool IsContextResolved();
+    //}
+
     public interface IQuery
     {
         List<IQuery> Children { get; set; }
 
         Type ResultType { get; }
 
-        void ResolveParameterInParentMode(IDataContext context);
-
-        void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult);
-
         bool IsContextResolved();
     }
 
-    //    public interface IQuery
-    //    {
-    //        List<IQuery> Children { get; set; }
+    public interface IRootQuery : IQuery
+    {
+        void ResolveRootQueryParameter(IDataContext context);
+    }
 
-    //        Type ResultType { get; }
-
-    //        bool IsContextResolved();
-    //    }
-
-    //    public interface IParentQuery : IQuery
-    //    {
-    //        //List<IQuery> Children { get; set; }
-
-    //        //Type GetResultType { get; }
-
-    //        void ResolveRootQueryParameter(IDataContext context);
-
-    //        //void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
-
-    //        //bool IsContextResolved();
-    //    }
-
-    //    public interface IChildQuery : IQuery
-    //    {
-    //        //List<IQuery> Children { get; set; }
-
-    //        //Type GetResultType { get; }
-
-    //        //void ResolveRootQueryParameter(IDataContext context);
-
-    //        void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
-
-    //        //bool IsContextResolved();
-    //    }
+    public interface IChildQuery : IQuery
+    {
+        void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+    }
 }

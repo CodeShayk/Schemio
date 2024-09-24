@@ -33,21 +33,35 @@ namespace Schemio
         /// <returns></returns>
         public bool IsContextResolved() => QueryParameter != null;
 
-        /// <summary>
-        /// Implement this method to resolve query parameter to execute query in child mode to a parent query.
-        /// </summary>
-        /// <param name="context">DataContext object passed to dataprovider.</param>
-        /// <param name="parentQueryResult">Query result of parent query.</param>
-        public virtual void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult)
-        {
-        }
+        ///// <summary>
+        ///// Implement this method to resolve query parameter to execute query in child mode to a parent query.
+        ///// </summary>
+        ///// <param name="context">DataContext object passed to dataprovider.</param>
+        ///// <param name="parentQueryResult">Query result of parent query.</param>
+        //public virtual void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult)
+        //{
+        //}
 
-        /// <summary>
-        /// Implement this method to resolve query parameter to execute query in parent mode.
-        /// </summary>
-        /// <param name="context">DataContext object passed to dataprovider.</param>
-        public virtual void ResolveParameterInParentMode(IDataContext context)
-        {
-        }
+        ///// <summary>
+        ///// Implement this method to resolve query parameter to execute query in parent mode.
+        ///// </summary>
+        ///// <param name="context">DataContext object passed to dataprovider.</param>
+        //public virtual void ResolveParameterInParentMode(IDataContext context)
+        //{
+        //}
     }
+
+    //public abstract class BaseRootQuery<TQueryParameter, TQueryResult> : BaseQuery<TQueryParameter, TQueryResult>, IQuery, IRootQuery
+    //   where TQueryParameter : IQueryParameter
+    //   where TQueryResult : IQueryResult
+    //{
+    //    public abstract void ResolveRootQueryParameter(IDataContext context);
+    //}
+
+    //public abstract class BaseChildQuery<TQueryParameter, TQueryResult> : BaseQuery<TQueryParameter, TQueryResult>, IQuery, IChildQuery
+    //   where TQueryParameter : IQueryParameter
+    //   where TQueryResult : IQueryResult
+    //{
+    //    public abstract void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
+    //}
 }

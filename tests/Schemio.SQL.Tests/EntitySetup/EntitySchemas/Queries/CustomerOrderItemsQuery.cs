@@ -3,9 +3,9 @@ using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrderItemsQuery : BaseSQLQuery<OrderItemParameter, OrderItemResult>
+    internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
     {
-        public override void ResolveParameterInChildMode(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to order query.
             var ordersResult = (OrderResult)parentQueryResult;

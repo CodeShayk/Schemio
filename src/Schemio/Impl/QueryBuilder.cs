@@ -20,8 +20,8 @@ namespace Schemio.Impl
         {
             var queries = GetMappedQueries(entitySchema.Mappings.ToList(), context);
 
-            foreach (var query in queries.Queries)
-                query.ResolveParameterInParentMode(context);
+            foreach (var query in queries.Queries.Cast<IRootQuery>())
+                query.ResolveRootQueryParameter(context);
 
             return new QueryList(queries.Queries);
         }
