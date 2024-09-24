@@ -49,5 +49,16 @@ namespace Schemio
         public virtual void ResolveParameterInParentMode(IDataContext context)
         {
         }
+
+        /// <summary>
+        /// Runs this query with query engine instance.
+        /// </summary>
+        /// <param name="engine"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public IQueryResult[] Run(IQueryEngine engine, IDataContext context)
+        {
+            return engine.Execute(this, context);
+        }
     }
 }

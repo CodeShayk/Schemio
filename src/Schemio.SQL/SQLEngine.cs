@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Schemio.SQL
 {
@@ -16,12 +11,11 @@ namespace Schemio.SQL
             this.sqlConfiguration = sqlConfiguration;
         }
 
-        public IQueryResult[] Run(IQueryList list, IDataContext context)
+        public IQueryResult[] Execute(IQuery query, IDataContext context)
         {
             var output = new List<IQueryResult>();
-            var queries = list.Queries.Cast<ISQLQuery>();
 
-            if (!queries.Any())
+            if (query == null || query is not ISQLQuery)
                 return output.ToArray();
 
             var factory = DbProviderFactories.GetFactory(sqlConfiguration.ConnectionSettings.ProviderName)
@@ -36,16 +30,10 @@ namespace Schemio.SQL
 
                 connection.ConnectionString = sqlConfiguration.ConnectionSettings.ConnectionString;
 
-                foreach (var query in queries)
-                {
-                    if (query != null)
-                    {
-                        var results = query.Run(connection);
+                var results = ((ISQLQuery)query).Run(connection);
 
-                        if (results != null && results.Any())
-                            output.AddRange(results);
-                    }
-                }
+                if (results != null && results.Any())
+                    output.AddRange(results);
             }
 
             return output.ToArray();

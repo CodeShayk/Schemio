@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace Schemio.EF
 {
     public interface ISQLQuery
@@ -9,6 +7,6 @@ namespace Schemio.EF
         /// Delegate returns a collection from db.
         /// </summary>
         /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
-        Func<DbContext, IEnumerable<IQueryResult>> GetQuery();
+        Func<IDbContext, IEnumerable<IQueryResult>> GetQuery();
     }
 }

@@ -12,13 +12,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{AF995FEF-BB94-48D0-B02B-6671DA73056B}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		.github\workflows\Build-Master.yml = .github\workflows\Build-Master.yml
-		GitVersion.yml = GitVersion.yml
 		LICENSE.md = LICENSE.md
-		.github\workflows\Master-CodeQL.yml = .github\workflows\Master-CodeQL.yml
 		README.md = README.md
-		.github\workflows\PullRequest-CodeQL.yml = .github\workflows\PullRequest-CodeQL.yml
-		.github\workflows\PullRequest-CI.yml = .github\workflows\PullRequest-CI.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.SQL", "src\Schemio.SQL\Schemio.SQL.csproj", "{1A0CB973-23C9-4A17-905E-59510CD18932}"
@@ -28,6 +23,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.Tests", "tests\Schemio.Tests\Schemio.Tests.csproj", "{B09236CB-BBD2-4DCF-A698-74CCCAB29FFB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.SQL.Tests", "tests\Schemio.SQL.Tests\Schemio.SQL.Tests.csproj", "{1E319404-8EF0-40A1-A9D7-A404A71A98C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{39FD806A-D320-43C9-800F-E9D9BCC90623}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\Build-Master.yml = .github\workflows\Build-Master.yml
+		GitVersion.yml = GitVersion.yml
+		.github\workflows\Master-CodeQL.yml = .github\workflows\Master-CodeQL.yml
+		.github\workflows\PullRequest-CI.yml = .github\workflows\PullRequest-CI.yml
+		.github\workflows\PullRequest-CodeQL.yml = .github\workflows\PullRequest-CodeQL.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +69,7 @@ Global
 		{6B92CC17-B7DB-446F-BF2F-A93696D48B5D} = {F41DA3D8-A0E9-4A05-8A35-78313C0F5804}
 		{B09236CB-BBD2-4DCF-A698-74CCCAB29FFB} = {07BAE427-96CF-4F9B-80A9-48CFB0A89CF3}
 		{1E319404-8EF0-40A1-A9D7-A404A71A98C4} = {07BAE427-96CF-4F9B-80A9-48CFB0A89CF3}
+		{39FD806A-D320-43C9-800F-E9D9BCC90623} = {AF995FEF-BB94-48D0-B02B-6671DA73056B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0FF62D6-1374-4939-A546-432862338528}

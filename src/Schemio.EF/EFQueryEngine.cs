@@ -9,32 +9,25 @@ namespace Schemio.EF
         public EFQueryEngine(IDbContextFactory<T> _dbContextFactory)
             => this._dbContextFactory = _dbContextFactory;
 
-        public IQueryResult[] Run(IQueryList queryList, IDataContext context)
+        public IQueryResult[] Execute(IQuery query, IDataContext context)
         {
-            if (queryList?.Queries == null)
-                return Array.Empty<IQueryResult>();
-
-            var queries = queryList.Queries.Cast<ISQLQuery>();
-
-            if (!queries.Any())
-                return Array.Empty<IQueryResult>();
-
             var output = new List<IQueryResult>();
+
+            if (query == null || !(query is ISQLQuery))
+                return output.ToArray();
 
             using (var dbcontext = _dbContextFactory.CreateDbContext())
             {
-                foreach (var query in queries)
-                {
-                    var queryDelegate = query.GetQuery();
-                    if (queryDelegate == null)
-                        continue;
+                var queryDelegate = ((ISQLQuery)query).GetQuery();
+                if (queryDelegate == null)
+                    return output.ToArray();
 
-                    var results = queryDelegate(dbcontext);
-                    if (results == null)
-                        continue;
+                var results = queryDelegate((IDbContext)dbcontext);
+                if (results == null)
+                    return output.ToArray();
 
-                    output.AddRange(results);
-                }
+                output.AddRange(results);
+
                 return output.ToArray();
             }
         }

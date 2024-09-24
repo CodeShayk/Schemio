@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace Schemio.EF
 {
     public abstract class BaseSQLQuery<TQueryParameter, TQueryResult>
@@ -12,6 +10,6 @@ namespace Schemio.EF
         /// Delegate returns a collection from db.
         /// </summary>
         /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
-        public abstract Func<DbContext, IEnumerable<IQueryResult>> GetQuery();
+        public abstract Func<IDbContext, IEnumerable<IQueryResult>> GetQuery();
     }
 }

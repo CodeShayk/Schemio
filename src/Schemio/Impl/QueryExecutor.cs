@@ -48,8 +48,12 @@ namespace Schemio.Impl
 
             foreach (var engine in queryEngines)
             {
-                var results = engine.Run(queries, context);
-                output.AddRange(results);
+                foreach (var query in queries.Queries)
+                {
+                    var results = query.Run(engine, context);
+                    if (results != null)
+                        output.AddRange(results);
+                }
             }
 
             return output;
