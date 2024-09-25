@@ -43,7 +43,7 @@ namespace Schemio.SQL.Tests
             var customer = _provider.GetData(new CustomerContext
             {
                 CustomerId = 1,
-                Paths = new[] { "Customer/orders/order/items/item" }
+                SchemaPaths = new[] { "Customer/orders/order/items/item" }
             });
 
             Assert.IsNotNull(customer);

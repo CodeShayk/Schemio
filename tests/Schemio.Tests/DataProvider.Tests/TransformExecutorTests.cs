@@ -82,6 +82,6 @@ namespace Schemio.Tests.DataProvider.Tests
     internal class EntityContext : IEntityContext
     {
         public int CustomerId { get; set; }
-        public string[] Paths { get; set; }
+        public string[] SchemaPaths { get; set; }
     }
 }
