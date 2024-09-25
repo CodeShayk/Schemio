@@ -28,18 +28,26 @@ namespace Schemio.Impl
 
             var results = Run(queries, context);
 
-            if (context.Cache != null)
-                foreach (var cacheResult in results
-                        .Where(result => result.GetType().GetCustomAttributes(typeof(CacheResultAttribute), false).Any())
-                        .ToList())
-                    if (!context.Cache.ContainsKey(cacheResult.GetType().Name))
-                        context.Cache.Add(cacheResult.GetType().Name, cacheResult);
+            CacheResults(context, results);
 
             eventAggregator.PublishEvent(context, new ExecutorResultArgs(results));
 
             globalResults.AddRange(results);
 
             return subscriber.ResolvedDependents;
+        }
+
+        private static void CacheResults(IDataContext context, List<IQueryResult> results)
+        {
+            if (context.Cache == null)
+                return;
+
+            foreach (var cacheResult in results
+                                        .Where(result => result.GetType()
+                                                               .GetCustomAttributes(typeof(CacheResultAttribute), false)
+                                                               .Any()))
+                if (!context.Cache.ContainsKey(cacheResult.GetType().Name))
+                    context.Cache.Add(cacheResult.GetType().Name, cacheResult);
         }
 
         private List<IQueryResult> Run(IQueryList queryList, IDataContext context)
