@@ -100,7 +100,7 @@ internal class CustomerSchema : IEntitySchema<Customer>
         }
     }
 ```
-<img width="1202" alt="image" src="https://github.com/CodeShayk/Schemio/blob/master/Images/entityschemadefinition.png">
+<img width="1202" alt="image" src="https://github.com/CodeShayk/Schemio/blob/master/Images/EntitySchemaDefinition.png">
 
 
 #### 2.1 Query Class
