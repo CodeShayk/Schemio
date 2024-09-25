@@ -40,7 +40,7 @@ namespace Schemio.Tests.DataProvider.Tests
         [Test]
         public void TestQueryBuilderForCorrectParentQueryList()
         {
-            var context = new DataContext(new CustomerContext { Paths = new[] { "customer/customercode" }, EntityId = 1 });
+            var context = new DataContext(new CustomerContext { Paths = new[] { "customer/customercode" }, CustomerId = 1 });
 
             var result = _queryBuilder.Build(context);
 

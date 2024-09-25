@@ -1,6 +1,6 @@
 namespace Schemio
 {
-    public interface IDataContext : ICacheContext
+    public interface IDataContext : IEntityContextCache
     {
         IEntityContext Entity { get; }
     }
