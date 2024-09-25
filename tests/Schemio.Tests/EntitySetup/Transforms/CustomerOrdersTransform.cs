@@ -5,10 +5,10 @@ namespace Schemio.Tests.EntitySetup.Transforms
 {
     public class CustomerOrdersTransform : BaseTransformer<CollectionResult<OrderValue>, Customer>
     {
-        public override Customer Transform(CollectionResult<OrderValue> queryResult, Customer entity)
+        public override void Transform(CollectionResult<OrderValue> queryResult, Customer entity)
         {
             if (queryResult?.Items == null)
-                return entity;
+                return;
 
             var customer = entity ?? new Customer();
             customer.Orders = queryResult.Items.Select(x => new Order
@@ -17,8 +17,6 @@ namespace Schemio.Tests.EntitySetup.Transforms
                 OrderId = x.OrderId,
                 OrderNo = x.OrderNo
             }).ToArray();
-
-            return customer;
         }
     }
 }

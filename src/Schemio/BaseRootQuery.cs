@@ -9,6 +9,10 @@ namespace Schemio
         where TQueryParameter : IQueryParameter
         where TQueryResult : IQueryResult
     {
+        /// <summary>
+        /// Implement to resolve query parameter using data context.
+        /// </summary>
+        /// <param name="context">Data context.</param>
         public abstract void ResolveRootQueryParameter(IDataContext context);
     }
 }

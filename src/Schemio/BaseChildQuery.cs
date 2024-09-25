@@ -9,6 +9,11 @@ namespace Schemio
         where TQueryParameter : IQueryParameter
         where TQueryResult : IQueryResult
     {
+        /// <summary>
+        /// Implement to resolve query parameter using parent query's result.
+        /// </summary>
+        /// <param name="context">Data context passed in.</param>
+        /// <param name="parentQueryResult">Parent Query's result.</param>
         public abstract void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult);
     }
 }

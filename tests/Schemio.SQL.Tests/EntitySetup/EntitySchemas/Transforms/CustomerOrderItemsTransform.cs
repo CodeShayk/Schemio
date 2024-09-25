@@ -6,10 +6,10 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
 {
     public class CustomerOrderItemsTransform : BaseTransformer<OrderItemResult, Customer>
     {
-        public override Customer Transform(OrderItemResult queryResult, Customer entity)
+        public override void Transform(OrderItemResult queryResult, Customer entity)
         {
             if (queryResult == null || entity?.Orders == null)
-                return entity;
+                return;
 
             foreach (var order in entity.Orders)
                 if (order.OrderId == queryResult.OrderId)
@@ -22,8 +22,6 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
                         Cost = queryResult.Cost
                     };
                 }
-
-            return entity;
         }
     }
 }

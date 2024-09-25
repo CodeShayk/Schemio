@@ -5,7 +5,7 @@ namespace Schemio.Tests.EntitySetup.Transforms
 {
     public class CustomerCommunicationTransform : BaseTransformer<CommunicationResult, Customer>
     {
-        public override Customer Transform(CommunicationResult queryResult, Customer entity)
+        public override void Transform(CommunicationResult queryResult, Customer entity)
         {
             var customer = entity ?? new Customer();
             customer.Communication = new Communication
@@ -24,8 +24,6 @@ namespace Schemio.Tests.EntitySetup.Transforms
                     PostalCode = queryResult.PostalCode,
                     Region = queryResult.Region
                 };
-
-            return customer;
         }
     }
 }

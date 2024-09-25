@@ -57,10 +57,9 @@ namespace Schemio.Tests.DataProvider.Tests
         where TEntity : IEntity
         where TQueryResult : IQueryResult
         {
-            public override TEntity Transform(TQueryResult queryResult, TEntity entity)
+            public override void Transform(TQueryResult queryResult, TEntity entity)
             {
                 TransformerInvocations.Add((queryResult.GetType(), 1));
-                return entity;
             }
         }
 
