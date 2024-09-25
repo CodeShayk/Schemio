@@ -1,9 +1,9 @@
-using Schemio.Tests.EntitySetup;
-using Schemio.Tests.EntitySetup.EntitySchemas;
 using Schemio.Impl;
-using Schemio.Tests.EntitySetup.Entities;
-using Schemio.Tests.EntitySetup.Queries;
 using Schemio.PathMatchers;
+using Schemio.Tests.EntitySetup;
+using Schemio.Tests.EntitySetup.Entities;
+using Schemio.Tests.EntitySetup.EntitySchemas;
+using Schemio.Tests.EntitySetup.Queries;
 
 namespace Schemio.Tests.DataProvider.Tests
 {

@@ -1,5 +1,3 @@
-using Schemio.Tests.EntitySetup;
-
 namespace Schemio.Tests.EntitySetup.Queries
 {
     public class CustomerQuery : BaseRootQuery<CustomerParameter, CustomerResult>

@@ -1,4 +1,3 @@
-using System.Data;
 using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries

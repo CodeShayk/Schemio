@@ -1,8 +1,8 @@
-using Microsoft.Extensions.Logging;
-using Schemio.Helpers.Xml;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Microsoft.Extensions.Logging;
+using Schemio.Helpers.Xml;
 
 namespace Schemio.XML
 {

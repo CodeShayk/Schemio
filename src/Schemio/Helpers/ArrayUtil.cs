@@ -2,7 +2,6 @@ namespace Schemio.Helpers
 {
     public static class ArrayUtil
     {
-
         public static T[] EnsureAndResizeArray<T>(T[] val, out int index)
         {
             return EnsureAndResizeArray(val, 1, out index);

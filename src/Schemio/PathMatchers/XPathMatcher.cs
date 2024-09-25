@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Schemio.Helpers;
 
 namespace Schemio.PathMatchers
 {
@@ -9,8 +8,6 @@ namespace Schemio.PathMatchers
 
         public bool IsMatch(string inputXPath, ISchemaPaths configuredXPaths)
         {
-            // Does the template xpath contain any of the mapping xpaths?
-
             if (inputXPath == null)
                 return false;
 
@@ -22,11 +19,6 @@ namespace Schemio.PathMatchers
                 return true;
 
             return false;
-
-            //return !inputXPath.IsNotNullOrEmpty()
-            // && configuredXPaths.Paths.Any(x => inputXPath.ToLower().Contains(x.ToLower())
-            //     || inputXPath.Contains("ancestor::")
-            //         && ancestorRegex.Matches(inputXPath).Select(match => match.Groups["path"].Value).Distinct().Any(match => x.EndsWith(match)));
         }
     }
 }

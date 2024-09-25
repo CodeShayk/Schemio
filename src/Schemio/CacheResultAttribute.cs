@@ -1,4 +1,5 @@
-﻿namespace Schemio
+namespace Schemio
 {
-    public class CacheResultAttribute : Attribute { }
+    public class CacheResultAttribute : Attribute
+    { }
 }

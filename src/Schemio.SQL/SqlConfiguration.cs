@@ -1,5 +1,3 @@
-using System.Data.Common;
-
 namespace Schemio.SQL
 {
     public class SqlConfiguration
