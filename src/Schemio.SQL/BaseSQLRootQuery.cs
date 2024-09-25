@@ -1,6 +1,6 @@
 namespace Schemio.SQL
 {
-    public abstract class BaseSQLRootQuery<TQueryParameter, TQueryResult> : BaseSQLQuery<TQueryParameter, TQueryResult>, ISQLQuery, IRootQuery
+    public abstract class BaseSQLRootQuery<TQueryParameter, TQueryResult> : BaseSQLQuery<TQueryParameter, TQueryResult>, IRootQuery
            where TQueryParameter : IQueryParameter
            where TQueryResult : IQueryResult
     {

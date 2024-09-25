@@ -1,6 +1,6 @@
-﻿namespace Schemio.SQL
+namespace Schemio.SQL
 {
-    public abstract class BaseSQLChildQuery<TQueryParameter, TQueryResult> : BaseSQLQuery<TQueryParameter, TQueryResult>, ISQLQuery, IChildQuery
+    public abstract class BaseSQLChildQuery<TQueryParameter, TQueryResult> : BaseSQLQuery<TQueryParameter, TQueryResult>, IChildQuery
            where TQueryParameter : IQueryParameter
            where TQueryResult : IQueryResult
     {

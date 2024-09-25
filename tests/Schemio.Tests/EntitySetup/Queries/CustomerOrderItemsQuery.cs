@@ -1,8 +1,8 @@
 namespace Schemio.Tests.EntitySetup.Queries
 {
-    internal class CustomerOrderItemsQuery : BaseQuery<OrderItemParameter, CollectionResult<OrderItemValue>>, IChildQuery
+    internal class CustomerOrderItemsQuery : BaseChildQuery<OrderItemParameter, CollectionResult<OrderItemValue>>
     {
-        public void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to order query.
             var ordersResult = (OrderCollectionResult)parentQueryResult;

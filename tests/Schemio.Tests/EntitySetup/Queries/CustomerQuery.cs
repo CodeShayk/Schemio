@@ -2,9 +2,9 @@ using Schemio.Tests.EntitySetup;
 
 namespace Schemio.Tests.EntitySetup.Queries
 {
-    public class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>, IRootQuery
+    public class CustomerQuery : BaseRootQuery<CustomerParameter, CustomerResult>
     {
-        public void ResolveRootQueryParameter(IDataContext context)
+        public override void ResolveRootQueryParameter(IDataContext context)
         {
             // Executes as root or level 1 query.
             var customer = (CustomerContext)context.Entity;
