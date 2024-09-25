@@ -10,9 +10,13 @@ namespace Schemio
 
         public BaseEntitySchema()
         {
-            Mappings = ConfigureSchema();
+            Mappings = GetSchema();
         }
 
-        public abstract IEnumerable<Mapping<TEntity, IQueryResult>> ConfigureSchema();
+        /// <summary>
+        /// Implement to configure entity schema mappings with queries & transformers.
+        /// </summary>
+        /// <returns>Entity Schema mappings</returns>
+        public abstract IEnumerable<Mapping<TEntity, IQueryResult>> GetSchema();
     }
 }

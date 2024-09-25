@@ -63,21 +63,11 @@ namespace Schemio.Tests.DataProvider.Tests
             }
         }
 
-        internal class MockCustomerSchema : IEntitySchema<Customer>
+        internal class MockCustomerSchema : BaseEntitySchema<Customer>
         {
-            private IEnumerable<Mapping<Customer, IQueryResult>> mappings;
-
-            private decimal version;
-
-            public IEnumerable<Mapping<Customer, IQueryResult>> Mappings => mappings;
-            public decimal Version => version;
-
-            public MockCustomerSchema()
+            public override IEnumerable<Mapping<Customer, IQueryResult>> GetSchema()
             {
-                version = 1;
-
-                // Create an object mapping graph of query and transformer pairs using xpaths.
-                mappings = CreateSchema.For<Customer>()
+                return CreateSchema.For<Customer>()
                     .Map<CustomerQuery, MockTransform<CustomerResult, Customer>>(For.Paths("customer/id", "customer/customercode", "customer/customername"),
                      customer => customer.Dependents
                         .Map<CustomerCommunicationQuery, MockTransform<CommunicationResult, Customer>>(For.Paths("customer/communication"))
@@ -87,5 +77,11 @@ namespace Schemio.Tests.DataProvider.Tests
                     ).Create();
             }
         }
+    }
+
+    internal class EntityContext : IEntityContext
+    {
+        public object EntityId { get; set; }
+        public string[] Paths { get; set; }
     }
 }

@@ -30,11 +30,11 @@ namespace Schemio.SQL.Tests
         {
             var customer = _provider.GetData(new CustomerContext
             {
-                CustomerId = 1
+                EntityId = 1
             });
 
             Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"CustomerId\":1,\"CustomerCode\":\"AB123\",\"CustomerName\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            Assert.That(customer.ToJson(), Is.EqualTo("{\"EntityId\":1,\"CustomerCode\":\"AB123\",\"CustomerName\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
         }
 
         [Test]
@@ -42,12 +42,12 @@ namespace Schemio.SQL.Tests
         {
             var customer = _provider.GetData(new CustomerContext
             {
-                CustomerId = 1,
+                EntityId = 1,
                 Paths = new[] { "Customer/orders/order/items/item" }
             });
 
             Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"CustomerId\":1,\"CustomerCode\":\"AB123\",\"CustomerName\":\"Jack Sparrow\",\"Communication\":null,\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            Assert.That(customer.ToJson(), Is.EqualTo("{\"EntityId\":1,\"CustomerCode\":\"AB123\",\"CustomerName\":\"Jack Sparrow\",\"Communication\":null,\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
         }
 
         [Test]
@@ -55,13 +55,13 @@ namespace Schemio.SQL.Tests
         {
             var context = new DataContext(new CustomerContext
             {
-                CustomerId = 1
+                EntityId = 1
             });
 
             var customer = _provider.GetData(context);
 
             Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"CustomerId\":1,\"CustomerCode\":\"AB123\",\"CustomerName\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            Assert.That(customer.ToJson(), Is.EqualTo("{\"EntityId\":1,\"CustomerCode\":\"AB123\",\"CustomerName\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
 
             Assert.That(context.Cache, Is.Not.Null);
             Assert.That(context.Cache.Count, Is.EqualTo(1));

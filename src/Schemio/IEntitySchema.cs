@@ -6,6 +6,9 @@ namespace Schemio
     /// <typeparam name="TEntity">Entity type</typeparam>
     public interface IEntitySchema<TEntity> where TEntity : IEntity
     {
+        /// <summary>
+        /// Entity schema mappings.
+        /// </summary>
         IEnumerable<Mapping<TEntity, IQueryResult>> Mappings { get; }
     }
 }

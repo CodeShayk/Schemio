@@ -10,7 +10,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             var customer = (CustomerContext)context.Entity;
             QueryParameter = new CustomerParameter
             {
-                CustomerId = customer.CustomerId
+                CustomerId = (int)customer.EntityId
             };
         }
 

@@ -1,7 +1,8 @@
 namespace Schemio.SQL.Tests.EntitySetup
 {
-    internal class CustomerContext : EntityContext
+    internal class CustomerContext : IEntityContext
     {
-        public int CustomerId { get; set; }
+        public object EntityId { get; set; }
+        public string[] Paths { get; set; }
     }
 }

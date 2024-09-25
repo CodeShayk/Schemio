@@ -21,49 +21,49 @@ namespace Schemio
 
     #endregion Helpers
 
-    public class Mappings<T, TD> :
-        List<Mapping<T, TD>>,
-        IMappings<T, TD>,
-        IMapOrComplete<T, TD>
-        where T : IEntity
-        where TD : IQueryResult
+    public class Mappings<TEntity, TQueryResult> :
+        List<Mapping<TEntity, TQueryResult>>,
+        IMappings<TEntity, TQueryResult>,
+        IMapOrComplete<TEntity, TQueryResult>
+        where TEntity : IEntity
+        where TQueryResult : IQueryResult
     {
         public int Order { get; set; }
 
         /// <summary>
         /// Map query and transformer for given schema path
         /// </summary>
-        /// <typeparam name="TQ">query type</typeparam>
-        /// <typeparam name="TR">transformer type</typeparam>
+        /// <typeparam name="TQuery">query type</typeparam>
+        /// <typeparam name="TTransformer">transformer type</typeparam>
         /// <param name="paths">given schema paths</param>
         /// <returns></returns>
-        public IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths)
-            where TQ : IQuery, new()
-            where TR : ITransformer, new() =>
-            Map<TQ, TR>(paths, null);
+        public IMapOrComplete<TEntity, TQueryResult> Map<TQuery, TTransformer>(ISchemaPaths paths)
+            where TQuery : IQuery, new()
+            where TTransformer : ITransformer, new() =>
+            Map<TQuery, TTransformer>(paths, null);
 
         /// <summary>
         /// Map query and transformer for given schema path and with dependent query/transform mappings
         /// </summary>
-        /// <typeparam name="TQ">query type</typeparam>
-        /// <typeparam name="TR">transformer type</typeparam>
+        /// <typeparam name="TQuery">query type</typeparam>
+        /// <typeparam name="TTransformer">transformer type</typeparam>
         /// <param name="paths">given schema paths</param>
         /// <param name="dependents">dependent mappings delegate</param>
         /// <returns></returns>
-        public IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths, Func<IWithDependents<T, TD>, IMap<T, TD>> dependents)
-            where TQ : IQuery, new()
-            where TR : ITransformer, new()
+        public IMapOrComplete<TEntity, TQueryResult> Map<TQuery, TTransformer>(ISchemaPaths paths, Func<IWithDependents<TEntity, TQueryResult>, IMap<TEntity, TQueryResult>> dependents)
+            where TQuery : IQuery, new()
+            where TTransformer : ITransformer, new()
         {
-            var mapping = new Mapping<T, TD>
+            var mapping = new Mapping<TEntity, TQueryResult>
             {
-                Query = new TQ(),
-                Transformer = new TR(),
+                Query = new TQuery(),
+                Transformer = new TTransformer(),
                 Order = Order,
                 SchemaPaths = paths,
             };
 
             if (dependents != null)
-                foreach (var dep in ((IMappings<T, TD>)dependents(mapping)).GetMappings)
+                foreach (var dep in ((IMappings<TEntity, TQueryResult>)dependents(mapping)).GetMappings)
                 {
                     dep.DependentOn ??= mapping.Query;
                     Add(dep);
@@ -74,15 +74,15 @@ namespace Schemio
             return this;
         }
 
-        public Mappings<T, TD> GetMappings => this;
+        public Mappings<TEntity, TQueryResult> GetMappings => this;
 
-        public IEnumerable<Mapping<T, TD>> Create() => this;
+        public IEnumerable<Mapping<TEntity, TQueryResult>> Create() => this;
     }
 
-    public class Mapping<T, TD> :
-        IWithDependents<T, TD>
-        where T : IEntity
-        where TD : IQueryResult
+    public class Mapping<TEntity, TQueryResult> :
+        IWithDependents<TEntity, TQueryResult>
+        where TEntity : IEntity
+        where TQueryResult : IQueryResult
     {
         public int Order { get; set; }
         public ISchemaPaths SchemaPaths { get; set; }
@@ -90,7 +90,7 @@ namespace Schemio
         public ITransformer Transformer { get; set; }
         public IQuery DependentOn { get; set; }
 
-        public IMappings<T, TD> Dependents => new Mappings<T, TD> { Order = Order + 1 };
+        public IMappings<TEntity, TQueryResult> Dependents => new Mappings<TEntity, TQueryResult> { Order = Order + 1 };
     }
 
     #region Fluent Interfaces
@@ -100,40 +100,40 @@ namespace Schemio
         string[] Paths { get; set; }
     }
 
-    public interface IMap<T, TD>
-        where T : IEntity
-        where TD : IQueryResult
+    public interface IMap<TEntity, TQueryResult>
+        where TEntity : IEntity
+        where TQueryResult : IQueryResult
     {
-        IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths)
-            where TQ : IQuery, new()
-            where TR : ITransformer, new();
+        IMapOrComplete<TEntity, TQueryResult> Map<TQuery, TTransformer>(ISchemaPaths paths)
+            where TQuery : IQuery, new()
+            where TTransformer : ITransformer, new();
 
-        IMapOrComplete<T, TD> Map<TQ, TR>(ISchemaPaths paths, Func<IWithDependents<T, TD>, IMap<T, TD>> dependents)
-            where TQ : IQuery, new()
-            where TR : ITransformer, new();
+        IMapOrComplete<TEntity, TQueryResult> Map<TQuery, TTransformer>(ISchemaPaths paths, Func<IWithDependents<TEntity, TQueryResult>, IMap<TEntity, TQueryResult>> dependents)
+            where TQuery : IQuery, new()
+            where TTransformer : ITransformer, new();
     }
 
-    public interface IMappings<T, TD> : IMap<T, TD>
-        where T : IEntity
-        where TD : IQueryResult
+    public interface IMappings<TEntity, TQueryResult> : IMap<TEntity, TQueryResult>
+        where TEntity : IEntity
+        where TQueryResult : IQueryResult
     {
         int Order { get; set; }
-        Mappings<T, TD> GetMappings { get; }
+        Mappings<TEntity, TQueryResult> GetMappings { get; }
     }
 
-    public interface IMapOrComplete<T, TD> : IMap<T, TD>
-        where T : IEntity
-        where TD : IQueryResult
+    public interface IMapOrComplete<TEntity, TQueryResult> : IMap<TEntity, TQueryResult>
+        where TEntity : IEntity
+        where TQueryResult : IQueryResult
     {
-        IEnumerable<Mapping<T, TD>> Create();
+        IEnumerable<Mapping<TEntity, TQueryResult>> Create();
     }
 
-    public interface IWithDependents<T, TD>
+    public interface IWithDependents<TEntity, TQueryResult>
 
-        where T : IEntity
-        where TD : IQueryResult
+        where TEntity : IEntity
+        where TQueryResult : IQueryResult
     {
-        IMappings<T, TD> Dependents { get; }
+        IMappings<TEntity, TQueryResult> Dependents { get; }
     }
 
     #endregion Fluent Interfaces
