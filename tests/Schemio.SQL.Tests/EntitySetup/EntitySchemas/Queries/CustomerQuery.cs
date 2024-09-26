@@ -19,8 +19,8 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             return new CommandDefinition
             (
                 "select CustomerId as Id, " +
-                       "Customer_Name as CustomerName," +
-                       "Customer_Code as CustomerCode " +
+                       "Customer_Name as Name," +
+                       "Customer_Code as Code " +
                 $"from TCustomer where customerId={QueryParameter.CustomerId}"
            );
         }
