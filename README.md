@@ -204,17 +204,17 @@ To define a transformer class, you need to implement `BaseTransformer<TQueryResu
 - where TEntity is Entity implementing `IEntity`. eg. Customer. 
 - where TQueryResult is Query Result from associated Query. It is an implementation of `IQueryResult` interface. 
 
-Note: It is `important` that the transformer should map data only to the `schema path(s)` pointed `section(s)` of the object graph.
+Note: It is `important` that the transformer should map data only to the `schema path(s)` pointing `section(s)` of the object graph.
 
 For the example query/transformer mapping
 >```
 >   .Map<CustomerQuery, CustomerTransform>(For.Paths("customer"))
 >```
 
-The customer transformer maps data to only the `customer` XPath mapped object grapgh of customer class.
+The customer transformer maps data only to the `customer` xpath mapped object graph of customer class.
 ie. - `customer/id`, `customer/customercode`, `customer/customername`
 
-In below example, `CustomerTransformer` (transformer) is implemented to transform `Customer` (entity) with `CustomerResult` (query result) obtained from `CustomerQuery` (query) execution.
+In below transformer example, `CustomerTransformer` is implemented to transform entity `Customer` with `CustomerResult` query result obtained from `CustomerQuery` execution.
 
 >
 >```
