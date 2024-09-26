@@ -139,6 +139,8 @@ QueryEngine is an implementation of `IQueryEngine` to execute queries against a 
 
 As explained above, You can configure a query in `Parent` or `Child` (nested) mode in nested hierarchies.
 
+i. Parent Query
+
 To define a `parent` or `root` query which is usually configured at level 1 to query the root entity, derive from `aseRootQuery<TQueryParameter, TQueryResult>`
 * `TQueryParameter` is basically the class that holds the `inputs` required by the root query for execution. It is an implementation of `IQueryParameter` type.
 * `TQueryResult` is the result that will be returned from executing the root query.  It is an implementation of `IQueryResult` type.
@@ -165,6 +167,7 @@ In `parent` mode, the query parameter is resolved using the `IDataContext` param
 >        }
 >    }
 >```
+ii. Child Query
 
 To define a `child` or `dependant` query which is usually configured as child at level below the root query to query, derive from `BaseChildQuery<TQueryParameter, TQueryResult>`
 * `TQueryParameter` is basically the class that holds the `inputs` required by the child query for execution. It is an implementation of `IQueryParameter` type.
