@@ -95,7 +95,7 @@ Example Entity Schema Definition (using XPaths)
 >   }
 >```
 
-##### Query/Transformer Mapping
+##### i. Query/Transformer Mapping
 Every `Query` type in the `EntitySchema` definition should have a complementing `Transformer` type.
 You could map multiple `schema paths` to a given query/transformer pair. Currently, `XPath` and `JSONPath` schema languages are supported.
 
@@ -104,7 +104,7 @@ You could map multiple `schema paths` to a given query/transformer pair. Current
 >   .Map<CustomerQuery, CustomerTransform>(For.Paths("customer", "customer/code", "customer/name"))
 >```
 
-##### Nested Query/Transformer Mappings
+##### ii. Nested Query/Transformer Mappings
 * You could nest query/transformer pairs in a `parent/child` hierarchy. In which case the output of the parent query will serve as the input to the child query to resolve its query paramter.
 * The query/transformer mappings can be `nested` to `5` levels down.
 * When certain `schema paths` are included in the DataProvider `request` to fetch the Entity, the relevant query and transformer pairs get executed in the order of their nesting to hydrate the entity. 
@@ -204,17 +204,17 @@ To define a transformer class, you need to implement `BaseTransformer<TQueryResu
 - where TEntity is Entity implementing `IEntity`. eg. Customer. 
 - where TQueryResult is Query Result from associated Query. It is an implementation of `IQueryResult` interface. 
 
-Note: It is `important` that the transformer should map data only to the `schema path(s)` pointed `section(s)` of the object graph.
+Note: It is `important` that the transformer should map data only to the `schema path(s)` pointing `section(s)` of the object graph.
 
 For the example query/transformer mapping
 >```
 >   .Map<CustomerQuery, CustomerTransform>(For.Paths("customer"))
 >```
 
-The customer transformer maps data to only the `customer` XPath mapped object grapgh of customer class.
+The customer transformer maps data only to the `customer` xpath mapped object graph of customer class.
 ie. - `customer/id`, `customer/customercode`, `customer/customername`
 
-In below example, `CustomerTransformer` (transformer) is implemented to transform `Customer` (entity) with `CustomerResult` (query result) obtained from `CustomerQuery` (query) execution.
+In below transformer example, `CustomerTransformer` is implemented to transform entity `Customer` with `CustomerResult` query result obtained from `CustomerQuery` execution.
 
 >
 >```
