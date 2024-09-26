@@ -95,7 +95,7 @@ Example Entity Schema Definition (using XPaths)
 >   }
 >```
 
-##### Query/Transformer Mapping
+##### i. Query/Transformer Mapping
 Every `Query` type in the `EntitySchema` definition should have a complementing `Transformer` type.
 You could map multiple `schema paths` to a given query/transformer pair. Currently, `XPath` and `JSONPath` schema languages are supported.
 
@@ -104,7 +104,7 @@ You could map multiple `schema paths` to a given query/transformer pair. Current
 >   .Map<CustomerQuery, CustomerTransform>(For.Paths("customer", "customer/code", "customer/name"))
 >```
 
-##### Nested Query/Transformer Mappings
+##### ii. Nested Query/Transformer Mappings
 * You could nest query/transformer pairs in a `parent/child` hierarchy. In which case the output of the parent query will serve as the input to the child query to resolve its query paramter.
 * The query/transformer mappings can be `nested` to `5` levels down.
 * When certain `schema paths` are included in the DataProvider `request` to fetch the Entity, the relevant query and transformer pairs get executed in the order of their nesting to hydrate the entity. 
