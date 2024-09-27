@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Schemio.EntityFramework;
+using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
@@ -17,7 +18,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 
         public override IEnumerable<IQueryResult> Run(DbContext dbContext)
         {
-            return ((CustomerDbContext)dbContext).Customers
+            return dbContext.Set<Customer>()
                         .Where(c => c.Id == QueryParameter.CustomerId)
                         .Select(c => new CustomerResult
                         {

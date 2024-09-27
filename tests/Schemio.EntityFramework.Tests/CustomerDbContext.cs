@@ -8,8 +8,6 @@ namespace Schemio.SQL.Tests
 {
     public class CustomerDbContext : DbContext
     {
-        public DbSet<Customer> Customers { get; set; }
-
         public CustomerDbContext(DbContextOptions<CustomerDbContext> options) : base(options)
         {
         }
@@ -49,7 +47,6 @@ namespace Schemio.SQL.Tests
                  eb.Property(b => b.Country);
                  eb.Property(b => b.PostalCode).HasColumnName("Postcode");
                  eb.HasOne(b => b.Communication).WithOne(c => c.Address).HasForeignKey<Address>(c => c.CommunicationId);
-                 ;
              });
 
             modelBuilder.Entity<Order>(
@@ -60,12 +57,7 @@ namespace Schemio.SQL.Tests
                  eb.Property(b => b.OrderNo);
                  eb.Property(b => b.Date).HasColumnName("OrderDate")
                                          .HasConversion(v => v.ToShortDateString(), s => s.IsNotNullOrEmpty() ? DateTime.Parse(s) : DateTime.MinValue);
-
-                 //.HasTranslation(args => SqlFunctionExpression.Create("strftime", args, typeof(DateTime), null));
-
-                 //HasComputedColumnSql<DateTime>("strftime('%Y-%m-%d', OrderDate)");
                  eb.HasOne(b => b.Customer);
-                 //.WithMany(c => c.Orders).HasForeignKey(c => c.CustomerId);
                  eb.HasMany(b => b.Items);
              });
 
