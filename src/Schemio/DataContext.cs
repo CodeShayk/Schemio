@@ -1,6 +1,6 @@
 namespace Schemio
 {
-    public class DataContext : IDataContext
+    internal class DataContext : IDataContext
     {
         public DataContext(IEntityContext entityContext)
         {

@@ -34,7 +34,7 @@ namespace Schemio.SQL.Tests
             });
 
             Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12 inch Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace Schemio.SQL.Tests
             });
 
             Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":null,\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":null,\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12 inch Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace Schemio.SQL.Tests
             var customer = _provider.GetData(context);
 
             Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12\\u0027 Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12 inch Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
 
             Assert.That(context.Cache, Is.Not.Null);
             Assert.That(context.Cache.Count, Is.EqualTo(1));

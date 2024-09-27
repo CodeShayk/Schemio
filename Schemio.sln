@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{AF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.SQL", "src\Schemio.SQL\Schemio.SQL.csproj", "{1A0CB973-23C9-4A17-905E-59510CD18932}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.EF", "src\Schemio.EF\Schemio.EF.csproj", "{6B92CC17-B7DB-446F-BF2F-A93696D48B5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.EntityFramework", "src\Schemio.EntityFramework\Schemio.EntityFramework.csproj", "{6B92CC17-B7DB-446F-BF2F-A93696D48B5D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.Tests", "tests\Schemio.Tests\Schemio.Tests.csproj", "{B09236CB-BBD2-4DCF-A698-74CCCAB29FFB}"
 EndProject
@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{39FD80
 		.github\workflows\PullRequest-CI.yml = .github\workflows\PullRequest-CI.yml
 		.github\workflows\PullRequest-CodeQL.yml = .github\workflows\PullRequest-CodeQL.yml
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schemio.EntityFramework.Tests", "tests\Schemio.EntityFramework.Tests\Schemio.EntityFramework.Tests.csproj", "{FE039675-00BE-4DC5-945F-14E7625170D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{1E319404-8EF0-40A1-A9D7-A404A71A98C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E319404-8EF0-40A1-A9D7-A404A71A98C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E319404-8EF0-40A1-A9D7-A404A71A98C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE039675-00BE-4DC5-945F-14E7625170D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE039675-00BE-4DC5-945F-14E7625170D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE039675-00BE-4DC5-945F-14E7625170D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE039675-00BE-4DC5-945F-14E7625170D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{B09236CB-BBD2-4DCF-A698-74CCCAB29FFB} = {07BAE427-96CF-4F9B-80A9-48CFB0A89CF3}
 		{1E319404-8EF0-40A1-A9D7-A404A71A98C4} = {07BAE427-96CF-4F9B-80A9-48CFB0A89CF3}
 		{39FD806A-D320-43C9-800F-E9D9BCC90623} = {AF995FEF-BB94-48D0-B02B-6671DA73056B}
+		{FE039675-00BE-4DC5-945F-14E7625170D0} = {07BAE427-96CF-4F9B-80A9-48CFB0A89CF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0FF62D6-1374-4939-A546-432862338528}
