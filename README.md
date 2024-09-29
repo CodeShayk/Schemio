@@ -358,4 +358,39 @@ In below transformer example, `CustomerTransformer` is implemented to transform 
 >```
 
 ### DataProvider Setup
-> coming soon
+Data provider needs to setup with required dependencies. Provide implementations of below dependencies to construct the data provider.
+
+- `ILogger<DataProvider<TEntity>>` - logger implementation. default no logger.
+- `IEntitySchema<TEntity>` - mandatory entity schema definition for entity's object graph. 
+- `IQueryEngine` - implementation of query engine to execute queries (of type IQuery) with supported data storage.
+- `ISchemaPathMatcher` - implementation of schema path matcher to use custom schema paths with entity schema definition.
+
+Example constructors:
+
+i. With `EntitySchema` and `QueryEngine` implementations.
+
+```
+    public DataProvider(IEntitySchema<TEntity> entitySchema, params IQueryEngine[] queryEngines)
+```      
+ii. With `Logger`, `EntitySchema`, `QueryEngine`, and `SchemaPathmMatcher` for custom schema paths mapping in entity schema definition.
+```
+    public DataProvider(ILogger<DataProvider<TEntity>> logger, IEntitySchema<TEntity> entitySchema, ISchemaPathMatcher schemaPathMatcher, params IQueryEngine[] queryEngines)
+           
+```
+#### Schemio.SQL
+Construct DataProvider using `Schemio.SQL.QueryEngine` query engine.
+
+```
+var provider = new DataProvider(new CustomerSchema(), new Schemio.SQL.QueryEngine());
+```
+
+#### Schemio.EntityFramework
+Construct DataProvider using `Schemio.EntityFramework.QueryEngine` query engine.
+
+```
+var provider = new DataProvider(new CustomerSchema(), Schemio.EntityFramework.QueryEngine());
+```
+
+### Using IOC for registrations
+
+Coming soon
