@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Schemio.EntityFramework;
 using Schemio.EntityFramework.Tests.Domain;
 
-namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
+namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
     public class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
     {
@@ -12,7 +11,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             var customer = (CustomerContext)context.Entity;
             QueryParameter = new CustomerParameter
             {
-                CustomerId = (int)customer.CustomerId
+                CustomerId = customer.CustomerId
             };
         }
 

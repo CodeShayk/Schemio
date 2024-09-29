@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Schemio.EntityFramework.Tests.Domain
 {
     public class Communication

@@ -1,8 +1,8 @@
-using Schemio.SQL.Tests.EntitySetup.Entities;
-using Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries;
-using Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms;
+using Schemio.EntityFramework.Tests.EntitySetup.Entities;
+using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
+using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms;
 
-namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas
+namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas
 {
     internal class CustomerSchema : BaseEntitySchema<Customer>
     {

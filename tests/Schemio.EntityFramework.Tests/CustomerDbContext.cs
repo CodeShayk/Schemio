@@ -1,10 +1,8 @@
-using System.ComponentModel;
-using System.Diagnostics.Metrics;
 using Microsoft.EntityFrameworkCore;
 using Schemio.EntityFramework.Tests.Domain;
 using Schemio.Helpers;
 
-namespace Schemio.SQL.Tests
+namespace Schemio.EntityFramework.Tests
 {
     public class CustomerDbContext : DbContext
     {

@@ -1,29 +1,33 @@
-using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Schemio.EntityFramework.Tests.EntitySetup.Entities;
-using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas;
+using Schemio.SQL;
+using Schemio.SQL.Tests.EntitySetup.Entities;
+using Schemio.SQL.Tests.EntitySetup.EntitySchemas;
 
 namespace Schemio.EntityFramework.Tests
 {
     public class BaseTest
     {
         protected ServiceProvider _serviceProvider;
+        private const string DbProviderName = "System.Data.SQLite";
 
         [OneTimeSetUp]
         public void Setup()
         {
             var services = new ServiceCollection();
 
+            DbProviderFactories.RegisterFactory(DbProviderName, SqliteFactory.Instance);
             var connectionString = $"DataSource={Environment.CurrentDirectory}//Customer.db;mode=readonly;cache=shared";
+            var configuration = new SqlConfiguration { ConnectionSettings = new ConnectionSettings { ConnectionString = connectionString, ProviderName = DbProviderName } };
 
-            services.AddDbContextFactory<CustomerDbContext>(options =>
-                    options.UseSqlite(connectionString));
+            Console.WriteLine(connectionString);
 
             services.AddLogging();
 
             services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
-                .AddEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
+                .AddEngine(c => new QueryEngine(configuration))
                 .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
 
             // 4. Build the service provider

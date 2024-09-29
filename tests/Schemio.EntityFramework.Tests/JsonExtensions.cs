@@ -1,7 +1,6 @@
 using System.Text.Json;
-using System.Xml;
 
-namespace Schemio.SQL.Tests
+namespace Schemio.EntityFramework.Tests
 {
     public static class JsonExtensions
     {

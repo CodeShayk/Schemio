@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Schemio.EntityFramework;
 using Schemio.EntityFramework.Tests.Domain;
 
-namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
+namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
     internal class CustomerCommunicationQuery : BaseSQLChildQuery<CustomerParameter, CommunicationResult>
     {

@@ -1,24 +1,17 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Schemio.EntityFramework;
-using Schemio.EntityFramework.Tests;
-using Schemio.Impl;
-using Schemio.SQL.Tests.EntitySetup;
-using Schemio.SQL.Tests.EntitySetup.Entities;
-using Schemio.SQL.Tests.EntitySetup.EntitySchemas;
+using Schemio.EntityFramework.Tests.EntitySetup;
+using Schemio.EntityFramework.Tests.EntitySetup.Entities;
 
-namespace Schemio.SQL.Tests
+namespace Schemio.EntityFramework.Tests
 {
     public class E2ETests : BaseTest
     {
-        private DataProvider<Customer> _provider;
+        private IDataProvider<Customer> _provider;
 
         [SetUp]
         public void Setup()
         {
-            var dbcontextFactory = _serviceProvider.GetService<IDbContextFactory<CustomerDbContext>>();
-
-            _provider = new DataProvider<Customer>(new CustomerSchema(), new QueryEngine<CustomerDbContext>(dbcontextFactory));
+            _provider = _serviceProvider.GetService<IDataProvider<Customer>>();
         }
 
         [Test]

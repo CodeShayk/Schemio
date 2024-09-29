@@ -1,4 +1,4 @@
-namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
+namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
     public class OrderItemResult : IQueryResult
     {

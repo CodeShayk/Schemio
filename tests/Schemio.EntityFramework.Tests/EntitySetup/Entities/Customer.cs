@@ -1,4 +1,4 @@
-namespace Schemio.SQL.Tests.EntitySetup.Entities
+namespace Schemio.EntityFramework.Tests.EntitySetup.Entities
 {
     public class Customer : IEntity
     {

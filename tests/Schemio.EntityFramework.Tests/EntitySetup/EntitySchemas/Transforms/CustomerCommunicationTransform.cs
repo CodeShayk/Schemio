@@ -1,7 +1,7 @@
-using Schemio.SQL.Tests.EntitySetup.Entities;
-using Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries;
+using Schemio.EntityFramework.Tests.EntitySetup.Entities;
+using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
 
-namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
+namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
 {
     public class CustomerCommunicationTransform : BaseTransformer<CommunicationResult, Customer>
     {

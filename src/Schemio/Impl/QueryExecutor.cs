@@ -2,9 +2,9 @@ namespace Schemio.Impl
 {
     public class QueryExecutor : IQueryExecutor
     {
-        private readonly IQueryEngine[] queryEngines;
+        private readonly IEnumerable<IQueryEngine> queryEngines;
 
-        public QueryExecutor(IQueryEngine[] queryEngines)
+        public QueryExecutor(IEnumerable<IQueryEngine> queryEngines)
         {
             this.queryEngines = queryEngines;
         }

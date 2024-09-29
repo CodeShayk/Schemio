@@ -2,11 +2,11 @@ using System.Data.Common;
 
 namespace Schemio.SQL
 {
-    public class SQLEngine : IQueryEngine
+    public class QueryEngine : IQueryEngine
     {
         private readonly SqlConfiguration sqlConfiguration;
 
-        public SQLEngine(SqlConfiguration sqlConfiguration)
+        public QueryEngine(SqlConfiguration sqlConfiguration)
         {
             this.sqlConfiguration = sqlConfiguration;
         }

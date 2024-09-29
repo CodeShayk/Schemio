@@ -1,28 +1,19 @@
-using System.Data.Common;
-using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.DependencyInjection;
+using Schemio.EntityFramework.Tests;
 using Schemio.Impl;
 using Schemio.SQL.Tests.EntitySetup;
 using Schemio.SQL.Tests.EntitySetup.Entities;
-using Schemio.SQL.Tests.EntitySetup.EntitySchemas;
 
 namespace Schemio.SQL.Tests
 {
-    public class E2ETests
+    public class E2ETests : BaseTest
     {
-        private const string DbProviderName = "System.Data.SQLite";
-
-        private DataProvider<Customer> _provider;
+        protected IDataProvider<Customer> _provider;
 
         [SetUp]
         public void Setup()
         {
-            DbProviderFactories.RegisterFactory(DbProviderName, SqliteFactory.Instance);
-            var connectionString = $"DataSource={Environment.CurrentDirectory}//Customer.db;mode=readonly;cache=shared";
-            var configuration = new SqlConfiguration { ConnectionSettings = new ConnectionSettings { ConnectionString = connectionString, ProviderName = DbProviderName } };
-
-            Console.WriteLine(connectionString);
-
-            _provider = new DataProvider<Customer>(new CustomerSchema(), new SQLEngine(configuration));
+            _provider = _serviceProvider.GetService<IDataProvider<Customer>>();
         }
 
         [Test]
@@ -58,7 +49,7 @@ namespace Schemio.SQL.Tests
                 CustomerId = 1
             });
 
-            var customer = _provider.GetData(context);
+            var customer = ((DataProvider<Customer>)_provider).GetData(context);
 
             Assert.IsNotNull(customer);
             Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12 inch Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));

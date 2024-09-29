@@ -1,6 +1,6 @@
 using Schemio.Helpers;
 
-namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
+namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
     internal class OrderItemParameter : IQueryParameter
     {

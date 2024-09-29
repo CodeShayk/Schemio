@@ -1,4 +1,4 @@
-namespace Schemio.SQL.Tests.EntitySetup
+namespace Schemio.EntityFramework.Tests.EntitySetup
 {
     internal class CustomerContext : IEntityContext
     {

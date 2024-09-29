@@ -381,7 +381,7 @@ ii. With `Logger`, `EntitySchema`, `QueryEngine`, and `SchemaPathmMatcher` for c
 Construct DataProvider using `Schemio.SQL.QueryEngine` query engine.
 
 ```
-var provider = new DataProvider(new CustomerSchema(), new Schemio.SQL.QueryEngine());
+var provider = new DataProvider(new CustomerSchema(), new Schemio.SQL.QueryEngine(new SQLConfiguration()));
 ```
 
 #### Schemio.EntityFramework
@@ -393,4 +393,35 @@ var provider = new DataProvider(new CustomerSchema(), Schemio.EntityFramework.Qu
 
 ### Using IOC for registrations
 
-Coming soon
+With ServiceCollection, you should call the `services.UseSchemio()` method for IoC registration.
+
+To configure Data provider with SQL Query engine, use fluent registration apis as shown below - 
+ ```
+   services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
+                .AddEngine(c => new QueryEngine(new SQLConfiguration {  ConnectionSettings = new ConnectionSettings {
+                        Providername = "System.Data.SqlClient", 
+                        ConnectionString ="Data Source=Powerstation; Initial Catalog=Customer; Integrated Security=SSPI;"            
+                    }}))
+                .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
+```
+To configure Data provider with Entity Framework Query engine, use fluent registration apis shown as below - 
+ ```
+   services.AddDbContextFactory<CustomerDbContext>(options => options.UseSqlServer(YourSqlConnection), ServiceLifetime.Scoped);
+
+   services.AddLogging();
+
+   services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
+     .AddEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
+     .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
+
+```
+`Please Note:` You can combine multiple query engines and implement different types of queries to execute on different supported platforms.
+
+To use Data provider, Inject IDataProvider<T> using constructor & property injection method or explicity Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<>))`
+
+## Credits
+Thank you for reading. Please fork, explore, contribute and report. Happy Coding !! :)
+
+
+
+

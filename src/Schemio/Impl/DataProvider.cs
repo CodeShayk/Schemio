@@ -3,9 +3,10 @@ using Schemio.PathMatchers;
 
 namespace Schemio.Impl
 {
-    public class DataProvider<TEntity> : IDataProvider<TEntity> where TEntity : IEntity, new()
+    public class DataProvider<TEntity> : IDataProvider<TEntity>
+        where TEntity : IEntity, new()
     {
-        private readonly ILogger<DataProvider<TEntity>> logger;
+        private readonly ILogger<IDataProvider<TEntity>> logger;
         private readonly IQueryExecutor queryExecutor;
         private readonly IQueryBuilder<TEntity> queryBuilder;
         private readonly ITransformExecutor<TEntity> transformExecutor;
@@ -19,7 +20,7 @@ namespace Schemio.Impl
         }
 
         public DataProvider(
-            ILogger<DataProvider<TEntity>> logger,
+            ILogger<IDataProvider<TEntity>> logger,
             IEntitySchema<TEntity> entitySchema,
             ISchemaPathMatcher schemaPathMatcher,
             params IQueryEngine[] queryEngines)
@@ -29,7 +30,7 @@ namespace Schemio.Impl
         }
 
         public DataProvider(
-            ILogger<DataProvider<TEntity>> logger,
+            ILogger<IDataProvider<TEntity>> logger,
             IQueryBuilder<TEntity> queryBuilder,
             IQueryExecutor queryExecutor,
             ITransformExecutor<TEntity> transformExecutor)

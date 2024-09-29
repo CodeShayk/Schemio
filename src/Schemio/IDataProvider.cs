@@ -1,7 +1,7 @@
 namespace Schemio
 {
-    public interface IDataProvider<T> where T : IEntity
+    public interface IDataProvider<TEntity> where TEntity : IEntity
     {
-        T GetData(IEntityContext context);
+        TEntity GetData(IEntityContext context);
     }
 }
