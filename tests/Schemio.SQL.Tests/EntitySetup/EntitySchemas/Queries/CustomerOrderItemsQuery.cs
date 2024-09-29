@@ -6,7 +6,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
     {
         public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
-            // Execute as child to order query.
+            // Execute as child query to order query taking OrderResult to resolve query parameter.
             var ordersResult = (OrderResult)parentQueryResult;
 
             QueryParameter ??= new OrderItemParameter();

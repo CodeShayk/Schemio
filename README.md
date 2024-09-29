@@ -152,7 +152,7 @@ In `parent` mode, the query parameter is resolved using the `IDataContext` param
 
 > See example `CustomerQuery` implemented to be configured and run in parent mode below. 
 > ```
->public class CustomerQuery : BaseRootQuery<CustomerParameter, CustomerResult>
+>internal class CustomerQuery : BaseRootQuery<CustomerParameter, CustomerResult>
 >    {
 >        public override void ResolveRootQueryParameter(IDataContext context)
 >        {
@@ -167,6 +167,7 @@ In `parent` mode, the query parameter is resolved using the `IDataContext` param
 >        }
 >    }
 >```
+
 ii. Child Query
 
 To define a `child` or `dependant` query which is usually configured as child at level below the root query to query, derive from `BaseChildQuery<TQueryParameter, TQueryResult>`
@@ -195,9 +196,131 @@ In `child` mode, the query parameter is resolved using the `query result` of the
 >    }
 >```
 
+#### Query Engines
 
-Please Note: The above query implementation is only with respect to parent/child mode. The actual storage specific query definition would vary with different implementations of the QueryEngine.
-> Please see Query engine provider specific implementation of queries below.
+`Please Note:` The above query implementation examples are with respect to parent/child configuration. The actual storage specific query definition should vary with specific implementation of the QueryEngine.
+> Please see supported Query engine implementations below.
+- `Schemio.SQL` - provides the implementation of IQueryEngine to execute SQL queries. Uses `Dapper` for SQL data acess.
+- `Schemio.EntityFramework` - provides implementation of IQueryEngine to execute `Entity Framework` queries.
+
+`Query using Schemio.SQL`
+The SQL query needs to implement `BaseSQLRootQuery<TQueryParameter, TQueryResult>` or `BaseSQLChildQuery<TQueryParameter, TQueryResult>` based on parent or child implementation.
+And, requires implementing  `public abstract CommandDefinition GetCommandDefinition()` method to return `command definition` for query to be executed with `Dapper` supported QueryEngine.
+
+See below example `CustomerQuery` implemented as Root SQL query
+>```
+> internal class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
+>    {
+>        public override void ResolveRootQueryParameter(IDataContext context)
+>        {
+>            // Executes as root or level 1 query.
+>            var customer = (CustomerContext)context.Entity;
+>            QueryParameter = new CustomerParameter
+>            {
+>                CustomerId = (int)customer.CustomerId
+>            };
+>        }
+>
+>        public override CommandDefinition GetCommandDefinition()
+>        {
+>            return new CommandDefinition
+>            (
+>                "select CustomerId as Id, " +
+>                       "Customer_Name as Name," +
+>                       "Customer_Code as Code " +
+>                $"from TCustomer where customerId={QueryParameter.CustomerId}"
+>           );
+>        }
+>    }
+>```
+>
+See below example `CustomerOrderItemsQuery` implemented as child SQL query.
+>```
+>internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
+>    {
+>        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+>        {
+>            // Execute as child query to order query taking OrderResult to resolve query parameter.
+>            var ordersResult = (OrderResult)parentQueryResult;
+>
+>            QueryParameter ??= new OrderItemParameter();
+>            QueryParameter.OrderIds.Add(ordersResult.OrderId);
+>        }
+>
+>        public override CommandDefinition GetCommandDefinition()
+>        {
+>            return new CommandDefinition
+>            (
+>                "select OrderId, " +
+>                       "OrderItemId as ItemId, " +
+>                       "Name, " +
+>                       "Cost " +
+>                $"from TOrderItem where OrderId in ({QueryParameter.ToCsv()})"
+>           );
+>        }
+>    }
+>```
+
+`Query using Schemio.EntityFramework`
+The SQL query needs to implement `BaseSQLRootQuery<TQueryParameter, TQueryResult>` or `BaseSQLChildQuery<TQueryParameter, TQueryResult>` based on parent or child implementation.
+And, requires implementing  `public abstract IEnumerable<IQueryResult> Run(DbContext dbContext)` method to implement query using `DbContext` using entity framework.
+
+See below example `CustomerQuery` implemented as Root Entity framework query
+>```
+> internal class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
+>    {
+>        public override void ResolveRootQueryParameter(IDataContext context)
+>        {
+>            // Executes as root or level 1 query.
+>            var customer = (CustomerContext)context.Entity;
+>            QueryParameter = new CustomerParameter
+>            {
+>                CustomerId = (int)customer.CustomerId
+>            };
+>        }
+>
+>        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
+>        {
+>            return dbContext.Set<Customer>()
+>                        .Where(c => c.Id == QueryParameter.CustomerId)
+>                        .Select(c => new CustomerResult
+>                        {
+>                            Id = c.Id,
+>                            Name = c.Name,
+>                            Code = c.Code
+>                        });
+>        }
+>    }
+>```
+>
+See below example `CustomerOrderItemsQuery` implemented as child Entity framework query.
+>```
+>internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
+>    {
+>        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+>        {
+>            // Execute as child query to order query taking OrderResult to resolve query parameter.
+>            var ordersResult = (CustomerOrderResult)parentQueryResult;
+>
+>            QueryParameter ??= new OrderItemParameter();
+>            QueryParameter.OrderIds.Add(ordersResult.OrderId);
+>        }
+>
+>        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
+>        {
+>            return dbContext.Set<OrderItem>()
+>                .Where(p => QueryParameter.OrderIds.Contains(p.Order.OrderId))
+>                .Select(c => new OrderItemResult
+>                {
+>                    ItemId = c.ItemId,
+>                    Name = c.Name,
+>                    Cost = c.Cost,
+>                    OrderId = c.Order.OrderId
+>                });
+>            ;
+>        }
+>    }
+>```
 
 
 #### 2.2 Tranformer Class
@@ -221,7 +344,7 @@ In below transformer example, `CustomerTransformer` is implemented to transform 
 
 >
 >```
->public class CustomerTransform : BaseTransformer<CustomerResult, Customer>
+>internal class CustomerTransform : BaseTransformer<CustomerResult, Customer>
 >    {
 >        public override Customer Transform(CustomerResult queryResult, Customer entity)
 >        {
