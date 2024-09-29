@@ -5,6 +5,11 @@
 [![Master-CodeQL](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml) 
 [![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 --
+> #### Nuget Packages - Query Engines
+>i. `Schemio.SQL` - Provides schemio with query engine implementation using `Dapper` to execute SQL queries.
+>
+>ii. `Schemio.EntityFramework` - Provides schemio with `Entity Framework` query engine to execute queries using DbContext.
+
 ## What is Schemio?
 `Schemio` is a .net utility to hydrate an entity with data by specifying schema paths or sections of its object graph.
 > Supports XPath & JsonPath for schema paths.
