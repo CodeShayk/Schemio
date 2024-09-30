@@ -10,11 +10,12 @@
 >
 >ii. `Schemio.EntityFramework` - Provides schemio with `Entity Framework` query engine to execute queries using DbContext.
 
-## What is Schemio?
+## Concept
+### What is Schemio?
 `Schemio` is a .net utility to hydrate an entity with data by specifying schema paths or sections of its object graph.
 > Supports XPath & JsonPath for schema paths.
 
-## When to use Schemio?
+### When to use Schemio?
 Schemio is perfect fit when you need to fetch parts of a large entity from given data storage. Ideally, you may not want all of the entity data but preferably only sections of the object graph depending on the context for fetch.
 
 Few example schemio use cases that require the service tier to dynamically fetch data for high performance, availability and scalability are
