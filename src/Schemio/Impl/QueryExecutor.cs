@@ -26,7 +26,7 @@ namespace Schemio.Impl
             var subscriber = new EventSubscriber(queries.GetChildrenQueries());
             var eventAggregator = new EventAggregator(subscriber);
 
-            var results = Run(queries, context);
+            var results = RunQueries(queries);
 
             CacheResults(context, results);
 
@@ -42,15 +42,14 @@ namespace Schemio.Impl
             if (context.Cache == null)
                 return;
 
-            foreach (var cacheResult in results
-                                        .Where(result => result.GetType()
-                                                               .GetCustomAttributes(typeof(CacheResultAttribute), false)
-                                                               .Any()))
+            foreach (var cacheResult in results.Where(result => result.GetType()
+                                               .GetCustomAttributes(typeof(CacheResultAttribute), false)
+                                               .Any()))
                 if (!context.Cache.ContainsKey(cacheResult.GetType().Name))
                     context.Cache.Add(cacheResult.GetType().Name, cacheResult);
         }
 
-        private List<IQueryResult> Run(IQueryList queryList, IDataContext context)
+        private List<IQueryResult> RunQueries(IQueryList queryList)
         {
             var output = new List<IQueryResult>();
 
@@ -58,7 +57,7 @@ namespace Schemio.Impl
             {
                 var queries = queryList.Queries.Where(x => engine.CanExecute(x));
 
-                var results = engine.Execute(queries, context);
+                var results = engine.Execute(queries);
 
                 if (results != null)
                     output.AddRange(results);

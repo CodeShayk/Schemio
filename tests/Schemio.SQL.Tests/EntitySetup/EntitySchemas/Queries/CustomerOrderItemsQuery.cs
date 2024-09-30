@@ -1,3 +1,4 @@
+using System.Data;
 using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
@@ -13,16 +14,16 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             QueryParameter.OrderIds.Add(ordersResult.OrderId);
         }
 
-        public override CommandDefinition GetCommandDefinition()
+        public override IEnumerable<OrderItemResult> Execute(IDbConnection conn)
         {
-            return new CommandDefinition
+            return conn.Query<OrderItemResult>(new CommandDefinition
             (
                 "select OrderId, " +
                        "OrderItemId as ItemId, " +
                        "Name, " +
                        "Cost " +
                 $"from TOrderItem where OrderId in ({QueryParameter.ToCsv()})"
-           );
+           ));
         }
     }
 }

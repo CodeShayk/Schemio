@@ -1,3 +1,4 @@
+using System.Data;
 using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
@@ -14,9 +15,9 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override CommandDefinition GetCommandDefinition()
+        public override IEnumerable<CommunicationResult> Execute(IDbConnection conn)
         {
-            return new CommandDefinition
+            return conn.Query<CommunicationResult>(new CommandDefinition
             (
                 "select c.CommunicationId as Id, " +
                        "c.Phone as Telephone, " +
@@ -30,7 +31,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
                 "from TCommunication c " +
                 "left join TAddress a on a.CommunicationId = c.CommunicationId " +
                 $"where customerId={QueryParameter.CustomerId}"
-           );
+           ));
         }
     }
 }

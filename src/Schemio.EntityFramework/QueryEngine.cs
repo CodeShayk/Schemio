@@ -7,11 +7,13 @@ namespace Schemio.EntityFramework
         private readonly IDbContextFactory<T> _dbContextFactory;
 
         public QueryEngine(IDbContextFactory<T> _dbContextFactory)
-            => this._dbContextFactory = _dbContextFactory;
+        {
+            this._dbContextFactory = _dbContextFactory;
+        }
 
         public bool CanExecute(IQuery query) => query != null && query is ISQLQuery;
 
-        public IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries, IDataContext context)
+        public IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries)
         {
             var output = new List<IQueryResult>();
 

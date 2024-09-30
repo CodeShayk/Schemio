@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Data;
 using Dapper;
 
@@ -7,12 +8,11 @@ namespace Schemio.SQL
            where TQueryParameter : IQueryParameter
            where TQueryResult : IQueryResult
     {
-        public abstract CommandDefinition GetCommandDefinition();
+        public abstract IEnumerable<TQueryResult> Execute(IDbConnection conn);
 
         public IEnumerable<IQueryResult> Run(IDbConnection conn)
         {
-            var results = conn.Query<TQueryResult>(GetCommandDefinition());
-            return results.Cast<IQueryResult>();
+            return (IEnumerable<IQueryResult>)Execute(conn);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Schemio.EntityFramework.Tests
 
             DbProviderFactories.RegisterFactory(DbProviderName, SqliteFactory.Instance);
             var connectionString = $"DataSource={Environment.CurrentDirectory}//Customer.db;mode=readonly;cache=shared";
-            var configuration = new SqlConfiguration { ConnectionSettings = new ConnectionSettings { ConnectionString = connectionString, ProviderName = DbProviderName } };
+            var configuration = new SQLConfiguration { ConnectionSettings = new ConnectionSettings { ConnectionString = connectionString, ProviderName = DbProviderName } };
 
             Console.WriteLine(connectionString);
 

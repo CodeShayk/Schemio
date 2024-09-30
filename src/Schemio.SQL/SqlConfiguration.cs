@@ -1,8 +1,8 @@
 namespace Schemio.SQL
 {
-    public class SqlConfiguration
+    public class SQLConfiguration
     {
-        public SqlConfiguration()
+        public SQLConfiguration()
         {
             ConnectionSettings = new ConnectionSettings();
             QuerySettings = new QuerySettings();
@@ -20,7 +20,6 @@ namespace Schemio.SQL
 
     public class QuerySettings
     {
-        public int TimeoutInSecs { get; set; } = 30;
         public int QueryBatchSize { get; set; } = 10;
     }
 }

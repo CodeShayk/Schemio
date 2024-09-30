@@ -6,7 +6,7 @@
 [![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 --
 > #### Nuget Packages - Query Engines
->i. `Schemio.SQL` - Provides schemio with query engine implementation using `Dapper` to execute SQL queries.
+>i. `Schemio.SQL` - Provides schemio with query engine using `Dapper` to execute SQL queries.
 >
 >ii. `Schemio.EntityFramework` - Provides schemio with `Entity Framework` query engine to execute queries using DbContext.
 
@@ -127,15 +127,8 @@ Please see the execution sequence below for queries and transformers nested in C
 <img width="1202" alt="image" src="https://github.com/CodeShayk/Schemio/blob/master/Images/EntitySchemaDefinition.png">
 
 
-Note: If you need to support custom schema language for mapping the object graph, then
-* Create entity schema definition with query/transformer pairs with custom paths
-* Provide implementation of `ISchemaPathMatcher` interface to implement `IsMatch()` method with logic for custom path matching.
-```
-public interface ISchemaPathMatcher
-    {
-        bool IsMatch(string inputPath, ISchemaPaths configuredPaths);
-    }
-```
+`Please Note:` If you need to support custom schema language for mapping the object graph, then see extending schemio section below.
+
 
 #### 1.2.1 Query Class
 The purpose of a query class is to execute with supported QueryEngine to fetch data from data storage.
@@ -226,15 +219,15 @@ See below example `CustomerQuery` implemented as Root SQL query
 >            };
 >        }
 >
->        public override CommandDefinition GetCommandDefinition()
+>       public override IEnumerable<CustomerResult> Execute(IDbConnection conn)
 >        {
->            return new CommandDefinition
+>            return conn.Query<CustomerResult>(new CommandDefinition
 >            (
 >                "select CustomerId as Id, " +
 >                       "Customer_Name as Name," +
 >                       "Customer_Code as Code " +
 >                $"from TCustomer where customerId={QueryParameter.CustomerId}"
->           );
+>           ));
 >        }
 >    }
 >```
@@ -252,16 +245,16 @@ See below example `CustomerOrderItemsQuery` implemented as child SQL query.
 >            QueryParameter.OrderIds.Add(ordersResult.OrderId);
 >        }
 >
->        public override CommandDefinition GetCommandDefinition()
+>        public override IEnumerable<OrderItemResult> Execute(IDbConnection conn)
 >        {
->            return new CommandDefinition
+>            return conn.Query<OrderItemResult>(new CommandDefinition
 >            (
 >                "select OrderId, " +
 >                       "OrderItemId as ItemId, " +
 >                       "Name, " +
 >                       "Cost " +
 >                $"from TOrderItem where OrderId in ({QueryParameter.ToCsv()})"
->           );
+>           ));
 >        }
 >    }
 >```
@@ -409,6 +402,7 @@ To configure Data provider with SQL Query engine, use fluent registration apis a
                     }}))
                 .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
 ```
+
 To configure Data provider with Entity Framework Query engine, use fluent registration apis shown as below - 
  ```
    services.AddDbContextFactory<CustomerDbContext>(options => options.UseSqlServer(YourSqlConnection), ServiceLifetime.Scoped);
@@ -420,9 +414,134 @@ To configure Data provider with Entity Framework Query engine, use fluent regist
      .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
 
 ```
+
 `Please Note:` You can combine multiple query engines and implement different types of queries to execute on different supported platforms.
 
 To use Data provider, Inject IDataProvider<T> using constructor & property injection method or explicity Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<>))`
+
+## Extend Schemio
+### Custom Query Engine
+To provide custom query engine and query implementations, you need to extend the base interfaces as depicted below
+- IQueryEngine interface to implement the custom query engine to be used with schemio.
+```
+public interface IQueryEngine
+    {
+        /// <summary>
+        /// Detrmines whether an instance of query can be executed with this engine.
+        /// </summary>
+        /// <param name="query">instance of IQuery.</param>
+        /// <returns>Boolean; True when supported.</returns>
+        bool CanExecute(IQuery query);
+
+        /// <summary>
+        /// Executes a list of queries returning a list of aggregated results.
+        /// </summary>
+        /// <param name="queries">List of IQuery instances.</param>
+        /// <returns>List of query results. Instances of IQueryResult.</returns>
+        IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries);
+    }
+```
+Example Entity Framework implementation is below
+```
+public class QueryEngine<T> : IQueryEngine where T : DbContext
+    {
+        private readonly IDbContextFactory<T> _dbContextFactory;
+
+        public QueryEngine(IDbContextFactory<T> _dbContextFactory)
+        {
+            this._dbContextFactory = _dbContextFactory;
+        }
+
+        public bool CanExecute(IQuery query) => query != null && query is ISQLQuery;
+
+        public IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries)
+        {
+            var output = new List<IQueryResult>();
+
+            using (var dbcontext = _dbContextFactory.CreateDbContext())
+            {
+                foreach (var query in queries)
+                {
+                    var results = ((ISQLQuery)query).Run(dbcontext);
+
+                    if (results == null)
+                        continue;
+
+                    output.AddRange(results);
+                }
+
+                return output.ToArray();
+            }
+        }
+    }
+```
+- Provide base implementation supporting IQuery, IRootQuery & IChildQuery interfaces. 
+- You can implement the parent and child base class implementations to construct for queries to be executed with custom engine implementation above. 
+
+For Parent Query base implementation, see example below.
+```
+public abstract class BaseSQLRootQuery<TQueryParameter, TQueryResult>
+        : BaseRootQuery<TQueryParameter, TQueryResult>, ISQLQuery
+       where TQueryParameter : IQueryParameter
+       where TQueryResult : IQueryResult
+    {
+        /// <summary>
+        /// Get query delegate with implementation to return query result.
+        /// Delegate returns a collection from db.
+        /// </summary>
+        /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
+        public abstract IEnumerable<IQueryResult> Run(DbContext dbContext);
+    }
+```
+For Child Query implementation, see example below.
+```
+public abstract class BaseSQLChildQuery<TQueryParameter, TQueryResult>
+        : BaseChildQuery<TQueryParameter, TQueryResult>, ISQLQuery
+       where TQueryParameter : IQueryParameter
+       where TQueryResult : IQueryResult
+    {
+        /// <summary>
+        /// Get query delegate with implementation to return query result.
+        /// Delegate returns a collection from db.
+        /// </summary>
+        /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
+        public abstract IEnumerable<IQueryResult> Run(DbContext dbContext);
+    }
+```
+### Custom Schema Language
+You can provide your own schema language support for use in entity schema definition to map sections of object graph.
+
+To do this you need to follow the below steps
+* Provide entity schema definition with query/transformer pairs using custom schema language paths
+* Provide implementation of `ISchemaPathMatcher` interface and implement `IsMatch()` method to provide logic for matching custom paths. This matcher is used by query builder to pick queries for matched paths against the configured p in Entity schema definition. 
+```
+public interface ISchemaPathMatcher
+    {
+        bool IsMatch(string inputPath, ISchemaPaths configuredPaths);
+    }
+```
+Example implementation of XPath matcher is below.
+```
+public class XPathMatcher : ISchemaPathMatcher
+    {
+        private static readonly Regex ancestorRegex = new Regex(@"=ancestor::(?'path'.*?)(/@|\[.*\]/@)", RegexOptions.Compiled);
+
+        public bool IsMatch(string inputXPath, ISchemaPaths configuredXPaths)
+        {
+            if (inputXPath == null)
+                return false;
+
+            if (configuredXPaths.Paths.Any(x => inputXPath.ToLower().Contains(x.ToLower())))
+                return true;
+
+            if (configuredXPaths.Paths.Any(x => inputXPath.Contains("ancestor::")
+                    && ancestorRegex.Matches(inputXPath).Select(match => match.Groups["path"].Value).Distinct().Any(match => x.EndsWith(match))))
+                return true;
+
+            return false;
+        }
+    }
+```
 
 ## Credits
 Thank you for reading. Please fork, explore, contribute and report. Happy Coding !! :)

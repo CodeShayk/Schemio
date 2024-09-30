@@ -1,3 +1,4 @@
+using System.Data;
 using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
@@ -14,15 +15,15 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override CommandDefinition GetCommandDefinition()
+        public override IEnumerable<CustomerResult> Execute(IDbConnection conn)
         {
-            return new CommandDefinition
+            return conn.Query<CustomerResult>(new CommandDefinition
             (
                 "select CustomerId as Id, " +
                        "Customer_Name as Name," +
                        "Customer_Code as Code " +
                 $"from TCustomer where customerId={QueryParameter.CustomerId}"
-           );
+           ));
         }
     }
 }
