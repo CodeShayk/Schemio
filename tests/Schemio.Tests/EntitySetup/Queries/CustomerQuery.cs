@@ -1,8 +1,8 @@
 namespace Schemio.Tests.EntitySetup.Queries
 {
-    public class CustomerQuery : BaseRootQuery<CustomerParameter, CustomerResult>
+    public class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
     {
-        public override void ResolveRootQueryParameter(IDataContext context)
+        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Executes as root or level 1 query.
             var customer = (CustomerContext)context.Entity;

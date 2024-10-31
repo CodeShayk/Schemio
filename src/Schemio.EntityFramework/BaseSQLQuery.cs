@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Schemio.EntityFramework
 {
-    public abstract class BaseSQLChildQuery<TQueryParameter, TQueryResult>
-        : BaseChildQuery<TQueryParameter, TQueryResult>, ISQLQuery
+    public abstract class BaseSQLQuery<TQueryParameter, TQueryResult>
+        : BaseQuery<TQueryParameter, TQueryResult>, ISQLQuery
        where TQueryParameter : IQueryParameter
        where TQueryResult : IQueryResult
     {

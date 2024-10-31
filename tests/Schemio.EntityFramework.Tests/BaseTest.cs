@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Schemio.EntityFramework.Tests.EntitySetup.Entities;
 using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas;
+using Schemio.PathMatchers;
 
 namespace Schemio.EntityFramework.Tests
 {
@@ -22,9 +23,9 @@ namespace Schemio.EntityFramework.Tests
 
             services.AddLogging();
 
-            services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
-                .AddEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
-                .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
+            services.UseSchemio(new XPathMatcher(),
+                        c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
+                .AddEntitySchema<Customer, CustomerSchema>();
 
             // 4. Build the service provider
             _serviceProvider = services.BuildServiceProvider();

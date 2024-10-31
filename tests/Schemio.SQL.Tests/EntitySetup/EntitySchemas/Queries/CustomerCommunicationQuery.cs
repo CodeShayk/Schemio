@@ -3,9 +3,9 @@ using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerCommunicationQuery : BaseSQLChildQuery<CustomerParameter, CommunicationResult>
+    internal class CustomerCommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
     {
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;

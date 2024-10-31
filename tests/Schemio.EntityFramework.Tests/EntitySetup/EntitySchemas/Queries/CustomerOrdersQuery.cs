@@ -3,9 +3,9 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrdersQuery : BaseSQLChildQuery<CustomerParameter, CustomerOrderResult>
+    internal class CustomerOrdersQuery : BaseSQLQuery<CustomerParameter, CustomerOrderResult>
     {
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;

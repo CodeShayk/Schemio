@@ -3,9 +3,9 @@ using Dapper;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    public class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
+    public class CustomerQuery : BaseSQLQuery<CustomerParameter, CustomerResult>
     {
-        public override void ResolveRootQueryParameter(IDataContext context)
+        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Executes as root or level 1 query.
             var customer = (CustomerContext)context.Entity;
