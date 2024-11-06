@@ -28,8 +28,8 @@ namespace Schemio.Impl
                     if (unresolved.ParentQueryResultType != result.GetType())
                         continue;
 
-                    foreach (var query in unresolved.Queries.Cast<IChildQuery>())
-                        query.ResolveChildQueryParameter(context, queryResult);
+                    foreach (var query in unresolved.Queries)
+                        query.ResolveQueryParameter(context, queryResult);
                 }
             }
 
@@ -48,8 +48,8 @@ namespace Schemio.Impl
                         !unresolved.ParentQueryResultType.IsAssignableFrom(result.GetType()))
                         continue;
 
-                    foreach (var query in unresolved.Queries.Cast<IChildQuery>())
-                        query.ResolveChildQueryParameter(context, queryResult);
+                    foreach (var query in unresolved.Queries)
+                        query.ResolveQueryParameter(context, queryResult);
                 }
             }
         }

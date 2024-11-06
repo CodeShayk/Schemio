@@ -10,5 +10,7 @@ namespace Schemio
         Type ResultType { get; }
 
         bool IsContextResolved();
+
+        void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult = null);
     }
 }

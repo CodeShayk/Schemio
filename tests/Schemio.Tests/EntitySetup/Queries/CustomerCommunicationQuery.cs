@@ -2,7 +2,7 @@ namespace Schemio.Tests.EntitySetup.Queries
 {
     internal class CustomerCommunicationQuery : BaseQuery<CustomerParameter, CommunicationResult>
     {
-        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;

@@ -18,10 +18,12 @@ namespace Schemio.Impl
         /// <returns></returns>
         public IQueryList Build(IDataContext context)
         {
-            var queries = GetMappedQueries(entitySchema.Mappings.ToList(), context);
+            var mappings = entitySchema.Mappings.ToList();
 
-            foreach (var query in queries.Queries.Cast<IRootQuery>())
-                query.ResolveRootQueryParameter(context);
+            var queries = GetMappedQueries(mappings, context);
+
+            foreach (var query in queries.Queries)
+                query.ResolveQueryParameter(context);
 
             return new QueryList(queries.Queries);
         }
@@ -32,16 +34,17 @@ namespace Schemio.Impl
 
             for (var index = 1; index <= queryDependencyDepth; index++)
             {
-                var maps = mappings.Where(x => x.Order == index);
+                var maps = mappings.Where(x => x.Order == index).ToList();
 
                 foreach (var map in maps)
                 {
                     var dependentQueries =
                         mappings.Where(x => x.Order == index + 1 && x.DependentOn != null && x.DependentOn.GetType() == map.Query.GetType()).ToList();
 
-                    map.Query.Children ??= new List<IQuery>();
+                    map.Query.Children = new List<IQuery>();
 
-                    map.Query.Children.AddRange(FilterByPaths(context, dependentQueries));
+                    var filtered = FilterByPaths(context, dependentQueries);
+                    map.Query.Children.AddRange(filtered);
                 }
             }
 

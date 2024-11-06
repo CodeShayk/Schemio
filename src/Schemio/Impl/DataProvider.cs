@@ -52,6 +52,22 @@ namespace Schemio.Impl
             // Build queries for the data source based on the included xPaths
             var watch = System.Diagnostics.Stopwatch.StartNew();
             var queries = queryBuilder.Build(context);
+
+            foreach (var item in queries.Queries)
+            {
+                Console.WriteLine("L1 Query To Execute: " + item.GetType().Name);
+
+                foreach (var item2 in item.Children)
+                {
+                    Console.WriteLine("L2 Query To Execute: " + item2.GetType().Name);
+
+                    foreach (var item3 in item2.Children)
+                    {
+                        Console.WriteLine("L3 Query To Execute: " + item3.GetType().Name);
+                    }
+                }
+            }
+
             watch.Stop();
             logger?.LogInformation("Query builder executed in " + watch.ElapsedMilliseconds + " ms");
 
