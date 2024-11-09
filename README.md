@@ -43,7 +43,7 @@ NuGet\Install-Package Schemio.SQL -Version 1.0.0
 NuGet\Install-Package Schemio.EntityFramework -Version 1.0.0
 ```
 
-### ii. Implementation Guide
+### ii. Developer Guide
 
 Please see [wiki](https://github.com/CodeShayk/Schemio/wiki) for details on how to implement schemio in your project.
 
