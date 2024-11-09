@@ -1,4 +1,5 @@
-using Schemio.Helpers;
+using Schemio.Core;
+using Schemio.Core.Helpers;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {

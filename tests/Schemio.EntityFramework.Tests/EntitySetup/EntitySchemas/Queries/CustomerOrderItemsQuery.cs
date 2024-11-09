@@ -1,22 +1,25 @@
 using Microsoft.EntityFrameworkCore;
+using Schemio.Core;
 using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
+    internal class CustomerOrderItemsQuery : BaseSQLQuery<OrderItemParameter, CollectionResult<OrderItemResult>>
     {
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to order query.
-            var ordersResult = (CustomerOrderResult)parentQueryResult;
+            var ordersResults = (CollectionResult<CustomerOrderResult>)parentQueryResult;
 
             QueryParameter ??= new OrderItemParameter();
-            QueryParameter.OrderIds.Add(ordersResult.OrderId);
+            var orderIds = ordersResults?.Select(o => o.OrderId);
+            if (orderIds != null)
+                QueryParameter.OrderIds.AddRange(orderIds);
         }
 
-        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
+        public override Task<IQueryResult> Run(DbContext dbContext)
         {
-            return dbContext.Set<OrderItem>()
+            var items = dbContext.Set<OrderItem>()
                 .Where(p => QueryParameter.OrderIds.Contains(p.Order.OrderId))
                 .Select(c => new OrderItemResult
                 {
@@ -24,8 +27,10 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                     Name = c.Name,
                     Cost = c.Cost,
                     OrderId = c.Order.OrderId
-                });
-            ;
+                })
+                .ToList();
+
+            return Task.FromResult((IQueryResult)new CollectionResult<OrderItemResult>(items));
         }
     }
 }

@@ -1,11 +1,12 @@
 using System.Data;
 using Dapper;
+using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    public class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
+    public class CustomerQuery : BaseSQLQuery<CustomerParameter, CustomerResult>
     {
-        public override void ResolveRootQueryParameter(IDataContext context)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Executes as root or level 1 query.
             var customer = (CustomerContext)context.Entity;
@@ -15,9 +16,9 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override IEnumerable<CustomerResult> Execute(IDbConnection conn)
+        public override Task<CustomerResult> Run(IDbConnection conn)
         {
-            return conn.Query<CustomerResult>(new CommandDefinition
+            return conn.QueryFirstOrDefaultAsync<CustomerResult>(new CommandDefinition
             (
                 "select CustomerId as Id, " +
                        "Customer_Name as Name," +

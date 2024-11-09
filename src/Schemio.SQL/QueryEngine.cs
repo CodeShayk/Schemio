@@ -1,4 +1,5 @@
 using System.Data.Common;
+using Schemio.Core;
 
 namespace Schemio.SQL
 {
@@ -19,33 +20,22 @@ namespace Schemio.SQL
 
         public bool CanExecute(IQuery query) => query != null && query is ISQLQuery;
 
-        public IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries)
+        public Task<IQueryResult> Execute(IQuery query)
         {
             var factory = DbProviderFactories.GetFactory(sqlConfiguration.ConnectionSettings.ProviderName)
                ?? throw new InvalidOperationException($"Provider: {sqlConfiguration.ConnectionSettings.ProviderName} is not supported. Please register entry in DbProviderFactories ");
 
-            var batches = queries.Chunk(sqlConfiguration.QuerySettings?.QueryBatchSize ?? 10);
+            using (var connection = factory.CreateConnection())
+            {
+                if (connection == null)
+                    throw new Exception($"Failed to create connection with Provider: {sqlConfiguration.ConnectionSettings.ProviderName}. Please check the connection settings.");
 
-            var output = new List<IQueryResult>();
+                connection.ConnectionString = sqlConfiguration.ConnectionSettings.ConnectionString;
 
-            foreach (var batch in batches)
-                using (var connection = factory.CreateConnection())
-                {
-                    if (connection == null)
-                        throw new Exception($"Failed to create connection with Provider: {sqlConfiguration.ConnectionSettings.ProviderName}. Please check the connection settings.");
+                var result = ((ISQLQuery)query).Run(connection);
 
-                    connection.ConnectionString = sqlConfiguration.ConnectionSettings.ConnectionString;
-
-                    foreach (var query in batch.Cast<ISQLQuery>())
-                    {
-                        var results = query.Run(connection);
-
-                        if (results != null && results.Any())
-                            output.AddRange(results);
-                    }
-                }
-
-            return output.ToArray();
+                return result;
+            }
         }
     }
 }

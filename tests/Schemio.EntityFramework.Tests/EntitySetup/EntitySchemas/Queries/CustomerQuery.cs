@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Schemio.Core;
 using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    public class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
+    public class CustomerQuery : BaseSQLQuery<CustomerParameter, CustomerResult>
     {
-        public override void ResolveRootQueryParameter(IDataContext context)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Executes as root or level 1 query.
             var customer = (CustomerContext)context.Entity;
@@ -15,16 +16,19 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
+        public override Task<IQueryResult> Run(DbContext dbContext)
         {
-            return dbContext.Set<Customer>()
+            var result = dbContext.Set<Customer>()
                         .Where(c => c.Id == QueryParameter.CustomerId)
                         .Select(c => new CustomerResult
                         {
                             Id = c.Id,
                             Name = c.Name,
                             Code = c.Code
-                        });
+                        })
+                        .FirstOrDefault();
+
+            return Task.FromResult((IQueryResult)result);
         }
     }
 }

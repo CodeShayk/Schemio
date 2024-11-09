@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Schemio.Core;
 using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrdersQuery : BaseSQLChildQuery<CustomerParameter, CustomerOrderResult>
+    internal class CustomerOrdersQuery : BaseSQLQuery<CustomerParameter, CollectionResult<CustomerOrderResult>>
     {
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;
@@ -15,9 +16,9 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
+        public override Task<IQueryResult> Run(DbContext dbContext)
         {
-            return dbContext.Set<Order>()
+            var items = dbContext.Set<Order>()
                 .Where(p => p.Customer.Id == QueryParameter.CustomerId)
                 .Select(c => new CustomerOrderResult
                 {
@@ -26,7 +27,8 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                     Date = c.Date,
                     OrderNo = c.OrderNo
                 });
-            ;
+
+            return Task.FromResult((IQueryResult)new CollectionResult<CustomerOrderResult>(items));
         }
     }
 }

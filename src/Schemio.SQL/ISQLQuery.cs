@@ -1,9 +1,10 @@
 using System.Data;
+using Schemio.Core;
 
 namespace Schemio.SQL
 {
     public interface ISQLQuery : IQuery
     {
-        IEnumerable<IQueryResult> Run(IDbConnection conn);
+        Task<IQueryResult> Run(IDbConnection conn);
     }
 }

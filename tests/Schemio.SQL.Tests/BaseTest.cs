@@ -1,7 +1,8 @@
 using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Schemio.Core;
+using Schemio.Core.PathMatchers;
 using Schemio.SQL;
 using Schemio.SQL.Tests.EntitySetup.Entities;
 using Schemio.SQL.Tests.EntitySetup.EntitySchemas;
@@ -26,9 +27,8 @@ namespace Schemio.EntityFramework.Tests
 
             services.AddLogging();
 
-            services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
-                .AddEngine(c => new QueryEngine(configuration))
-                .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
+            services.UseSchemio(new XPathMatcher(), c => new QueryEngine(configuration))
+                    .AddEntitySchema<Customer, CustomerSchema>();
 
             // 4. Build the service provider
             _serviceProvider = services.BuildServiceProvider();

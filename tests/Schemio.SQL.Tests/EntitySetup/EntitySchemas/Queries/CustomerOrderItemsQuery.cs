@@ -1,22 +1,23 @@
 using System.Data;
 using Dapper;
+using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
+    internal class CustomerOrderItemsQuery : BaseSQLQuery<OrderItemParameter, CollectionResult<OrderItemResult>>
     {
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child query to order query taking OrderResult to resolve query parameter.
-            var ordersResult = (OrderResult)parentQueryResult;
+            var ordersResult = (CollectionResult<OrderResult>)parentQueryResult;
 
             QueryParameter ??= new OrderItemParameter();
-            QueryParameter.OrderIds.Add(ordersResult.OrderId);
+            QueryParameter.OrderIds.AddRange(ordersResult.Select(o => o.OrderId));
         }
 
-        public override IEnumerable<OrderItemResult> Execute(IDbConnection conn)
+        public override async Task<CollectionResult<OrderItemResult>> Run(IDbConnection conn)
         {
-            return conn.Query<OrderItemResult>(new CommandDefinition
+            var items = await conn.QueryAsync<OrderItemResult>(new CommandDefinition
             (
                 "select OrderId, " +
                        "OrderItemId as ItemId, " +
@@ -24,6 +25,8 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
                        "Cost " +
                 $"from TOrderItem where OrderId in ({QueryParameter.ToCsv()})"
            ));
+
+            return new CollectionResult<OrderItemResult>(items);
         }
     }
 }

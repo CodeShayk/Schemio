@@ -1,7 +1,6 @@
-using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using Schemio.Core.Helpers;
 using Schemio.EntityFramework.Tests.Domain;
-using Schemio.Helpers;
 
 namespace Schemio.EntityFramework.Tests
 {

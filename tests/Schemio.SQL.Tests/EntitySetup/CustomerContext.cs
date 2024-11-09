@@ -1,3 +1,5 @@
+using Schemio.Core;
+
 namespace Schemio.SQL.Tests.EntitySetup
 {
     internal class CustomerContext : IEntityContext

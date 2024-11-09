@@ -1,4 +1,6 @@
-﻿namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
+using Schemio.Core;
+
+namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
     public class CustomerParameter : IQueryParameter
     {

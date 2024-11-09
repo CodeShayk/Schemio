@@ -1,3 +1,5 @@
+using Schemio.Core;
+
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
     public class OrderItemResult : IQueryResult
