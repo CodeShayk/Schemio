@@ -28,24 +28,24 @@ Few example schemio use cases that require the service tier to dynamically fetch
 
 ## Getting Started?
 ### i. Installation
-Install the nuget package as appropriate for Core, SQL using Dapper or EntityFramework. 
+Install the latest nuget package as appropriate for Core, SQL using Dapper or EntityFramework. 
 
 `Scemio.Core` - for installing schemio for `bespoke` implementation of query engine.
 ```
-NuGet\Install-Package Schemio.Core -Version 1.0.0
+NuGet\Install-Package Schemio.Core
 ```
 `Schemio.SQL` - for installing schemio for SQL with `Dapper` engine.
 ```
-NuGet\Install-Package Schemio.SQL -Version 1.0.0
+NuGet\Install-Package Schemio.SQL
 ```
 `Schemio.EntityFramework` - for installing schemio for SQL with `EntityFramework` engine.
 ```
-NuGet\Install-Package Schemio.EntityFramework -Version 1.0.0
+NuGet\Install-Package Schemio.EntityFramework
 ```
 
 ### ii. Developer Guide
 
-Please see [Developer Guide](https://github.com/CodeShayk/Schemio/blob/master/DeveloperGuide.md) for details on how to implement schemio in your project.
+Please see [Developer Guide](/DeveloperGuide.md) for details on how to implement schemio in your project.
 
 ## Support
 
