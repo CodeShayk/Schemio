@@ -1,16 +1,16 @@
 # <img src="https://github.com/CodeShayk/Schemio/blob/master/Images/ninja-icon-16.png" alt="ninja" style="width:30px;"/> Schemio v1.0 
-[![NuGet version](https://badge.fury.io/nu/Schemio.Core.svg)](https://badge.fury.io/nu/Schemio.Core) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/CodeShayk/Schemio/blob/master/LICENSE.md) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/CodeShayk/Schemio/blob/master/LICENSE.md) 
 [![Master-Build](https://github.com/CodeShayk/Schemio/actions/workflows/Build-Master.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/Build-Master.yml) 
 [![GitHub Release](https://img.shields.io/github/v/release/CodeShayk/Schemio?logo=github&sort=semver)](https://github.com/CodeShayk/Schemio/releases/latest)
 [![Master-CodeQL](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml) 
 [![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 --
-> #### Nuget Packages
->i. `Schemio.Core` - Provides `core` functionality to configure nested queries and transformers. With ability to map schema paths (XPath/JSONPath) to entity's object graph. `No QueryEngine` provided and requires implementing IQueryEngine to execute IQuery instances.
->
->ii. `Schemio.SQL` - Provides schemio with query engine using `Dapper` to execute SQL queries.
->
->iii. `Schemio.EntityFramework` - Provides schemio with `Entity Framework` query engine to execute queries using DbContext.
+ #### Nuget Packages
+| Vesrion  | Details | 
+| -------- | --------|
+| ![NuGet Version](https://img.shields.io/nuget/v/Schemio.Core?style=for-the-badge&label=Schemio.Core&labelColor=green) | Provides `core` functionality to configure nested queries and transformers. With ability to map schema paths (XPath/JSONPath) to entity's object graph. `No QueryEngine` provided and requires implementing IQueryEngine to execute IQuery instances. |
+| ![NuGet Version](https://img.shields.io/nuget/v/Schemio.SQL?style=for-the-badge&label=Schemio.SQL&labelColor=green) | Provides schemio with query engine using Dapper to execute SQL queries. |
+|![NuGet Version](https://img.shields.io/nuget/v/Schemio.EntityFramework?style=for-the-badge&label=Schemio.EntityFramework&labelColor=green) | Provides schemio with `Entity Framework` query engine to execute queries using DbContext. |
 
 ## Concept
 ### What is Schemio?
@@ -545,6 +545,10 @@ public class XPathMatcher : ISchemaPathMatcher
         }
     }
 ```
+## Version History
+| Version  | Release Notes |
+| -------- | --------|
+| [`v1.0.0`](https://github.com/CodeShayk/Schemio/tree/v1.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v1.0.0) |
 
 ## Credits
 Thank you for reading. Please fork, explore, contribute and report. Happy Coding !! :)
