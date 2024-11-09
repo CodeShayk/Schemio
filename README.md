@@ -45,7 +45,7 @@ NuGet\Install-Package Schemio.EntityFramework -Version 1.0.0
 
 ### ii. Implementation Guide
 
-Please see [wiki](https://github.com/CodeShayk/Schemio/wiki) for implementation details on how to use schemio.
+Please see [wiki](https://github.com/CodeShayk/Schemio/wiki) for details on how to implement schemio in your project.
 
 ## Support
 
