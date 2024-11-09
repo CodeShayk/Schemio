@@ -14,7 +14,7 @@ NuGet\Install-Package Schemio.SQL
 ```
 NuGet\Install-Package Schemio.EntityFramework
 ```
-## ii. Implementation: Usingse Schemio
+## ii. Implementation: Using Schemio
 
 To use schemio you need to
 > Step 1 - Setup the entity to be fetched.
@@ -131,7 +131,7 @@ As explained above, You can configure a query in `Parent` or `Child` (nested) mo
 
 i. Parent Query
 
-To define a `parent` or `root` query which is usually configured at level 1 to query the root entity, derive from `aseRootQuery<TQueryParameter, TQueryResult>`
+To define a `parent` or `root` query which is usually configured at level 1 to query the root entity, derive from `BaseQuery<TQueryParameter, TQueryResult>`
 * `TQueryParameter` is basically the class that holds the `inputs` required by the root query for execution. It is an implementation of `IQueryParameter` type.
 * `TQueryResult` is the result that will be returned from executing the root query.  It is an implementation of `IQueryResult` type.
 
@@ -142,12 +142,12 @@ In `parent` mode, the query parameter is resolved using the `IDataContext` param
 
 > See example `CustomerQuery` implemented to be configured and run in parent mode below. 
 > ```
->internal class CustomerQuery : BaseRootQuery<CustomerParameter, CustomerResult>
+>internal class CustomerQuery : BaseQuery<CustomerParameter, CustomerResult>
 >    {
->        public override void ResolveRootQueryParameter(IDataContext context)
+>        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
 >        {
 >            // Executes as Parent or Level 1 query.
->            // The query parameter is resolved using IDataContext parameter of data provider class.
+>            // The query parameter is resolved using IDataContext parameter of data provider class. Parent query result will be null.
 >
 >            var customer = (CustomerContext)context;
 >            QueryParameter = new CustomerParameter
@@ -160,7 +160,7 @@ In `parent` mode, the query parameter is resolved using the `IDataContext` param
 
 ii. Child Query
 
-To define a `child` or `dependant` query which is usually configured as child at level below the root query to query, derive from `BaseChildQuery<TQueryParameter, TQueryResult>`
+To define a `child` or `dependant` query which is usually configured as child at level below the root query to query, derive from `BaseQuery<TQueryParameter, TQueryResult>`
 * `TQueryParameter` is basically the class that holds the `inputs` required by the child query for execution. It is an implementation of `IQueryParameter` type.
 * `TQueryResult` is the result that will be returned by executing the child query.  It is an implementation of `IQueryResult` type.
 
@@ -170,9 +170,9 @@ In `child` mode, the query parameter is resolved using the `query result` of the
 
 > See example `CustomerCommunicationQuery` implemented to be configured and run as child or nested query to customer query below. Please see `CustomerSchema` definition above for parent/child configuration setup.
 >```
->    internal class CustomerCommunicationQuery : BaseChildQuery<CustomerParameter, CommunicationResult>
+>    internal class CustomerCommunicationQuery : BaseQuery<CustomerParameter, CommunicationResult>
 >    {
->        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+>        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
 >        {
 >            // Execute as child to customer query.
 >            // The result from parent customer query is used to resolve the query parameter of the nested communication query.
@@ -194,16 +194,16 @@ In `child` mode, the query parameter is resolved using the `query result` of the
 - `Schemio.EntityFramework` - provides implementation of IQueryEngine to execute `Entity Framework` queries.
 
 `Query using Schemio.SQL`
-The SQL query needs to implement `BaseSQLRootQuery<TQueryParameter, TQueryResult>` or `BaseSQLChildQuery<TQueryParameter, TQueryResult>` based on parent or child implementation.
+The SQL query needs to implement `BaseSQLQuery<TQueryParameter, TQueryResult>`.
 And, requires implementing  `public abstract CommandDefinition GetCommandDefinition()` method to return `command definition` for query to be executed with `Dapper` supported QueryEngine.
 
 See below example `CustomerQuery` implemented as Root SQL query
 >```
-> internal class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
+> internal class CustomerQuery : BaseSQLQuery<CustomerParameter, CustomerResult>
 >    {
->        public override void ResolveRootQueryParameter(IDataContext context)
+>        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
 >        {
->            // Executes as root or level 1 query.
+>            // Executes as root or level 1 query. parent QueryResult should be null.
 >            var customer = (CustomerContext)context.Entity;
 >            QueryParameter = new CustomerParameter
 >            {
@@ -226,9 +226,9 @@ See below example `CustomerQuery` implemented as Root SQL query
 >
 See below example `CustomerOrderItemsQuery` implemented as child SQL query.
 >```
->internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
+>internal class CustomerOrderItemsQuery : BaseSQLQuery<OrderItemParameter, OrderItemResult>
 >    {
->        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+>        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
 >        {
 >            // Execute as child query to order query taking OrderResult to resolve query parameter.
 >            var ordersResult = (OrderResult)parentQueryResult;
@@ -252,16 +252,16 @@ See below example `CustomerOrderItemsQuery` implemented as child SQL query.
 >```
 
 `Query using Schemio.EntityFramework`
-The SQL query needs to implement `BaseSQLRootQuery<TQueryParameter, TQueryResult>` or `BaseSQLChildQuery<TQueryParameter, TQueryResult>` based on parent or child implementation.
+The SQL query needs to implement `BaseSQLQuery<TQueryParameter, TQueryResult>`.
 And, requires implementing  `public abstract IEnumerable<IQueryResult> Run(DbContext dbContext)` method to implement query using `DbContext` using entity framework.
 
 See below example `CustomerQuery` implemented as Root Entity framework query
 >```
-> internal class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
+> internal class CustomerQuery : BaseSQLQuery<CustomerParameter, CustomerResult>
 >    {
->        public override void ResolveRootQueryParameter(IDataContext context)
+>        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
 >        {
->            // Executes as root or level 1 query.
+>            // Executes as root or level 1 query. parent QueryResult shuld be null.
 >            var customer = (CustomerContext)context.Entity;
 >            QueryParameter = new CustomerParameter
 >            {
@@ -285,9 +285,9 @@ See below example `CustomerQuery` implemented as Root Entity framework query
 >
 See below example `CustomerOrderItemsQuery` implemented as child Entity framework query.
 >```
->internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
+>internal class CustomerOrderItemsQuery : BaseSQLQuery<OrderItemParameter, OrderItemResult>
 >    {
->        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+>        protected override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
 >        {
 >            // Execute as child query to order query taking OrderResult to resolve query parameter.
 >            var ordersResult = (CustomerOrderResult)parentQueryResult;
@@ -383,33 +383,41 @@ var provider = new DataProvider(new CustomerSchema(), Schemio.EntityFramework.Qu
 
 ### Using IOC for registrations
 
-With ServiceCollection, you should call the `services.UseSchemio()` method for IoC registration.
+#### Registrations
 
-To configure Data provider with SQL Query engine, use fluent registration apis as shown below - 
- ```
-   services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
-                .AddEngine(c => new QueryEngine(new SQLConfiguration {  ConnectionSettings = new ConnectionSettings {
-                        Providername = "System.Data.SqlClient", 
-                        ConnectionString ="Data Source=Powerstation; Initial Catalog=Customer; Integrated Security=SSPI;"            
-                    }}))
-                .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
+With ServiceCollection, you need to register the below dependencies.
 ```
+    // Register core services
+    services.AddTransient(typeof(IQueryBuilder<>), typeof(QueryBuilder<>));
+    services.AddTransient(typeof(ITransformExecutor<>), typeof(TransformExecutor<>));
+    services.AddTransient(typeof(IDataProvider<>), typeof(DataProvider<>));
+    services.AddTransient<IQueryExecutor, QueryExecutor>();
 
-To configure Data provider with Entity Framework Query engine, use fluent registration apis shown as below - 
- ```
-   services.AddDbContextFactory<CustomerDbContext>(options => options.UseSqlServer(YourSqlConnection), ServiceLifetime.Scoped);
+    // Register instance of ISchemaPathMatcher - Json, XPath or Custom.
+    services.AddTransient(c => new XPathMatcher());
 
-   services.AddLogging();
+    // Enable logging
+    services.AddLogging();
 
-   services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
-     .AddEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
-     .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
+    //For Dapper SQL engine.
+    services.AddTransient<IQueryEngine>(c => new QueryEngine(new SQLConfiguration {  ConnectionSettings = new ConnectionSettings {
+                Providername = "System.Data.SqlClient", 
+                ConnectionString ="Data Source=Powerstation; Initial Catalog=Customer; Integrated Security=SSPI;"            
+            }}); 
 
+    // For entity framework engine.
+    services.AddDbContextFactory<CustomerDbContext>(options => options.UseSqlServer(YourSqlConnection), ServiceLifetime.Scoped);
+    services.AddTransient<IQueryEngine>(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>());
+               
+
+    // Register schema definitions. eg CustomerSchema
+    services.AddTransient<IEntitySchema<Customer>, CustomerSchema>();
 ```
 
 `Please Note:` You can combine multiple query engines and implement different types of queries to execute on different supported platforms.
 
-To use Data provider, Inject IDataProvider<T> using constructor & property injection method or explicity Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<>))`
+#### Data Provider (DI)
+To use Data provider, Inject IDataProvider<T> where T is IEntity, using constructor & property injection method or explicity Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<Customer>))`
 
 ## Extend Schemio
 ### Custom Query Engine
@@ -472,8 +480,8 @@ public class QueryEngine<T> : IQueryEngine where T : DbContext
 
 For Parent Query base implementation, see example below.
 ```
-public abstract class BaseSQLRootQuery<TQueryParameter, TQueryResult>
-        : BaseRootQuery<TQueryParameter, TQueryResult>, ISQLQuery
+public abstract class BaseSQLQuery<TQueryParameter, TQueryResult>
+        : BaseQuery<TQueryParameter, TQueryResult>, ISQLQuery
        where TQueryParameter : IQueryParameter
        where TQueryResult : IQueryResult
     {
@@ -485,21 +493,7 @@ public abstract class BaseSQLRootQuery<TQueryParameter, TQueryResult>
         public abstract IEnumerable<IQueryResult> Run(DbContext dbContext);
     }
 ```
-For Child Query implementation, see example below.
-```
-public abstract class BaseSQLChildQuery<TQueryParameter, TQueryResult>
-        : BaseChildQuery<TQueryParameter, TQueryResult>, ISQLQuery
-       where TQueryParameter : IQueryParameter
-       where TQueryResult : IQueryResult
-    {
-        /// <summary>
-        /// Get query delegate with implementation to return query result.
-        /// Delegate returns a collection from db.
-        /// </summary>
-        /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
-        public abstract IEnumerable<IQueryResult> Run(DbContext dbContext);
-    }
-```
+
 ### Custom Schema Language
 You can provide your own schema language support for use in entity schema definition to map sections of object graph.
 
@@ -534,4 +528,3 @@ public class XPathMatcher : ISchemaPathMatcher
         }
     }
 ```
-
