@@ -129,15 +129,14 @@ QueryEngine is an implementation of `IQueryEngine` to execute queries against a 
 
 As explained above, You can configure a query in `Parent` or `Child` (nested) mode in nested hierarchies.
 
-i. Parent Query
-
-To define a `parent` or `root` query which is usually configured at level 1 to query the root entity, derive from `BaseQuery<TQueryParameter, TQueryResult>`
+To define a `parent` or `child` query, derive from `BaseQuery<TQueryParameter, TQueryResult>`
 * `TQueryParameter` is basically the class that holds the `inputs` required by the root query for execution. It is an implementation of `IQueryParameter` type.
 * `TQueryResult` is the result that will be returned from executing the root query.  It is an implementation of `IQueryResult` type.
 
 The query parameter needs to be resolved before executing the query with QueryEngine.
+To resolve the query parameter you need to override `ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)` method
 
-In `parent` mode, the query parameter is resolved using the `IDataContext` parameter passed to data provider class.
+i. Parent Query - In `parent` mode, which is usually configured at level 1 to query the root entity, the query parameter is resolved using the `IDataContext` parameter passed to data provider class. `IQueryResult` parameter in ResolveQueryParameter() will be `null`. 
 
 
 > See example `CustomerQuery` implemented to be configured and run in parent mode below. 
@@ -158,15 +157,10 @@ In `parent` mode, the query parameter is resolved using the `IDataContext` param
 >    }
 >```
 
-ii. Child Query
+ii. Child Query - In `child` mode, which is a query configured usually at level below any parent query, the query parameter can be resolved using the `IQueryResult`  query result of the `parent` query.
+IDataContext parameter passed to data provider class is also available.
 
-To define a `child` or `dependant` query which is usually configured as child at level below the root query to query, derive from `BaseQuery<TQueryParameter, TQueryResult>`
-* `TQueryParameter` is basically the class that holds the `inputs` required by the child query for execution. It is an implementation of `IQueryParameter` type.
-* `TQueryResult` is the result that will be returned by executing the child query.  It is an implementation of `IQueryResult` type.
-
-Similar to Root query, the query parameter of child query needs to be resolved before executing with QueryEngine.
-
-In `child` mode, the query parameter is resolved using the `query result` of the `parent` query. You can have a maximum of `5` levels of query nestings.
+Note: You can have a maximum of `5` levels of query nestings.
 
 > See example `CustomerCommunicationQuery` implemented to be configured and run as child or nested query to customer query below. Please see `CustomerSchema` definition above for parent/child configuration setup.
 >```
