@@ -1,6 +1,7 @@
+using Schemio.Core;
+using Schemio.Core.Helpers;
 using Schemio.EntityFramework.Tests.EntitySetup.Entities;
 using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
-using Schemio.Helpers;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
 {

@@ -1,6 +1,5 @@
-using System.Collections.Generic;
 using System.Data;
-using Dapper;
+using Schemio.Core;
 
 namespace Schemio.SQL
 {
@@ -8,11 +7,11 @@ namespace Schemio.SQL
            where TQueryParameter : IQueryParameter
            where TQueryResult : IQueryResult
     {
-        public abstract IEnumerable<TQueryResult> Execute(IDbConnection conn);
+        public abstract Task<TQueryResult> Run(IDbConnection conn);
 
-        public IEnumerable<IQueryResult> Run(IDbConnection conn)
+        async Task<IQueryResult> ISQLQuery.Run(IDbConnection conn)
         {
-            return (IEnumerable<IQueryResult>)Execute(conn);
+            return await Run(conn);
         }
     }
 }

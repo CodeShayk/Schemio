@@ -1,3 +1,4 @@
+using Schemio.Core;
 using Schemio.SQL.Tests.EntitySetup.Entities;
 using Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries;
 

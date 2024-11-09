@@ -1,11 +1,12 @@
 using System.Data;
 using Dapper;
+using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerCommunicationQuery : BaseSQLChildQuery<CustomerParameter, CommunicationResult>
+    internal class CustomerCommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
     {
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;
@@ -15,9 +16,9 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override IEnumerable<CommunicationResult> Execute(IDbConnection conn)
+        public override Task<CommunicationResult> Run(IDbConnection conn)
         {
-            return conn.Query<CommunicationResult>(new CommandDefinition
+            return conn.QueryFirstOrDefaultAsync<CommunicationResult>(new CommandDefinition
             (
                 "select c.CommunicationId as Id, " +
                        "c.Phone as Telephone, " +

@@ -1,11 +1,12 @@
 using System.Data;
 using Dapper;
+using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrdersQuery : BaseSQLChildQuery<CustomerParameter, OrderResult>
+    internal class CustomerOrdersQuery : BaseSQLQuery<CustomerParameter, CollectionResult<OrderResult>>
     {
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;
@@ -15,9 +16,9 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override IEnumerable<OrderResult> Execute(IDbConnection conn)
+        public override async Task<CollectionResult<OrderResult>> Run(IDbConnection conn)
         {
-            return conn.Query<OrderResult>(new CommandDefinition
+            var items = await conn.QueryAsync<OrderResult>(new CommandDefinition
             (
                 "select OrderId, " +
                        "OrderNo, " +
@@ -25,6 +26,8 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
                  "from TOrder " +
                 $"where customerId={QueryParameter.CustomerId}"
            ));
+
+            return new CollectionResult<OrderResult>(items);
         }
     }
 }

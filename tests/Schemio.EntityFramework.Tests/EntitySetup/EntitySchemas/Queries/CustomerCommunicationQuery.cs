@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Schemio.Core;
 using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerCommunicationQuery : BaseSQLChildQuery<CustomerParameter, CommunicationResult>
+    internal class CustomerCommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
     {
-        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;
@@ -15,9 +16,9 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
+        public override Task<IQueryResult> Run(DbContext dbContext)
         {
-            return dbContext.Set<Communication>()
+            var result = dbContext.Set<Communication>()
                 .Where(p => p.Customer.Id == QueryParameter.CustomerId)
                 .Select(c => new CommunicationResult
                 {
@@ -30,8 +31,9 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                     Region = c.Address.Region,
                     PostalCode = c.Address.PostalCode,
                     Country = c.Address.Country
-                });
-            ;
+                }).FirstOrDefault();
+
+            return Task.FromResult((IQueryResult)result);
         }
     }
 }

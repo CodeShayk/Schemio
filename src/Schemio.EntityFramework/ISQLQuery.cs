@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Schemio.Core;
 
 namespace Schemio.EntityFramework
 {
@@ -9,6 +10,6 @@ namespace Schemio.EntityFramework
         /// Delegate returns a collection from db.
         /// </summary>
         /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
-        IEnumerable<IQueryResult> Run(DbContext dbContext);
+        Task<IQueryResult> Run(DbContext dbContext);
     }
 }

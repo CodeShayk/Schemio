@@ -1,0 +1,21 @@
+namespace Schemio.Core
+{
+    /// <summary>
+    /// Implement IQuery to fetch data using API or database.
+    /// </summary>
+    public interface IQuery : IQueryRunner
+    {
+        List<IQuery> Children { get; set; }
+
+        Type ResultType { get; }
+
+        bool IsContextResolved();
+
+        void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult = null);
+    }
+
+    public interface IQueryRunner
+    {
+        Task<IQueryResult> Run(IQueryEngine engine);
+    }
+}
