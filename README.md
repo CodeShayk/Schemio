@@ -45,7 +45,7 @@ NuGet\Install-Package Schemio.EntityFramework
 
 ### ii. Developer Guide
 
-Please see [wiki](https://github.com/CodeShayk/Schemio/wiki) for details on how to implement schemio in your project.
+Please see [Developer Guide](https://github.com/CodeShayk/Schemio/blob/master/DeveloperGuide.md) for details on how to implement schemio in your project.
 
 ## Support
 
