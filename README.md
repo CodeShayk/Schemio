@@ -6,7 +6,7 @@
 [![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 --
  #### Nuget Packages
-| Vesrion  | Details | 
+| Latest  | Details | 
 | -------- | --------|
 | ![NuGet Version](https://img.shields.io/nuget/v/Schemio.Core?style=for-the-badge&label=Schemio.Core&labelColor=green) | Provides `core` functionality to configure nested queries and transformers. With ability to map schema paths (XPath/JSONPath) to entity's object graph. `No QueryEngine` provided and requires implementing IQueryEngine to execute IQuery instances. |
 | ![NuGet Version](https://img.shields.io/nuget/v/Schemio.SQL?style=for-the-badge&label=Schemio.SQL&labelColor=green) | Provides schemio with query engine using Dapper to execute SQL queries. |
