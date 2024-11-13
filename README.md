@@ -16,7 +16,7 @@
 ### What is Schemio?
 `Schemio` is a data aggregation framework that   
 - allows fetching `aggregated data` from `heterogeneous` data storages. You could combine queries targetting different data platforms (example. SQL, API, Cache) to return an aggregated data entity.
-- allows `conditionally` fetching only `parts` of the data entity. You could retrieve an entity with some sections of its `object graph` populated depending on the context passed with the request.
+- allows `conditionally` fetching only `parts` of the data entity. You could retrieve an aggregated data entity with selective sections of its `object graph` populated depending on the context passed with the request.
 
 ### When to use Schemio?
 Schemio is perfect fit for many use cases. Few examples that require the service tier to dynamically fetch aggregated data with high performance, availability and scalability are
