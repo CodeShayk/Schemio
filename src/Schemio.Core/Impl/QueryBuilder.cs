@@ -23,7 +23,7 @@ namespace Schemio.Core.Impl
             var queries = GetMappedQueries(mappings, context);
 
             foreach (var query in queries.Queries)
-                query.ResolveQueryParameter(context);
+                query.ResolveQuery(context);
 
             return new QueryList(queries.Queries);
         }

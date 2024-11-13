@@ -4,26 +4,19 @@ using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    public class CustomerQuery : BaseSQLQuery<CustomerParameter, CustomerResult>
+    public class CustomerQuery : BaseSQLQuery<CustomerResult>
     {
-        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        protected override Func<IDbConnection, Task<CustomerResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Executes as root or level 1 query.
             var customer = (CustomerContext)context.Entity;
-            QueryParameter = new CustomerParameter
-            {
-                CustomerId = (int)customer.CustomerId
-            };
-        }
 
-        public override Task<CustomerResult> Run(IDbConnection conn)
-        {
-            return conn.QueryFirstOrDefaultAsync<CustomerResult>(new CommandDefinition
+            return connection => connection.QueryFirstOrDefaultAsync<CustomerResult>(new CommandDefinition
             (
                 "select CustomerId as Id, " +
                        "Customer_Name as Name," +
                        "Customer_Code as Code " +
-                $"from TCustomer where customerId={QueryParameter.CustomerId}"
+                $"from TCustomer where customerId={customer.CustomerId}"
            ));
         }
     }

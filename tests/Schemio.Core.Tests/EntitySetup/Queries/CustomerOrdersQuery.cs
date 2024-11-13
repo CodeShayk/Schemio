@@ -1,10 +1,19 @@
 namespace Schemio.Core.Tests.EntitySetup.Queries
 {
-    internal class CustomerOrdersQuery : BaseQuery<CustomerParameter, CollectionResult<OrderValue>>
+    internal class CustomerOrdersQuery : BaseQuery<CollectionResult<OrderValue>>
     {
-        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        private CustomerParameter QueryParameter;
+
+        public override bool IsContextResolved() => QueryParameter != null;
+
+        public override void ResolveQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Does not execute as child to any query.
+            var customer = (CustomerResult)parentQueryResult;
+            QueryParameter = new CustomerParameter
+            {
+                CustomerId = customer.Id
+            };
         }
     }
 }

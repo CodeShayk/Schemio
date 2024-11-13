@@ -4,21 +4,14 @@ using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
+    internal class CommunicationQuery : BaseSQLQuery<CommunicationResult>
     {
-        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        protected override Func<IDbConnection, Task<CommunicationResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;
-            QueryParameter = new CustomerParameter
-            {
-                CustomerId = customer.Id
-            };
-        }
 
-        public override Task<CommunicationResult> Run(IDbConnection conn)
-        {
-            return conn.QueryFirstOrDefaultAsync<CommunicationResult>(new CommandDefinition
+            return connection => connection.QueryFirstOrDefaultAsync<CommunicationResult>(new CommandDefinition
             (
                 "select c.CommunicationId as ContactId, " +
                        "c.Phone as Telephone, " +
@@ -31,7 +24,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
                        "a.Country " +
                 "from TCommunication c " +
                 "left join TAddress a on a.CommunicationId = c.CommunicationId " +
-                $"where customerId={QueryParameter.CustomerId}"
+                $"where customerId={customer.Id}"
            ));
         }
     }
