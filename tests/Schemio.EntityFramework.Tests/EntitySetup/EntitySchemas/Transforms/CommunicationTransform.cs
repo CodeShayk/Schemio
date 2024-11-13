@@ -4,7 +4,7 @@ using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
 {
-    public class CustomerCommunicationTransform : BaseTransformer<CommunicationResult, Customer>
+    public class CommunicationTransform : BaseTransformer<CommunicationResult, Customer>
     {
         public override void Transform(CommunicationResult queryResult, Customer entity)
         {

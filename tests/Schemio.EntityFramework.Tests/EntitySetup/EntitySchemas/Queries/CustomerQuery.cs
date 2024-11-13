@@ -16,9 +16,9 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override Task<IQueryResult> Run(DbContext dbContext)
+        public override async Task<CustomerResult> Run(DbContext dbContext)
         {
-            var result = dbContext.Set<Customer>()
+            var result = await dbContext.Set<Customer>()
                         .Where(c => c.Id == QueryParameter.CustomerId)
                         .Select(c => new CustomerResult
                         {
@@ -26,9 +26,9 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                             Name = c.Name,
                             Code = c.Code
                         })
-                        .FirstOrDefault();
+                        .FirstOrDefaultAsync();
 
-            return Task.FromResult((IQueryResult)result);
+            return result;
         }
     }
 }

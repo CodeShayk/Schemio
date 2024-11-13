@@ -2,7 +2,7 @@ using Schemio.Core;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    public class CustomerOrderResult : IQueryResult
+    public class OrderResult : IQueryResult
     {
         public int CustomerId { get; set; }
         public int OrderId { get; set; }

@@ -4,7 +4,7 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrdersQuery : BaseSQLQuery<CustomerParameter, CollectionResult<CustomerOrderResult>>
+    internal class OrdersQuery : BaseSQLQuery<CustomerParameter, CollectionResult<OrderResult>>
     {
         public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
@@ -16,19 +16,20 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override Task<IQueryResult> Run(DbContext dbContext)
+        public override async Task<CollectionResult<OrderResult>> Run(DbContext dbContext)
         {
-            var items = dbContext.Set<Order>()
+            var items = await dbContext.Set<Order>()
                 .Where(p => p.Customer.Id == QueryParameter.CustomerId)
-                .Select(c => new CustomerOrderResult
+                .Select(c => new OrderResult
                 {
                     CustomerId = c.CustomerId,
                     OrderId = c.OrderId,
                     Date = c.Date,
                     OrderNo = c.OrderNo
-                });
+                })
+                .ToListAsync();
 
-            return Task.FromResult((IQueryResult)new CollectionResult<CustomerOrderResult>(items));
+            return new CollectionResult<OrderResult>(items);
         }
     }
 }

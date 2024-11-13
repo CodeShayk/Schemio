@@ -39,11 +39,16 @@ namespace Schemio.Core.Impl
                     .ToList();
 
                 foreach (var queryResult in queryResults)
-                    transformers.Where(transformer => (transformer as ITransformerQueryResult)?.SupportedQueryResult == queryResult.GetType()).ToList()
+                    transformers.Where(transformer => IsMatch(((ITransformerQueryResult)transformer).SupportedQueryResult, queryResult.GetType())).ToList()
                         .ForEach(supportedtransformer => supportedtransformer?.Transform(queryResult, entity));
             }
 
             return entity;
+
+            static bool IsMatch(Type transformer, Type queryResult)
+            {
+                return transformer == queryResult;
+            }
         }
     }
 }

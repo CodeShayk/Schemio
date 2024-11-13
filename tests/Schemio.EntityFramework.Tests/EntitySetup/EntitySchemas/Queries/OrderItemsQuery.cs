@@ -4,12 +4,12 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrderItemsQuery : BaseSQLQuery<OrderItemParameter, CollectionResult<OrderItemResult>>
+    internal class OrderItemsQuery : BaseSQLQuery<OrderItemParameter, CollectionResult<OrderItemResult>>
     {
         public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to order query.
-            var ordersResults = (CollectionResult<CustomerOrderResult>)parentQueryResult;
+            var ordersResults = (CollectionResult<OrderResult>)parentQueryResult;
 
             QueryParameter ??= new OrderItemParameter();
             var orderIds = ordersResults?.Select(o => o.OrderId);
@@ -17,9 +17,9 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                 QueryParameter.OrderIds.AddRange(orderIds);
         }
 
-        public override Task<IQueryResult> Run(DbContext dbContext)
+        public override async Task<CollectionResult<OrderItemResult>> Run(DbContext dbContext)
         {
-            var items = dbContext.Set<OrderItem>()
+            var items = await dbContext.Set<OrderItem>()
                 .Where(p => QueryParameter.OrderIds.Contains(p.Order.OrderId))
                 .Select(c => new OrderItemResult
                 {
@@ -28,9 +28,9 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                     Cost = c.Cost,
                     OrderId = c.Order.OrderId
                 })
-                .ToList();
+                .ToListAsync();
 
-            return Task.FromResult((IQueryResult)new CollectionResult<OrderItemResult>(items));
+            return new CollectionResult<OrderItemResult>(items);
         }
     }
 }

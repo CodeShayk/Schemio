@@ -11,7 +11,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
             var customer = entity ?? new Customer();
             customer.Communication = new Communication
             {
-                ContactId = queryResult.Id,
+                ContactId = queryResult.ContactId,
                 Email = queryResult.Email,
                 Phone = queryResult.Telephone
             };
@@ -19,6 +19,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
             if (queryResult.HouseNo != null)
                 customer.Communication.Address = new Address
                 {
+                    AddressId = queryResult.AddressId,
                     HouseNo = queryResult.HouseNo,
                     City = queryResult.City,
                     Country = queryResult.Country,

@@ -12,10 +12,10 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas
             return CreateSchema.For<Customer>()
                 .Map<CustomerQuery, CustomerTransform>(For.Paths("customer"),
                  customer => customer.Dependents
-                    .Map<CustomerCommunicationQuery, CustomerCommunicationTransform>(For.Paths("customer/communication"))
-                    .Map<CustomerOrdersQuery, CustomerOrdersTransform>(For.Paths("customer/orders"),
+                    .Map<CommunicationQuery, CommunicationTransform>(For.Paths("customer/communication"))
+                    .Map<OrdersQuery, OrdersTransform>(For.Paths("customer/orders"),
                         customerOrders => customerOrders.Dependents
-                            .Map<CustomerOrderItemsQuery, CustomerOrderItemsTransform>(For.Paths("customer/orders/order/items")))
+                            .Map<OrderItemsQuery, OrderItemsTransform>(For.Paths("customer/orders/order/items")))
                 ).Create();
         }
     }

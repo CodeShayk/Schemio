@@ -4,7 +4,7 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerCommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
+    internal class CommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
     {
         public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
@@ -16,9 +16,9 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
             };
         }
 
-        public override Task<IQueryResult> Run(DbContext dbContext)
+        public override async Task<CommunicationResult> Run(DbContext dbContext)
         {
-            var result = dbContext.Set<Communication>()
+            var result = await dbContext.Set<Communication>()
                 .Where(p => p.Customer.Id == QueryParameter.CustomerId)
                 .Select(c => new CommunicationResult
                 {
@@ -31,9 +31,10 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                     Region = c.Address.Region,
                     PostalCode = c.Address.PostalCode,
                     Country = c.Address.Country
-                }).FirstOrDefault();
+                })
+                .FirstOrDefaultAsync();
 
-            return Task.FromResult((IQueryResult)result);
+            return result;
         }
     }
 }

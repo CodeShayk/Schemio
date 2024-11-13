@@ -1,18 +1,19 @@
+using System.Diagnostics.Contracts;
 using Schemio.Core;
 using Schemio.Core.Helpers;
-using Schemio.SQL.Tests.EntitySetup.Entities;
-using Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries;
+using Schemio.EntityFramework.Tests.EntitySetup.Entities;
+using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
 
-namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
+namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
 {
     public class OrdersTransform : BaseTransformer<CollectionResult<OrderResult>, Customer>
     {
-        public override void Transform(CollectionResult<OrderResult> collectionResult, Customer contract)
+        public override void Transform(CollectionResult<OrderResult> collectionResult, Customer entity)
         {
             if (collectionResult == null || !collectionResult.Any())
                 return;
 
-            var customer = contract ?? new Customer();
+            var customer = entity ?? new Customer();
 
             customer.Orders = new Order[collectionResult.Count];
 
@@ -20,7 +21,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
             {
                 customer.Orders[index] = new Order
                 {
-                    Date = DateTime.Parse(collectionResult[index].OrderDate),
+                    Date = collectionResult[index].Date,
                     OrderId = collectionResult[index].OrderId,
                     OrderNo = collectionResult[index].OrderNo
                 };

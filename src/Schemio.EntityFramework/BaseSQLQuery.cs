@@ -12,7 +12,12 @@ namespace Schemio.EntityFramework
         /// Get query delegate with implementation to return query result.
         /// Delegate returns a collection from db.
         /// </summary>
-        /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
-        public abstract Task<IQueryResult> Run(DbContext dbContext);
+        /// <returns>IQueryResult</returns>
+        public abstract Task<TQueryResult> Run(DbContext dbContext);
+
+        async Task<IQueryResult> ISQLQuery.Run(DbContext dbContext)
+        {
+            return await Run(dbContext);
+        }
     }
 }

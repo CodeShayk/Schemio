@@ -42,7 +42,7 @@ namespace Schemio.Core.Impl
             if (context.Cache == null)
                 return;
 
-            foreach (var cacheResult in results.Where(result => result.GetType()
+            foreach (var cacheResult in results.Where(result => result != null && result.GetType()
                                                .GetCustomAttributes(typeof(CacheResultAttribute), false)
                                                .Any()))
                 if (!context.Cache.ContainsKey(cacheResult.GetType().Name))
