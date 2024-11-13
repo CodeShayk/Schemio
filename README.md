@@ -6,23 +6,23 @@
 [![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 --
  #### Nuget Packages
-| Latest  | Details | 
-| -------- | --------|
-| ![NuGet Version](https://img.shields.io/nuget/v/Schemio.Core?style=for-the-badge&label=Schemio.Core&labelColor=green) | Provides `core` functionality to configure nested queries and transformers. With ability to map schema paths (XPath/JSONPath) to entity's object graph. `No QueryEngine` provided and requires implementing IQueryEngine to execute IQuery instances. |
-| ![NuGet Version](https://img.shields.io/nuget/v/Schemio.SQL?style=for-the-badge&label=Schemio.SQL&labelColor=green) | Provides schemio with query engine using Dapper to execute SQL queries. |
-|![NuGet Version](https://img.shields.io/nuget/v/Schemio.EntityFramework?style=for-the-badge&label=Schemio.EntityFramework&labelColor=green) | Provides schemio with `Entity Framework` query engine to execute queries using DbContext. |
+| Package | Latest  | Details | 
+| --------| --------| --------|
+| Schemio.Core|[![NuGet version](https://badge.fury.io/nu/Schemio.Core.svg)](https://badge.fury.io/nu/Schemio.Core) | Provides `core` functionality to configure nested queries and transformers. With ability to map schema paths (XPath/JSONPath) to entity's object graph. `No QueryEngine` provided and requires implementing IQueryEngine to execute IQuery instances. |
+| Schemio.SQL|[![NuGet version](https://badge.fury.io/nu/Schemio.SQL.svg)](https://badge.fury.io/nu/Schemio.SQL)| Provides schemio with query engine using `Dapper` to execute SQL queries. |
+| Schemio.EntityFramework|[![NuGet version](https://badge.fury.io/nu/Schemio.EntityFramework.svg)](https://badge.fury.io/nu/Schemio.EntityFramework)| Provides schemio with `Entity Framework` query engine to execute queries using DbContext. |
 
 ## Concept
 ### What is Schemio?
-`Schemio` is a .net utility to hydrate an entity with data by specifying schema paths or sections of its object graph.
-> Supports XPath & JsonPath for schema paths.
+`Schemio` is a data aggregation framework that   
+- allows fetching `aggregated data` from `heterogeneous` data storages. You could combine queries targetting different data platforms (example. SQL, API, Cache) to return an aggregated data entity.
+- allows `conditionally` fetching only `parts` of the data entity. You could retrieve an aggregated data entity with selective sections of its `object graph` populated depending on the context passed with the request.
 
 ### When to use Schemio?
-Schemio is perfect fit when you need to fetch parts of a large entity from given data storage. Ideally, you may not want all of the entity data but preferably only sections of the object graph depending on the context for fetch.
-
-Few example schemio use cases that require the service tier to dynamically fetch data for high performance, availability and scalability are
-> - Reporting
-> - Document Generation ( with templated data)
+Schemio is perfect fit for many use cases. Few examples that require the service tier to dynamically fetch aggregated data with high performance, availability and scalability are
+> - Aggregated APIs
+> - Data Reporting
+> - Document Generation (with templated data)
 > - Content Management Systems
 > - Many more
 
@@ -57,9 +57,10 @@ This project is licensed with the [MIT license](LICENSE).
 
 ## Version History
 The main branch is now on .NET 8.0. The following previous versions are available:
-| Version  | Release Notes |
-| -------- | --------|
-| [`v1.0.0`](https://github.com/CodeShayk/Schemio/tree/v1.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v1.0.0) |
+| Version  | Release Notes | Developer Guide |
+| -------- | --------|--------|
+| [`v1.0.0`](https://github.com/CodeShayk/Schemio/tree/v1.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v1.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v1.0.0/DeveloperGuide.md) |
+| [`Pre-Release v2.0.0`](https://github.com/CodeShayk/Schemio/tree/v2.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v2.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v2.0.0/DeveloperGuide.md) |
 
 ## Credits
 Thank you for reading. Please fork, explore, contribute and report. Happy Coding !! :)
