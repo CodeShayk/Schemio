@@ -11,6 +11,20 @@ namespace Schemio.EntityFramework.Tests
     {
         protected ServiceProvider _serviceProvider;
 
+        protected void AssertAreEqual(Customer expected, Customer actual)
+        {
+            var actualCustomer = actual.ToJson();
+            var expectedCustomer = expected.ToJson();
+
+            Console.WriteLine("expected:");
+            Console.WriteLine(expectedCustomer);
+
+            Console.WriteLine("actual:");
+            Console.WriteLine(actualCustomer);
+
+            Assert.That(actualCustomer, Is.EqualTo(expectedCustomer));
+        }
+
         [OneTimeSetUp]
         public void Setup()
         {

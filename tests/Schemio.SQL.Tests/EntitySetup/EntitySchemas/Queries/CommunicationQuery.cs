@@ -4,7 +4,7 @@ using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerCommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
+    internal class CommunicationQuery : BaseSQLQuery<CustomerParameter, CommunicationResult>
     {
         public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
@@ -20,7 +20,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
         {
             return conn.QueryFirstOrDefaultAsync<CommunicationResult>(new CommandDefinition
             (
-                "select c.CommunicationId as Id, " +
+                "select c.CommunicationId as ContactId, " +
                        "c.Phone as Telephone, " +
                        "c.Email, " +
                        "a.AddressId, " +

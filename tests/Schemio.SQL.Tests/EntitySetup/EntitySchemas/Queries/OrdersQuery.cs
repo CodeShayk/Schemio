@@ -4,7 +4,7 @@ using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CustomerOrdersQuery : BaseSQLQuery<CustomerParameter, CollectionResult<OrderResult>>
+    internal class OrdersQuery : BaseSQLQuery<CustomerParameter, CollectionResult<OrderResult>>
     {
         public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
         {
@@ -22,7 +22,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
             (
                 "select OrderId, " +
                        "OrderNo, " +
-                       "Date(OrderDate) as Date " +
+                       "OrderDate " +
                  "from TOrder " +
                 $"where customerId={QueryParameter.CustomerId}"
            ));
