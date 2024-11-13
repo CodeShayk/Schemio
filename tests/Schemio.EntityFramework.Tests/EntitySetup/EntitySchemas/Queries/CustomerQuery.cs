@@ -4,22 +4,17 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    public class CustomerQuery : BaseSQLQuery<CustomerParameter, CustomerResult>
+    public class CustomerQuery : BaseSQLQuery<CustomerResult>
     {
-        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        protected override Func<DbContext, Task<CustomerResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
-            // Executes as root or level 1 query.
+            // Executes as root or level 1 query. parentQueryResult will be null.
             var customer = (CustomerContext)context.Entity;
-            QueryParameter = new CustomerParameter
-            {
-                CustomerId = customer.CustomerId
-            };
-        }
 
-        public override async Task<CustomerResult> Run(DbContext dbContext)
-        {
-            var result = await dbContext.Set<Customer>()
-                        .Where(c => c.Id == QueryParameter.CustomerId)
+            return async dbContext =>
+            {
+                var result = await dbContext.Set<Customer>()
+                        .Where(c => c.Id == customer.CustomerId)
                         .Select(c => new CustomerResult
                         {
                             Id = c.Id,
@@ -28,7 +23,8 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                         })
                         .FirstOrDefaultAsync();
 
-            return result;
+                return result;
+            };
         }
     }
 }

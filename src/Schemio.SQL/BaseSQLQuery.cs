@@ -3,15 +3,29 @@ using Schemio.Core;
 
 namespace Schemio.SQL
 {
-    public abstract class BaseSQLQuery<TQueryParameter, TQueryResult> : BaseQuery<TQueryParameter, TQueryResult>, ISQLQuery
-           where TQueryParameter : IQueryParameter
+    public abstract class BaseSQLQuery<TQueryResult> : BaseQuery<TQueryResult>, ISQLQuery
            where TQueryResult : IQueryResult
     {
-        public abstract Task<TQueryResult> Run(IDbConnection conn);
-
         async Task<IQueryResult> ISQLQuery.Run(IDbConnection conn)
         {
-            return await Run(conn);
+            return await QueryDelegate(conn);
         }
+
+        private Func<IDbConnection, Task<TQueryResult>> QueryDelegate = null;
+
+        public override bool IsContextResolved() => QueryDelegate != null;
+
+        public override void ResolveQuery(IDataContext context, IQueryResult parentQueryResult)
+        {
+            QueryDelegate = GetQuery(context, parentQueryResult);
+        }
+
+        /// <summary>
+        /// Get query delegate to return query result.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="parentQueryResult"></param>
+        /// <returns></returns>
+        protected abstract Func<IDbConnection, Task<TQueryResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult);
     }
 }

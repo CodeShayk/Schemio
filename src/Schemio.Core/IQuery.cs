@@ -11,7 +11,7 @@ namespace Schemio.Core
 
         bool IsContextResolved();
 
-        void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult = null);
+        void ResolveQuery(IDataContext context, IQueryResult parentQueryResult = null);
     }
 
     public interface IQueryRunner

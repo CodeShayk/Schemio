@@ -4,30 +4,26 @@ using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class OrdersQuery : BaseSQLQuery<CustomerParameter, CollectionResult<OrderResult>>
+    internal class OrdersQuery : BaseSQLQuery<CollectionResult<OrderResult>>
     {
-        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        protected override Func<IDbConnection, Task<CollectionResult<OrderResult>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to customer query.
             var customer = (CustomerResult)parentQueryResult;
-            QueryParameter = new CustomerParameter
+
+            return async connection =>
             {
-                CustomerId = customer.Id
+                var items = await connection.QueryAsync<OrderResult>(new CommandDefinition
+                (
+                    "select OrderId, " +
+                            "OrderNo, " +
+                            "OrderDate " +
+                        "from TOrder " +
+                    $"where customerId={customer.Id}"
+                ));
+
+                return new CollectionResult<OrderResult>(items);
             };
-        }
-
-        public override async Task<CollectionResult<OrderResult>> Run(IDbConnection conn)
-        {
-            var items = await conn.QueryAsync<OrderResult>(new CommandDefinition
-            (
-                "select OrderId, " +
-                       "OrderNo, " +
-                       "OrderDate " +
-                 "from TOrder " +
-                $"where customerId={QueryParameter.CustomerId}"
-           ));
-
-            return new CollectionResult<OrderResult>(items);
         }
     }
 }

@@ -4,33 +4,28 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class OrderItemsQuery : BaseSQLQuery<OrderItemParameter, CollectionResult<OrderItemResult>>
+    internal class OrderItemsQuery : BaseSQLQuery<CollectionResult<OrderItemResult>>
     {
-        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        protected override Func<DbContext, Task<CollectionResult<OrderItemResult>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to order query.
             var ordersResults = (CollectionResult<OrderResult>)parentQueryResult;
 
-            QueryParameter ??= new OrderItemParameter();
-            var orderIds = ordersResults?.Select(o => o.OrderId);
-            if (orderIds != null)
-                QueryParameter.OrderIds.AddRange(orderIds);
-        }
+            return async dbContext =>
+            {
+                var items = await dbContext.Set<OrderItem>()
+               .Where(p => ordersResults.Select(o => o.OrderId).Contains(p.Order.OrderId))
+               .Select(c => new OrderItemResult
+               {
+                   ItemId = c.ItemId,
+                   Name = c.Name,
+                   Cost = c.Cost,
+                   OrderId = c.Order.OrderId
+               })
+               .ToListAsync();
 
-        public override async Task<CollectionResult<OrderItemResult>> Run(DbContext dbContext)
-        {
-            var items = await dbContext.Set<OrderItem>()
-                .Where(p => QueryParameter.OrderIds.Contains(p.Order.OrderId))
-                .Select(c => new OrderItemResult
-                {
-                    ItemId = c.ItemId,
-                    Name = c.Name,
-                    Cost = c.Cost,
-                    OrderId = c.Order.OrderId
-                })
-                .ToListAsync();
-
-            return new CollectionResult<OrderItemResult>(items);
+                return new CollectionResult<OrderItemResult>(items);
+            };
         }
     }
 }

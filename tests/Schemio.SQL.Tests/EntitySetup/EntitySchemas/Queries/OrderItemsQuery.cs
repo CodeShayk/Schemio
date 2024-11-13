@@ -1,32 +1,30 @@
 using System.Data;
 using Dapper;
 using Schemio.Core;
+using Schemio.Core.Helpers;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class OrderItemsQuery : BaseSQLQuery<OrderItemParameter, CollectionResult<OrderItemResult>>
+    internal class OrderItemsQuery : BaseSQLQuery<CollectionResult<OrderItemResult>>
     {
-        public override void ResolveQueryParameter(IDataContext context, IQueryResult parentQueryResult)
+        protected override Func<IDbConnection, Task<CollectionResult<OrderItemResult>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child query to order query taking OrderResult to resolve query parameter.
             var ordersResult = (CollectionResult<OrderResult>)parentQueryResult;
 
-            QueryParameter ??= new OrderItemParameter();
-            QueryParameter.OrderIds.AddRange(ordersResult.Select(o => o.OrderId));
-        }
+            return async connection =>
+            {
+                var items = await connection.QueryAsync<OrderItemResult>(new CommandDefinition
+                   (
+                       "select OrderId, " +
+                              "OrderItemId as ItemId, " +
+                              "Name, " +
+                              "Cost " +
+                       $"from TOrderItem where OrderId in ({ordersResult.Select(o => o.OrderId).ToCSV()})"
+                  ));
 
-        public override async Task<CollectionResult<OrderItemResult>> Run(IDbConnection conn)
-        {
-            var items = await conn.QueryAsync<OrderItemResult>(new CommandDefinition
-            (
-                "select OrderId, " +
-                       "OrderItemId as ItemId, " +
-                       "Name, " +
-                       "Cost " +
-                $"from TOrderItem where OrderId in ({QueryParameter.ToCsv()})"
-           ));
-
-            return new CollectionResult<OrderItemResult>(items);
+                return new CollectionResult<OrderItemResult>(items);
+            };
         }
     }
 }

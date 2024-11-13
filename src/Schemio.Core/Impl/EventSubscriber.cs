@@ -29,7 +29,7 @@ namespace Schemio.Core.Impl
                         continue;
 
                     foreach (var query in unresolved.Queries)
-                        query.ResolveQueryParameter(context, queryResult);
+                        query.ResolveQuery(context, queryResult);
                 }
             }
 
@@ -49,7 +49,7 @@ namespace Schemio.Core.Impl
                         continue;
 
                     foreach (var query in unresolved.Queries)
-                        query.ResolveQueryParameter(context, queryResult);
+                        query.ResolveQuery(context, queryResult);
                 }
             }
         }
