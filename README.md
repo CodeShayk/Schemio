@@ -14,15 +14,15 @@
 
 ## Concept
 ### What is Schemio?
-`Schemio` is a .net utility to hydrate an entity with data by specifying schema paths or sections of its object graph.
-> Supports XPath & JsonPath for schema paths.
+`Schemio` is a data aggregation framework that allows  
+- Fetching aggregated data from heterogeneous storages. You could combine queries targetting different data stores to return aggregated data entity.
+- Conditionally fetching only parts of a large data entity. You may retrieve an entity with sections of its object graph populated with data depending on the context of the fetch.
 
 ### When to use Schemio?
-Schemio is perfect fit when you need to fetch parts of a large entity from given data storage. Ideally, you may not want all of the entity data but preferably only sections of the object graph depending on the context for fetch.
-
-Few example schemio use cases that require the service tier to dynamically fetch data for high performance, availability and scalability are
+Schemio is perfect fit for many use cases. Few examples that require the service tier to dynamically fetch aggregated data for high performance, availability and scalability are
+> - Aggregated APIs
 > - Reporting
-> - Document Generation ( with templated data)
+> - Document Generation (with templated data)
 > - Content Management Systems
 > - Many more
 
