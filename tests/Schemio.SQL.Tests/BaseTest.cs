@@ -2,9 +2,9 @@ using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Schemio.Core;
+using Schemio.Core.Helpers;
 using Schemio.Core.PathMatchers;
 using Schemio.SQL;
-using Schemio.SQL.Tests;
 using Schemio.SQL.Tests.EntitySetup.Entities;
 using Schemio.SQL.Tests.EntitySetup.EntitySchemas;
 

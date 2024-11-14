@@ -73,7 +73,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
                         .Map<CustomerOrdersQuery, MockTransform<OrderCollectionResult, Customer>>(For.Paths("customer/orders"),
                             customerOrders => customerOrders.Dependents
                                 .Map<CustomerOrderItemsQuery, MockTransform<OrderItemCollectionResult, Customer>>(For.Paths("customer/orders/order/items")))
-                    ).Create();
+                    ).End();
             }
         }
     }
