@@ -76,7 +76,7 @@ namespace Schemio.Core
 
         public Mappings<TEntity, TQueryResult> GetMappings => this;
 
-        public IEnumerable<Mapping<TEntity, TQueryResult>> Create() => this;
+        public IEnumerable<Mapping<TEntity, TQueryResult>> End() => this;
     }
 
     public class Mapping<TEntity, TQueryResult> :
@@ -125,7 +125,7 @@ namespace Schemio.Core
         where TEntity : IEntity
         where TQueryResult : IQueryResult
     {
-        IEnumerable<Mapping<TEntity, TQueryResult>> Create();
+        IEnumerable<Mapping<TEntity, TQueryResult>> End();
     }
 
     public interface IWithDependents<TEntity, TQueryResult>

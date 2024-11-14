@@ -1,6 +1,4 @@
-using System.Diagnostics.Contracts;
 using Schemio.Core;
-using Schemio.Core.Helpers;
 using Schemio.EntityFramework.Tests.EntitySetup.Entities;
 using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
 

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Schemio.Core;
+using Schemio.Core.Helpers;
 using Schemio.Core.PathMatchers;
 using Schemio.EntityFramework.Tests.EntitySetup.Entities;
 using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas;

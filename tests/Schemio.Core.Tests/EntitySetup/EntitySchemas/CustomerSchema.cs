@@ -15,7 +15,7 @@ namespace Schemio.Core.Tests.EntitySetup.EntitySchemas
                     .Map<CustomerOrdersQuery, CustomerOrdersTransform>(For.Paths("customer/orders"),
                         customerOrders => customerOrders.Dependents
                             .Map<CustomerOrderItemsQuery, CustomerOrderItemsTransform>(For.Paths("customer/orders/order/items")))
-                ).Create();
+                ).End();
         }
     }
 }
