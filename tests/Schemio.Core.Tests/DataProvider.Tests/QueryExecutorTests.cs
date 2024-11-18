@@ -3,8 +3,8 @@ using Schemio.Core.Impl;
 using Schemio.Core.PathMatchers;
 using Schemio.Core.Tests.EntitySetup;
 using Schemio.Core.Tests.EntitySetup.Entities;
-using Schemio.Core.Tests.EntitySetup.EntitySchemas;
-using Schemio.Core.Tests.EntitySetup.Queries;
+using Schemio.Core.Tests.EntitySetup.Configuration;
+using Schemio.Core.Tests.EntitySetup.Configuration.Queries;
 
 namespace Schemio.Core.Tests.DataProvider.Tests
 {
@@ -42,7 +42,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
         [Test] // TODO - All sequence assertions
         public void TestQueryExecutorToExecuteConfiguredQueriesInCorrectOrder()
         {
-            var querList = new QueryBuilder<Customer>(new CustomerSchema(), new XPathMatcher())
+            var querList = new QueryBuilder<Customer>(new CustomerConfiguration(), new XPathMatcher())
                 .Build(new DataContext(new CustomerContext()));
 
             _queryExecutor.Execute(new DataContext(new EntityContext()), querList);

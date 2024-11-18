@@ -13,9 +13,4 @@ namespace Schemio.Core
 
         void ResolveQuery(IDataContext context, IQueryResult parentQueryResult = null);
     }
-
-    public interface IQueryRunner
-    {
-        Task<IQueryResult> Run(IQueryEngine engine);
-    }
 }

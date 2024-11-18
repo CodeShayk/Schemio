@@ -4,18 +4,18 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class OrderItemsQuery : BaseSQLQuery<CollectionResult<OrderItemResult>>
+    internal class OrderItemsQuery : BaseSQLQuery<CollectionResult<OrderItemRecord>>
     {
-        protected override Func<DbContext, Task<CollectionResult<OrderItemResult>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
+        protected override Func<DbContext, Task<CollectionResult<OrderItemRecord>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Execute as child to order query.
-            var ordersResults = (CollectionResult<OrderResult>)parentQueryResult;
+            var ordersResults = (CollectionResult<OrderRecord>)parentQueryResult;
 
             return async dbContext =>
             {
                 var items = await dbContext.Set<OrderItem>()
                .Where(p => ordersResults.Select(o => o.OrderId).Contains(p.Order.OrderId))
-               .Select(c => new OrderItemResult
+               .Select(c => new OrderItemRecord
                {
                    ItemId = c.ItemId,
                    Name = c.Name,
@@ -24,7 +24,7 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
                })
                .ToListAsync();
 
-                return new CollectionResult<OrderItemResult>(items);
+                return new CollectionResult<OrderItemRecord>(items);
             };
         }
     }

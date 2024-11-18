@@ -2,9 +2,9 @@ namespace Schemio.Core.Impl
 {
     public class EntityBuilder<T> : IEntityBuilder<T> where T : IEntity, new()
     {
-        private readonly IEntitySchema<T> entitySchema;
+        private readonly IEntityConfiguration<T> entitySchema;
 
-        public EntityBuilder(IEntitySchema<T> entitySchema)
+        public EntityBuilder(IEntityConfiguration<T> entitySchema)
         {
             this.entitySchema = entitySchema;
         }
