@@ -1,8 +1,8 @@
 using Schemio.Core;
-using Schemio.EntityFramework.Tests.EntitySetup.Entities;
-using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
+using Schemio.SQL.Tests.EntitySetup.Entities;
+using Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries;
 
-namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
+namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
 {
     public class CommunicationTransform : BaseTransformer<CommunicationRecord, Customer>
     {
@@ -11,7 +11,7 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
             var customer = entity ?? new Customer();
             customer.Communication = new Communication
             {
-                ContactId = queryResult.Id,
+                ContactId = queryResult.ContactId,
                 Email = queryResult.Email,
                 Phone = queryResult.Telephone
             };
@@ -19,12 +19,12 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
             if (queryResult.HouseNo != null)
                 customer.Communication.Address = new Address
                 {
+                    AddressId = queryResult.AddressId,
                     HouseNo = queryResult.HouseNo,
                     City = queryResult.City,
                     Country = queryResult.Country,
                     PostalCode = queryResult.PostalCode,
-                    Region = queryResult.Region,
-                    AddressId = queryResult.AddressId
+                    Region = queryResult.Region
                 };
         }
     }

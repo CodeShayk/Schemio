@@ -5,5 +5,9 @@ namespace Schemio.Core
         public CollectionResult(IEnumerable<T> list) : base(list)
         {
         }
+
+        public CollectionResult()
+        {
+        }
     }
 }

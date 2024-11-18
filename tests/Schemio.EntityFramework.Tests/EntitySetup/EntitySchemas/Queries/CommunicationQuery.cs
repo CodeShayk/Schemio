@@ -4,15 +4,15 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CommunicationQuery : BaseSQLQuery<CommunicationResult>
+    internal class CommunicationQuery : BaseSQLQuery<CommunicationRecord>
     {
-        protected override Func<DbContext, Task<CommunicationResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
+        protected override Func<DbContext, Task<CommunicationRecord>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
-            var customer = (CustomerResult)parentQueryResult;
+            var customer = (CustomerRecord)parentQueryResult;
 
             return async dbContext => await dbContext.Set<Communication>()
                 .Where(p => p.Customer.Id == customer.Id)
-                .Select(c => new CommunicationResult
+                .Select(c => new CommunicationRecord
                 {
                     Id = c.CommunicationId,
                     AddressId = c.Address.AddressId,

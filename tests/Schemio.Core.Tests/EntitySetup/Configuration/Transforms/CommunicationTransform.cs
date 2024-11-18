@@ -1,8 +1,7 @@
-using Schemio.Core;
-using Schemio.EntityFramework.Tests.EntitySetup.Entities;
-using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
+using Schemio.Core.Tests.EntitySetup.Configuration.Queries;
+using Schemio.Core.Tests.EntitySetup.Entities;
 
-namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
+namespace Schemio.Core.Tests.EntitySetup.Configuration.Transforms
 {
     public class CommunicationTransform : BaseTransformer<CommunicationRecord, Customer>
     {
@@ -23,8 +22,7 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
                     City = queryResult.City,
                     Country = queryResult.Country,
                     PostalCode = queryResult.PostalCode,
-                    Region = queryResult.Region,
-                    AddressId = queryResult.AddressId
+                    Region = queryResult.Region
                 };
         }
     }

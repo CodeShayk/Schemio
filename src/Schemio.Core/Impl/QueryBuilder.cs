@@ -2,10 +2,10 @@ namespace Schemio.Core.Impl
 {
     public class QueryBuilder<T> : IQueryBuilder<T> where T : IEntity
     {
-        private readonly IEntitySchema<T> entitySchema;
+        private readonly IEntityConfiguration<T> entitySchema;
         private readonly ISchemaPathMatcher schemaPathMatcher;
 
-        public QueryBuilder(IEntitySchema<T> entitySchema, ISchemaPathMatcher schemaPathMatcher)
+        public QueryBuilder(IEntityConfiguration<T> entitySchema, ISchemaPathMatcher schemaPathMatcher)
         {
             this.entitySchema = entitySchema;
             this.schemaPathMatcher = schemaPathMatcher;

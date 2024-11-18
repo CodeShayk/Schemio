@@ -2,8 +2,8 @@ using Schemio.Core.Impl;
 using Schemio.Core.PathMatchers;
 using Schemio.Core.Tests.EntitySetup;
 using Schemio.Core.Tests.EntitySetup.Entities;
-using Schemio.Core.Tests.EntitySetup.EntitySchemas;
-using Schemio.Core.Tests.EntitySetup.Queries;
+using Schemio.Core.Tests.EntitySetup.Configuration;
+using Schemio.Core.Tests.EntitySetup.Configuration.Queries;
 
 namespace Schemio.Core.Tests.DataProvider.Tests
 {
@@ -12,13 +12,13 @@ namespace Schemio.Core.Tests.DataProvider.Tests
     {
         private QueryBuilder<Customer> _queryBuilder;
 
-        private IEntitySchema<Customer> _entitySchema;
+        private IEntityConfiguration<Customer> _entitySchema;
         private ISchemaPathMatcher _schemaPathMatcher;
 
         [SetUp]
         public void Setup()
         {
-            _entitySchema = new CustomerSchema();
+            _entitySchema = new CustomerConfiguration();
 
             /*-----------------------------------------             *
              *
@@ -75,7 +75,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
             Assert.That(parentQuery.GetType() == typeof(CustomerQuery));
 
             var childQuery = parentQuery.Children.First();
-            Assert.That(childQuery.GetType() == typeof(CustomerCommunicationQuery));
+            Assert.That(childQuery.GetType() == typeof(CommunicationQuery));
         }
 
         [Test]
@@ -96,8 +96,8 @@ namespace Schemio.Core.Tests.DataProvider.Tests
             var parentQuery = result.Queries.First();
             Assert.That(parentQuery.GetType() == typeof(CustomerQuery));
 
-            var communicationChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CustomerCommunicationQuery));
-            var ordersChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CustomerOrdersQuery));
+            var communicationChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CommunicationQuery));
+            var ordersChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(OrdersQuery));
 
             Assert.IsNotNull(communicationChildQuery);
             Assert.IsNotNull(ordersChildQuery);
@@ -124,8 +124,8 @@ namespace Schemio.Core.Tests.DataProvider.Tests
             var parentQuery = result.Queries.First();
             Assert.That(parentQuery.GetType() == typeof(CustomerQuery));
 
-            var communicationChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CustomerCommunicationQuery));
-            var ordersChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CustomerOrdersQuery));
+            var communicationChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CommunicationQuery));
+            var ordersChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(OrdersQuery));
 
             Assert.IsNotNull(communicationChildQuery);
             Assert.IsNotNull(ordersChildQuery);
@@ -133,7 +133,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
             // nested child query for order item in order query children as order items are included in paths
             Assert.That(ordersChildQuery.Children.Count, Is.EqualTo(1));
 
-            var orderItemsChildQuery = ordersChildQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CustomerOrderItemsQuery));
+            var orderItemsChildQuery = ordersChildQuery.Children.FirstOrDefault(x => x.GetType() == typeof(OrderItemsQuery));
             Assert.IsNotNull(orderItemsChildQuery);
         }
     }

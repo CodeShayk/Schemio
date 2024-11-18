@@ -5,6 +5,7 @@ using Schemio.Core;
 using Schemio.Core.Helpers;
 using Schemio.Core.PathMatchers;
 using Schemio.SQL;
+using Schemio.SQL.Tests.EntitySetup;
 using Schemio.SQL.Tests.EntitySetup.Entities;
 using Schemio.SQL.Tests.EntitySetup.EntitySchemas;
 
@@ -42,8 +43,13 @@ namespace Schemio.EntityFramework.Tests
 
             services.AddLogging();
 
-            services.UseSchemio(new XPathMatcher(), c => new QueryEngine(configuration))
-                    .AddEntitySchema<Customer, CustomerSchema>();
+            //services.UseSchemio(new XPathMatcher(), c => new QueryEngine(configuration))
+            //        .AddEntitySchema<Customer, CustomerConfiguration>();
+
+            services.UseSchemio()
+                .WithEngine(c => new QueryEngine(configuration))
+                .WithPathMatcher(c => new XPathMatcher())
+                   .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
 
             // 4. Build the service provider
             _serviceProvider = services.BuildServiceProvider();

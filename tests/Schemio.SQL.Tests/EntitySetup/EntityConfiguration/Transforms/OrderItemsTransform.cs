@@ -1,9 +1,9 @@
 using Schemio.Core;
 using Schemio.Core.Helpers;
-using Schemio.EntityFramework.Tests.EntitySetup.Entities;
-using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries;
+using Schemio.SQL.Tests.EntitySetup.Entities;
+using Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries;
 
-namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Transforms
+namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
 {
     public class OrderItemsTransform : BaseTransformer<CollectionResult<OrderItemRecord>, Customer>
     {

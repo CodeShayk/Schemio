@@ -12,7 +12,7 @@ namespace Schemio.Core.Impl
         private readonly IEntityBuilder<TEntity> entityBuilder;
 
         public DataProvider(
-            IEntitySchema<TEntity> entitySchema,
+            IEntityConfiguration<TEntity> entitySchema,
             params IQueryEngine[] queryEngines)
             : this(null, new QueryBuilder<TEntity>(entitySchema, new XPathMatcher()),
               new QueryExecutor(queryEngines), new EntityBuilder<TEntity>(entitySchema))
@@ -21,7 +21,7 @@ namespace Schemio.Core.Impl
 
         public DataProvider(
             ILogger<IDataProvider<TEntity>> logger,
-            IEntitySchema<TEntity> entitySchema,
+            IEntityConfiguration<TEntity> entitySchema,
             ISchemaPathMatcher schemaPathMatcher,
             params IQueryEngine[] queryEngines)
             : this(logger, new QueryBuilder<TEntity>(entitySchema, schemaPathMatcher),

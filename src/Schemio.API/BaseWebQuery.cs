@@ -25,7 +25,7 @@ namespace Schemio.API
 
         public override void ResolveQuery(IDataContext context, IQueryResult parentQueryResult)
         {
-            UriDelegate = GetUri(context, parentQueryResult);
+            UriDelegate = GetQuery(context, parentQueryResult);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Schemio.API
         /// <param name="context">Request Context. Always available.</param>
         /// <param name="parentApiResult">Result from parent Query. Only available when configured as nested web query. Else will be null.</param>
         /// <returns></returns>
-        protected abstract Func<Uri> GetUri(IDataContext context, IQueryResult parentApiResult = null);
+        protected abstract Func<Uri> GetQuery(IDataContext context, IQueryResult parentApiResult = null);
 
         async Task<IQueryResult> IWebQuery.Run(IHttpClientFactory httpClientFactory, ILogger logger)
         {
