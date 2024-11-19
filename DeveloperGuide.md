@@ -113,7 +113,7 @@ Execution Flow
 
 Please see the execution sequence below for queries and transformers nested in `CustomerConfiguration` implemented above.
 
-<img width="1202" alt="image" src="https://github.com/CodeShayk/Schemio/blob/master/Images/EntitySchemaDefinition.png">
+<img width="1202" alt="image" src="/Images/EntitySchemaDefinition.png">
 
 #### iii. Query Class
 `Query` - The purpose of a query class is to execute with supported QueryEngine to fetch data from data storage.
@@ -432,7 +432,7 @@ When nested path for a nested query is included (eg. customer/orders/order/items
 
 Example - Control Flow
 
-<img width="1202" alt="image" src="https://github.com/CodeShayk/Schemio/blob/master/Images/Schemio-Control-Flow.png">
+<img width="1202" alt="image" src="/Images/Schemio-Control-Flow.png">
 
 
 ## Extending Schemio
