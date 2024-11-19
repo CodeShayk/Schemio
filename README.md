@@ -49,7 +49,7 @@ NuGet\Install-Package Schemio.API
 ```
 ### ii. Developer Guide
 
-Please see [Developer Guide](/DeveloperGuide.md) for details on how to implement schemio in your project.
+Please see [Developer Guide](https://codeshayk.github.io/schemio/) for details on how to implement schemio in your project.
 
 ## Support
 
@@ -63,8 +63,8 @@ This project is licensed with the [MIT license](LICENSE).
 The main branch is now on .NET 8.0. The following previous versions are available:
 | Version  | Release Notes | Developer Guide |
 | -------- | --------|--------|
-| [`v1.0.0`](https://github.com/CodeShayk/Schemio/tree/v1.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v1.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v1.0.0/DeveloperGuide.md) |
-| [`Pre-Release v2.0.0`](https://github.com/CodeShayk/Schemio/tree/v2.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v2.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v2.0.0/DeveloperGuide.md) |
+| [`v1.0.0`](https://github.com/CodeShayk/Schemio/tree/v1.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v1.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v1.0.0/index.md) |
+| [`Pre-Release v2.0.0`](https://github.com/CodeShayk/Schemio/tree/v2.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v2.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v2.0.0/index.md) |
 
 ## Credits
 Thank you for reading. Please fork, explore, contribute and report. Happy Coding !! :)
