@@ -49,7 +49,7 @@ NuGet\Install-Package Schemio.API
 ```
 ### ii. Developer Guide
 
-Please see [Developer Guide](https://codeshayk.github.io/schemio/) for details on how to implement schemio in your project.
+Please see [Developer Guide](https://codeshayk.github.io/Schemio/) for details on how to implement schemio in your project.
 
 ## Support
 
