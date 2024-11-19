@@ -428,9 +428,12 @@ The `IEntityContext` provides a `SchemaPaths` property, which is a list of schem
 - When `no` paths are passed in the parameter then entire aggregated entity for all configured queries is returned.
 - When list of schema paths are included in the request then the returned aggregated data entity only includes query results from included queries.
 
-When nested path for a nested query is included (eg. customer/orders/order/items) then all parent queries in the respective parent paths also get included for execution..
-Example - Control Flow 
-TBC
+When nested path for a nested query is included (eg. customer/orders/order/items) then all parent queries in the respective parent paths also get included for execution.
+
+Example - Control Flow
+
+<img width="1202" alt="image" src="https://github.com/CodeShayk/Schemio/blob/master/Images/Schemio-Control-Flow.png">
+
 
 ## Extending Schemio
 
