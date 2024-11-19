@@ -29,7 +29,7 @@ Schemio is perfect fit for many use cases. Few examples that require the service
 
 ## Getting Started?
 ### i. Installation
-Install the latest nuget package as appropriate for Core, SQL using Dapper or EntityFramework. 
+Install the latest nuget package as appropriate for `Core`, `Web API`, `SQL` using `Dapper` or `EntityFramework` using commands below. 
 
 `Scemio.Core` - for installing schemio for `bespoke` implementation of query engine.
 ```
@@ -43,7 +43,10 @@ NuGet\Install-Package Schemio.SQL
 ```
 NuGet\Install-Package Schemio.EntityFramework
 ```
-
+`Schemio.API` - for installing schemio for Web API with `HttpClient` engine.
+```
+NuGet\Install-Package Schemio.API
+```
 ### ii. Developer Guide
 
 Please see [Developer Guide](https://codeshayk.github.io/Schemio/) for details on how to implement schemio in your project.
