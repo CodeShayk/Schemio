@@ -298,7 +298,7 @@ For the example query/transformer mapping
 The Communication transformer should map data only to the `customer/communication` xpath mapped object graph of customer class.
 
 ### Step 3. DataProvider Setup
-Data provider needs to setup with required dependencies. Provide implementations of below dependencies to construct the data provider.
+Data provider needs to be setup with required dependencies. Provide implementations of below dependencies to construct the data provider.
 
 #### Container Registrations
 
@@ -415,7 +415,7 @@ iv. Example registration: Multiple Engines
       .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
 ```
 
-#### Data Provider 
+#### Use Data Provider 
 
 ##### i. Dependency Inject - IDataProvider
 
