@@ -317,16 +317,21 @@ With ServiceCollection, you need to register the below dependencies.
     // Enable logging
     services.AddLogging();
 
-    //For Dapper SQL engine.
+    //For Dapper SQL engine - Schemio.SQL
     services.AddTransient<IQueryEngine>(c => new QueryEngine(new SQLConfiguration {  ConnectionSettings = new ConnectionSettings {
                 Providername = "System.Data.SqlClient", 
                 ConnectionString ="Data Source=Powerstation; Initial Catalog=Customer; Integrated Security=SSPI;"            
             }}); 
 
-    // For entity framework engine.
+    // For entity framework engine - Schemio.EntityFramework
     services.AddDbContextFactory<CustomerDbContext>(options => options.UseSqlServer(YourSqlConnection), ServiceLifetime.Scoped);
     services.AddTransient<IQueryEngine>(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>());
                
+    // For HTTPClient Engine for web APIs - Schemio.API
+    
+    // Enable HttpClient
+    services.AddHttpClient();
+    services.AddTransient<IQueryEngine, QueryEngine>();
 
     // Register each entity configuration. eg CustomerConfiguration
     services.AddTransient<IEntityConfiguration<Customer>, CustomerConfiguration>();
@@ -414,9 +419,17 @@ iv. Example registration: Multiple Engines
 
 ##### i. Dependency Inject - IDataProvider
 
-To use Data provider, Inject IDataProvider<T> where T is IEntity, using constructor & property injection method or explicity Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<Customer>))`
+To use Data provider, Inject `IDataProvider<T>` where T is IEntity, using constructor & property injection method or explicitly Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<Customer>))`
 
-##### ii. Call DataProvider.GetData(IDataContext) method.
+##### ii. Call DataProvider.GetData(IEntityContext context) method.
+You need to call the `GetData()` method with an instance of parameter class derived from `IEntityContext` interface.
+
+The `IEntityContext` provides a `SchemaPaths` property, which is a list of schema paths to include for the given request to fetch aggregated data.
+- When `no` paths are passed in the parameter then entire aggregated entity for all configured queries is returned.
+- When list of schema paths are included in the request then the returned aggregated data entity only includes query results from included queries.
+
+When nested path for a nested query is included (eg. customer/orders/order/items) then all parent queries in the respective parent paths also get included for execution..
+Example - Control Flow 
 TBC
 
 ## Extending Schemio
@@ -509,23 +522,26 @@ Example - EntityFramework Supported query implementation is shown below.
 
 ### iii. Custom Schema Paths
 
-Additionally, You can provide your own schema language instead of XPath/JSONPath to map aggregated entity's object graph, and register with schemio.
+Additionally, You can use your own schema language instead of XPath/JSONPath to map aggregated entity's object graph, and register with schemio.
 
-To do this you need to follow the below steps
-i. Provide entity schema definition with query/transformer pairs using custom schema language paths. 
+To do this you need to follow the below steps:
+#### i. Use schema paths in Entity Configuration.
+
+Provide entity schema definition with query/transformer pairs using custom schema language paths. 
 
 Example - with Dummy schema mapping
 ```
 .Map<OrderQuery, OrderTransform>(For.Paths("customer$orders"))
 ```
+#### ii. ISchemaPathMatcher 
+Provide implementation of `ISchemaPathMatcher` interface and implement `IsMatch()` method to provide logic for matching custom paths. 
 
-ii. Provide implementation of `ISchemaPathMatcher` interface and implement `IsMatch()` method to provide logic for matching custom paths. 
 `Important`: This matcher is used by query builder to filter queries based matched paths, to include only required queries for execution to optimize performance.
 ```
 public interface ISchemaPathMatcher
-    {
-        bool IsMatch(string inputPath, ISchemaPaths configuredPaths);
-    }
+{
+    bool IsMatch(string inputPath, ISchemaPaths configuredPaths);
+}
 ```
 Example implementation of XPathMatcher is below.
 ```
