@@ -299,7 +299,7 @@ internal class OrdersQuery : WebQuery<CollectionResult<OrderResult>>
     protected override Func<Uri> GetQuery(IDataContext context, IQueryResult parentQueryResult)
     {
          // Execute as child to customer api.
-        var customer = (CustomerResult)parentApiResult;
+        var customer = (CustomerResult)parentQueryResult;
     
         return ()=> new Uri(string.Format($"v2/customers/{customer.Id}/orders);
     }

@@ -39,7 +39,7 @@ namespace Schemio.API
 
         /// <summary>
         /// Override to get custom incoming headers with the api response.
-        /// The headers collection will be present on `IApiResult.Headers` when api response includes any of the headers defined in this method.
+        /// The headers collection will be present on `WebHeaderResult.Headers` when api response includes any of the headers defined in this method.
         /// </summary>
         /// <returns></returns>
         protected virtual IEnumerable<string> GetResponseHeaders()
