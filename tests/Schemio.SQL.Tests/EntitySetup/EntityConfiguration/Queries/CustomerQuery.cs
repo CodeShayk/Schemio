@@ -4,7 +4,7 @@ using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    public class CustomerQuery : BaseSQLQuery<CustomerRecord>
+    public class CustomerQuery : SQLQuery<CustomerRecord>
     {
         protected override Func<IDbConnection, Task<CustomerRecord>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {

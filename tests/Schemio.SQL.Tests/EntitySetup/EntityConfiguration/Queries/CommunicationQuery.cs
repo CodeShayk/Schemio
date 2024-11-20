@@ -4,7 +4,7 @@ using Schemio.Core;
 
 namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class CommunicationQuery : BaseSQLQuery<CommunicationRecord>
+    internal class CommunicationQuery : SQLQuery<CommunicationRecord>
     {
         protected override Func<IDbConnection, Task<CommunicationRecord>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {

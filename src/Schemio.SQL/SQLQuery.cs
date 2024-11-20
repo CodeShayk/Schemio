@@ -3,7 +3,7 @@ using Schemio.Core;
 
 namespace Schemio.SQL
 {
-    public abstract class BaseSQLQuery<TQueryResult> : BaseQuery<TQueryResult>, ISQLQuery
+    public abstract class SQLQuery<TQueryResult> : BaseQuery<TQueryResult>, ISQLQuery
            where TQueryResult : IQueryResult
     {
         async Task<IQueryResult> ISQLQuery.Run(IDbConnection conn)
