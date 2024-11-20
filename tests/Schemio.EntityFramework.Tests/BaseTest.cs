@@ -38,10 +38,6 @@ namespace Schemio.EntityFramework.Tests
 
             services.AddLogging();
 
-            //services.UseSchemio(new XPathMatcher(),
-            //            c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
-            //    .AddEntitySchema<Customer, CustomerConfiguration>();
-
             services.UseSchemio()
                 .WithEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
                 .WithPathMatcher(c => new XPathMatcher())

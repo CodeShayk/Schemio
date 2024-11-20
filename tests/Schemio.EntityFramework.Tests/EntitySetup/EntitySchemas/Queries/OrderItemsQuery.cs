@@ -4,7 +4,7 @@ using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    internal class OrderItemsQuery : BaseSQLQuery<CollectionResult<OrderItemRecord>>
+    internal class OrderItemsQuery : SQLQuery<CollectionResult<OrderItemRecord>>
     {
         protected override Func<DbContext, Task<CollectionResult<OrderItemRecord>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {

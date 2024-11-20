@@ -3,7 +3,7 @@ using Schemio.Core;
 
 namespace Schemio.EntityFramework
 {
-    public abstract class BaseSQLQuery<TQueryResult>
+    public abstract class SQLQuery<TQueryResult>
         : BaseQuery<TQueryResult>, ISQLQuery
        where TQueryResult : IQueryResult
     {

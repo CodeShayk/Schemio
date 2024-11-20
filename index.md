@@ -131,11 +131,12 @@ You need to override the `GetQuery(IDataContext context, IQueryResult parentQuer
 * `IDataContext` is the context parameter passed to DataProvider to get aggregated results (. Aggregated Entity). This parameter is always available for both parent and child queries.
 * `IQueryResult` parameter is only available when query is configured in child mode, else will be null.
 
-##### `Schemio.SQL` - with `Dapper` Query implementation. 
+##### `Schemio.SQL` - with `Dapper` Query implementation.
+To create a SQL query you need to derive from `SQLQuery<TQueryResult>` where TQueryResult is `IQueryResult` implementation.
 
 1. Example Parent Query - CustomerQuery
 ```
-public class CustomerQuery : BaseSQLQuery<CustomerResult>
+public class CustomerQuery : SQLQuery<CustomerResult>
 {
     protected override Func<IDbConnection, Task<CustomerResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
     {
@@ -154,7 +155,7 @@ public class CustomerQuery : BaseSQLQuery<CustomerResult>
 ```
 2. Example Child Query - OrdersQuery
 ```
-internal class OrdersQuery : BaseSQLQuery<CollectionResult<OrderResult>>
+internal class OrdersQuery : SQLQuery<CollectionResult<OrderResult>>
 {
     protected override Func<IDbConnection, Task<CollectionResult<OrderResult>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
     {
@@ -179,10 +180,11 @@ internal class OrdersQuery : BaseSQLQuery<CollectionResult<OrderResult>>
 ```
 
 ##### `Schemio.EntityFramework` - with `EntityFramework` Query implementation
+To create a SQL query you need to derive from `SQLQuery<TQueryResult>` where TQueryResult is `IQueryResult` implementation.
 
 1. Example Parent Query - CustomerQuery
 ```
-public class CustomerQuery : BaseSQLQuery<CustomerResult>
+public class CustomerQuery : SQLQuery<CustomerResult>
 {
     protected override Func<DbContext, Task<CustomerResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
     {
@@ -208,7 +210,7 @@ public class CustomerQuery : BaseSQLQuery<CustomerResult>
 ```
 2. Example Child Query - OrdersQuery
 ```
- internal class OrdersQuery : BaseSQLQuery<CollectionResult<OrderResult>>
+ internal class OrdersQuery : SQLQuery<CollectionResult<OrderResult>>
  {
      protected override Func<DbContext, Task<CollectionResult<OrderResult>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
      {
@@ -234,25 +236,62 @@ public class CustomerQuery : BaseSQLQuery<CustomerResult>
  }
 ```
 ##### `Schemio.Api` - with `HttpClient` Query implementation
+To create a Web API query you need to derive from `WebQuery<TQueryResult>` where TQueryResult is `IQueryResult` implementation.
+
+`Important`: If you need to get response headers in the result then TQueryResult should derive from `WebHeaderResult` class.
+
 1. Example Parent Query - CustomerQuery
 ```
-public class CustomerQuery : BaseApiQuery<CustomerResult>
+public class CustomerWebQuery : WebQuery<CustomerResult>
 {
-     public CustomerQuery() : base(Endpoints.BaseAddress)
-     {
-     }
-    protected override Func<Uri> GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    public CustomerWebQuery() : base(Endpoints.BaseAddress)
     {
-        // Executes as root or level 1 query.
-        var customer = (CustomerContext)context.Entity;
-    
-        return ()=> new Uri(string.Format($"v2/customers/{customer.CustomerId});
+    }
+
+    protected override Func<Uri> GetQuery(IDataContext context, IQueryResult parentApiResult)
+    {
+        // Executes as root or level 1 api.
+        var customerContext = (CustomerContext)context.Entity;
+
+        return () => new Uri(string.Format(Endpoints.BaseAddress + Endpoints.Customer, customerContext.CustomerId), UriKind.Absolute);
+    }
+
+    /// <summary>
+    /// Override to pass outgoing request headers.
+    /// </summary>
+    /// <returns></returns>
+    protected override IDictionary<string, string> GetRequestHeaders()
+    {
+        return new Dictionary<string, string>
+        {
+            { "x-meta-branch-code", "London" }
+        };
+    }
+
+    /// <summary>
+    /// Override to subscribe for given Response headers to be added to TQueryResult.
+    /// For receiving response headers, You need to implement the TQueryResult type from `WebHeaderResult` class instead of IQueryResult.
+    /// </summary>
+    /// <returns></returns>
+    protected override IEnumerable<string> GetResponseHeaders()
+    {
+        return new[] { "x-meta-branch-code" };
     }
 }
 ```
+Note: CustomerResult is above query implements from `WebHeaderResult` class to support response headers.
+```
+public class CustomerResult : WebHeaderResult
+{
+    public int Id { get; set; }
+    public string Code { get; set; }
+    public string Name { get; set; }
+}
+```
+
 2. Example Child Query - OrdersQuery
 ```
-internal class OrdersQuery : BaseApiQuery<CollectionResult<OrderResult>>
+internal class OrdersQuery : WebQuery<CollectionResult<OrderResult>>
 {
      public OrdersQuery() : base(Endpoints.BaseAddress)
      {
@@ -284,6 +323,11 @@ internal class CustomerTransform : BaseTransformer<CustomerResult, Customer>
         customer.CustomerId = queryResult.Id;
         customer.CustomerName = queryResult.CustomerName;
         customer.CustomerCode = queryResult.CustomerCode;
+
+        if (queryResult is WebHeaderResult webHeaderResult)
+            if (webHeaderResult.Headers.TryGetValue("x-meta-branch-code", out var branch))
+                customer.Branch = branch;
+
         return customer;
     }
 }
@@ -484,7 +528,7 @@ public class QueryEngine<T> : IQueryEngine where T : DbContext
 }
 ```
 ### ii. IQuery
-With the Query Engine implementation, you also need to provide custom implementation of `IQuery` for executing the query custom query engine.
+With the Query Engine implementation, you also need to provide custom implementation of `IQuery` for executing the query with custom query engine.
 
 To do this, you need to extend `BaseQuery<TResult>` where TQueryResult is `IQueryResult`. And, provide overrides for below methods.
 - `bool IsContextResolved()`
@@ -495,7 +539,7 @@ This method is invoked by schemio to resolve the query context required for exec
 
 Example - EntityFramework Supported query implementation is shown below.
 ```
- public abstract class BaseSQLQuery<TQueryResult>
+ public abstract class SQLQuery<TQueryResult>
      : BaseQuery<TQueryResult>, ISQLQuery
     where TQueryResult : IQueryResult
  {

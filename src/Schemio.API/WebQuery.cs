@@ -4,16 +4,16 @@ using Schemio.Core.Helpers;
 
 namespace Schemio.API
 {
-    public abstract class BaseWebQuery<TQueryResult> : BaseQuery<TQueryResult>, IWebQuery
-          where TQueryResult : IWebResponse
+    public abstract class WebQuery<TQueryResult> : BaseQuery<TQueryResult>, IWebQuery
+          where TQueryResult : IQueryResult
     {
         protected Uri BaseAddress;
 
-        protected BaseWebQuery() : this(string.Empty)
+        protected WebQuery() : this(string.Empty)
         {
         }
 
-        protected BaseWebQuery(string baseAddress)
+        protected WebQuery(string baseAddress)
         {
             if (!string.IsNullOrEmpty(baseAddress))
                 BaseAddress = new Uri(baseAddress);
@@ -150,22 +150,27 @@ namespace Schemio.API
 
             var headers = GetResponseHeaders();
 
-            if (headers != null && headers.Any())
-                foreach (var header in headers)
-                {
-                    if (!response.Headers.Any(r => r.Key == header))
-                        continue;
+            if (headers == null || !headers.Any())
+                return;
 
-                    var responseHeader = response.Headers.First(r => r.Key == header);
+            if (!(result is WebHeaderResult webResult))
+                throw new InvalidOperationException($"{typeof(TQueryResult).Name} should implement from WebHeaderResult for response Headers");
 
-                    var value = responseHeader.Value != null && responseHeader.Value.Any()
-                                                ? responseHeader.Value.ElementAt(0)
-                                                : string.Empty;
+            foreach (var header in headers)
+            {
+                if (!response.Headers.Any(r => r.Key == header))
+                    continue;
 
-                    result.Headers ??= new Dictionary<string, string>();
+                var responseHeader = response.Headers.First(r => r.Key == header);
 
-                    result.Headers.Add(responseHeader.Key, value);
-                }
+                var value = responseHeader.Value != null && responseHeader.Value.Any()
+                                            ? responseHeader.Value.ElementAt(0)
+                                            : string.Empty;
+
+                webResult.Headers ??= new Dictionary<string, string>();
+
+                webResult.Headers.Add(responseHeader.Key, value);
+            }
         }
     }
 }
