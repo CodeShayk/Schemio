@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Schemio.Core.Impl;
 using Schemio.Core.PathMatchers;
 
@@ -6,40 +7,13 @@ namespace Schemio.Core
 {
     public static class ServicesExtensions
     {
-        public static IServiceCollection UseSchemio(this IServiceCollection services,
-            ISchemaPathMatcher schemaPathMatcher = null,
-            params Func<IServiceProvider, IQueryEngine>[] queryEngines
-            )
-        {
-            services.AddTransient(typeof(IQueryBuilder<>), typeof(QueryBuilder<>));
-            services.AddTransient(typeof(IEntityBuilder<>), typeof(EntityBuilder<>));
-            services.AddTransient(typeof(IDataProvider<>), typeof(DataProvider<>));
-
-            services.AddTransient<IQueryExecutor, QueryExecutor>();
-            services.AddTransient(c => schemaPathMatcher ?? new XPathMatcher());
-
-            if (queryEngines != null && queryEngines.Length > 0)
-                foreach (var engine in queryEngines)
-                    services.AddTransient(c => engine(c));
-
-            return services;
-        }
-
-        public static IServiceCollection AddEntitySchema<TEntity, TSchema>(this IServiceCollection services)
-            where TEntity : IEntity
-            where TSchema : IEntityConfiguration<TEntity>
-        {
-            services.AddTransient(typeof(IEntityConfiguration<TEntity>), typeof(TSchema));
-
-            return services;
-        }
-
         public static SchemioOptionsBuilder UseSchemio(this IServiceCollection services)
         {
             services.AddTransient(typeof(IQueryBuilder<>), typeof(QueryBuilder<>));
             services.AddTransient(typeof(IEntityBuilder<>), typeof(EntityBuilder<>));
             services.AddTransient(typeof(IDataProvider<>), typeof(DataProvider<>));
             services.AddTransient<IQueryExecutor, QueryExecutor>();
+            services.AddTransient<ISchemaPathMatcher, XPathMatcher>();
 
             return new SchemioOptionsBuilder(services);
         }
@@ -54,11 +28,11 @@ namespace Schemio.Core
 
         public IServiceCollection Services { get; }
 
-        public ISchemioOptions WithEngine(Func<IServiceProvider, IQueryEngine> queryEngines)
+        public ISchemioOptions WithEngine(Func<IServiceProvider, IQueryEngine> queryEngine)
         {
-            if (queryEngines != null)
+            if (queryEngine != null)
             {
-                Services.AddTransient<IQueryEngine>(c => queryEngines(c));
+                Services.AddTransient<IQueryEngine>(c => queryEngine(c));
             }
 
             return this;
@@ -81,14 +55,29 @@ namespace Schemio.Core
             return this;
         }
 
+        /// <summary>
+        /// Register an instance of ISchemaPathMatcher. Default is XPathMatcher.
+        /// </summary>
+        /// <param name="pathMatcher"></param>
+        /// <returns></returns>
         public ISchemioOptions WithPathMatcher(Func<IServiceProvider, ISchemaPathMatcher> pathMatcher)
         {
             if (pathMatcher != null)
+            {
+                Services.RemoveAll<ISchemaPathMatcher>();
                 Services.AddTransient<ISchemaPathMatcher>(c => pathMatcher(c));
+            }
 
             return this;
         }
 
+        /// <summary>
+        /// Register and instance of EntityConfiguration<typeparamref name="T"/>
+        /// You could register configuration for multiple entities.
+        /// </summary>
+        /// <typeparam name="T">IEntity</typeparam>
+        /// <param name="entityConfiguration">Instance of EntityConfiguration[typeparamref name="T"]</param>
+        /// <returns></returns>
         public ISchemioOptions WithEntityConfiguration<T>(Func<IServiceProvider, IEntityConfiguration<T>> entityConfiguration) where T : class, IEntity
         {
             if (entityConfiguration != null)
