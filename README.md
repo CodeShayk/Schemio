@@ -11,13 +11,15 @@
 | Schemio.Core|[![NuGet version](https://badge.fury.io/nu/Schemio.Core.svg)](https://badge.fury.io/nu/Schemio.Core) | Provides `core` functionality to configure nested queries and transformers. With ability to map schema paths (XPath/JSONPath) to entity's object graph. `No QueryEngine` provided and requires implementing IQueryEngine to execute IQuery instances. |
 | Schemio.SQL|[![NuGet version](https://badge.fury.io/nu/Schemio.SQL.svg)](https://badge.fury.io/nu/Schemio.SQL)| Provides schemio with query engine using `Dapper` to execute SQL queries. |
 | Schemio.EntityFramework|[![NuGet version](https://badge.fury.io/nu/Schemio.EntityFramework.svg)](https://badge.fury.io/nu/Schemio.EntityFramework)| Provides schemio with `Entity Framework` query engine to execute queries using DbContext. |
-| Schemio.Api|[![NuGet version](https://badge.fury.io/nu/Schemio.Api.svg)](https://badge.fury.io/nu/Schemio.Api)| Provides schemio with `Web Api` query engine to execute apis using HttpClient. |
+| Schemio.API|[![NuGet version](https://badge.fury.io/nu/Schemio.Api.svg)](https://badge.fury.io/nu/Schemio.Api)| Provides schemio with `Web Api` query engine to execute apis using HttpClient. |
 
 ## Concept
 ### What is Schemio?
-`Schemio` is a data aggregation framework that   
+`Schemio` is a data aggregation framework using queries that can target different data platforms.
+
+Key benefits:
 - allows fetching `aggregated` data from `heterogeneous` data storages. You could combine queries targetting different data platforms (example. `SQL`, `API`, `Cache`) to return an aggregated data `entity`.
-- allows `selectively` fetching only `parts` of the aggregated data entity. You could retrieve an aggregated data entity with only `sections` of its `object graph` `populated` with data depending upon the `context` passed with the request.
+- allows `selectively` fetching only `parts` of the aggregated data entity. You could retrieve an aggregated data entity with only `sections` of its `object graph` populated with data depending upon the `schema paths` passed with the request.
 
 ### When to use Schemio?
 Schemio is perfect fit for many use cases. Few examples that require the service tier to dynamically fetch aggregated data with high performance, availability and scalability are
