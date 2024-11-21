@@ -49,7 +49,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
             Assert.That(orderItemsCollectionTransforms.Count() == 1);
             Assert.That(orderItemsCollectionTransforms.ElementAt(0).InvocationCount == 1);
 
-            Assert.IsNotNull(entity);
+            Assert.That(entity, Is.Not.Null);
         }
 
         public class MockTransform<TQueryResult, TEntity> : BaseTransformer<TQueryResult, TEntity>

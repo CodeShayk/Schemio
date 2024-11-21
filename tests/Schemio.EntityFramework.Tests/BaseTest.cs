@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Schemio.Core;
@@ -50,7 +51,8 @@ namespace Schemio.EntityFramework.Tests
         [OneTimeTearDown]
         public void TearDown()
         {
-            _serviceProvider = null;
+            if (_serviceProvider is IDisposable disposable)
+                disposable.Dispose();
         }
     }
 }
