@@ -39,7 +39,7 @@ NuGet\Install-Package Schemio.Core
 ```
 `Schemio.SQL` - for installing schemio for SQL with `Dapper` engine.
 ```
-NuGet\Install-Package Schemio.SQL
+NuGet\Install-Package Schemio.SQL 
 ```
 `Schemio.EntityFramework` - for installing schemio for SQL with `EntityFramework` engine.
 ```
