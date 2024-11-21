@@ -141,7 +141,7 @@ public class CustomerQuery : SQLQuery<CustomerResult>
     protected override Func<IDbConnection, Task<CustomerResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
     {
         // Executes as root or level 1 query.
-        var customer = (CustomerContext)context.Entity;
+        var customer = (CustomerRequest)context.Request;
 
         return connection => connection.QueryFirstOrDefaultAsync<CustomerResult>(new CommandDefinition
         (
@@ -189,7 +189,7 @@ public class CustomerQuery : SQLQuery<CustomerResult>
     protected override Func<DbContext, Task<CustomerResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
     {
         // Executes as root or level 1 query. parentQueryResult will be null.
-        var customer = (CustomerContext)context.Entity;
+        var customer = (CustomerRequest)context.Request;
 
         return async dbContext =>
         {
@@ -251,9 +251,9 @@ public class CustomerWebQuery : WebQuery<CustomerResult>
     protected override Func<Uri> GetQuery(IDataContext context, IQueryResult parentApiResult)
     {
         // Executes as root or level 1 api.
-        var customerContext = (CustomerContext)context.Entity;
+        var customerRequest = (CustomerRequest)context.Request;
 
-        return () => new Uri(string.Format(Endpoints.BaseAddress + Endpoints.Customer, customerContext.CustomerId), UriKind.Absolute);
+        return () => new Uri(string.Format(Endpoints.BaseAddress + Endpoints.Customer, customerRequest.CustomerId), UriKind.Absolute);
     }
 
     /// <summary>
@@ -465,10 +465,10 @@ iv. Example registration: Multiple Engines
 
 To use Data provider, Inject `IDataProvider<T>` where T is IEntity, using constructor & property injection method or explicitly Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<Customer>))`
 
-##### ii. Call DataProvider.GetData(IEntityContext context) method.
-You need to call the `GetData()` method with an instance of parameter class derived from `IEntityContext` interface.
+##### ii. Call DataProvider.GetData(IEntityRequest context) method.
+You need to call the `GetData()` method with an instance of parameter class derived from `IEntityRequest` interface.
 
-The `IEntityContext` provides a `SchemaPaths` property, which is a list of schema paths to include for the given request to fetch aggregated data.
+The `IEntityRequest` provides a `SchemaPaths` property, which is a list of schema paths to include for the given request to fetch aggregated data.
 - When `no` paths are passed in the parameter then entire aggregated entity for all configured queries is returned.
 - When list of schema paths are included in the request then the returned aggregated data entity only includes query results from included queries.
 

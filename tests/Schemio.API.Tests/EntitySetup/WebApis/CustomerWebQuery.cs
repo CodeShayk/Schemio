@@ -12,7 +12,7 @@ namespace Schemio.API.Tests.EntitySetup.WebApis
         protected override Func<Uri> GetQuery(IDataContext context, IQueryResult parentApiResult)
         {
             // Executes as root or level 1 api.
-            var customerContext = (CustomerContext)context.Entity;
+            var customerContext = (CustomerRequest)context.Request;
 
             return () => new Uri(string.Format(Endpoints.BaseAddress + Endpoints.Customer, customerContext.CustomerId), UriKind.Absolute);
         }

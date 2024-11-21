@@ -1,6 +1,6 @@
 namespace Schemio.Core
 {
-    public interface IEntityContext
+    public interface IEntityRequest
     {
         /// <summary>
         /// Entity schema paths for data retrieval.
