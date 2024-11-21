@@ -1,3 +1,5 @@
+using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Schemio.Core;
 using Schemio.Core.Helpers;
