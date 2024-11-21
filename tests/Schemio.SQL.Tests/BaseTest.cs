@@ -1,3 +1,4 @@
+using System;
 using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,7 +55,8 @@ namespace Schemio.EntityFramework.Tests
         [OneTimeTearDown]
         public void TearDown()
         {
-            _serviceProvider = null;
+            if (_serviceProvider is IDisposable disposable)
+                disposable.Dispose();
         }
     }
 }

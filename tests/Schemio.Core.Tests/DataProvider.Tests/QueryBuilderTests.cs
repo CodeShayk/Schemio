@@ -44,7 +44,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
 
             var result = _queryBuilder.Build(context);
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
 
             // returns parent query with filtered out child communication query.
 
@@ -63,7 +63,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
 
             var result = _queryBuilder.Build(context);
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
 
             // returns parent query with filtered out child communication query.
 
@@ -85,7 +85,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
 
             var result = _queryBuilder.Build(context);
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
 
             // returns parent query with filtered out children - communication & orders query.
 
@@ -99,8 +99,8 @@ namespace Schemio.Core.Tests.DataProvider.Tests
             var communicationChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CommunicationQuery));
             var ordersChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(OrdersQuery));
 
-            Assert.IsNotNull(communicationChildQuery);
-            Assert.IsNotNull(ordersChildQuery);
+            Assert.That(communicationChildQuery, Is.Not.Null);
+            Assert.That(ordersChildQuery, Is.Not.Null);
 
             // nested child query for order item not included as order items are excluded from paths
             Assert.That(ordersChildQuery.Children.Count, Is.EqualTo(0));
@@ -113,7 +113,7 @@ namespace Schemio.Core.Tests.DataProvider.Tests
 
             var result = _queryBuilder.Build(context);
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
 
             // returns parent query with filtered out children - communication & orders query.
 
@@ -127,14 +127,14 @@ namespace Schemio.Core.Tests.DataProvider.Tests
             var communicationChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(CommunicationQuery));
             var ordersChildQuery = parentQuery.Children.FirstOrDefault(x => x.GetType() == typeof(OrdersQuery));
 
-            Assert.IsNotNull(communicationChildQuery);
-            Assert.IsNotNull(ordersChildQuery);
+            Assert.That(communicationChildQuery, Is.Not.Null);
+            Assert.That(ordersChildQuery, Is.Not.Null);
 
             // nested child query for order item in order query children as order items are included in paths
             Assert.That(ordersChildQuery.Children.Count, Is.EqualTo(1));
 
             var orderItemsChildQuery = ordersChildQuery.Children.FirstOrDefault(x => x.GetType() == typeof(OrderItemsQuery));
-            Assert.IsNotNull(orderItemsChildQuery);
+            Assert.That(orderItemsChildQuery, Is.Not.Null);
         }
     }
 }
