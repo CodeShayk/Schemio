@@ -9,7 +9,7 @@ namespace Schemio.Core.Tests.EntitySetup.Configuration.Queries
         public override void ResolveQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Executes as root or level 1 query.
-            var customer = (CustomerContext)context.Entity;
+            var customer = (CustomerContext)context.Request;
             QueryParameter = new
             {
                 customer.CustomerId

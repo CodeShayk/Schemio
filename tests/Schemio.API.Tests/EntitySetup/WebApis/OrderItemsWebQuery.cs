@@ -14,7 +14,7 @@ namespace Schemio.API.Tests.EntitySetup.WebApis
         {
             // Execute as nested api to order parent api taking OrderResult to resolve api parameter.
             var orders = (CollectionResult<OrderResult>)parentApiResult;
-            var customerContext = (CustomerContext)context.Entity;
+            var customerContext = (CustomerRequest)context.Request;
 
             return () => new Uri(string.Format(Endpoints.BaseAddress + Endpoints.OrderItems, customerContext.CustomerId, orders.Select(o => o.OrderId).ToCSV()), UriKind.Absolute);
         }

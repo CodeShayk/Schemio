@@ -57,8 +57,8 @@ namespace Schemio.Core.Impl
 
         private IEnumerable<IQuery> FilterByPaths(IDataContext context, IEnumerable<Mapping<T, IQueryResult>> mappings)
         {
-            var matchedMappings = context.Entity.SchemaPaths != null
-                ? mappings.Where(mapping => context.Entity.SchemaPaths.Any(Path => schemaPathMatcher.IsMatch(Path, mapping.SchemaPaths)))
+            var matchedMappings = context.Request?.SchemaPaths != null
+                ? mappings.Where(mapping => context.Request.SchemaPaths.Any(Path => schemaPathMatcher.IsMatch(Path, mapping.SchemaPaths)))
                 .ToList()
                 : mappings;
 

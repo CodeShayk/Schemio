@@ -19,7 +19,7 @@ namespace Schemio.EntityFramework.Tests
         [Test]
         public void TestDataProviderToFetchWholeEntityWhenPathsAreNull()
         {
-            var customer = _provider.GetData(new CustomerContext
+            var customer = _provider.GetData(new CustomerRequest
             {
                 CustomerId = 1
             });
@@ -68,7 +68,7 @@ namespace Schemio.EntityFramework.Tests
         [Test]
         public void TestDataProviderToFetchEntityWhenPathsContainsCommunication()
         {
-            var customer = _provider.GetData(new CustomerContext
+            var customer = _provider.GetData(new CustomerRequest
             {
                 CustomerId = 1,
                 SchemaPaths = new[] { "Customer/Communication" }
@@ -102,7 +102,7 @@ namespace Schemio.EntityFramework.Tests
         [Test]
         public void TestDataProviderToFetchEntityWhenPathsContainsOrderItems()
         {
-            var customer = _provider.GetData(new CustomerContext
+            var customer = _provider.GetData(new CustomerRequest
             {
                 CustomerId = 1,
                 SchemaPaths = new[] { "Customer/orders/order/items/item" }

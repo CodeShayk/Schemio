@@ -27,7 +27,7 @@ namespace Schemio.API.Tests.E2E.Tests
         [Test]
         public void TestDataProviderToFetchWholeContractWhenNamesAreNull()
         {
-            var customer = dataProvider.GetData(new CustomerContext
+            var customer = dataProvider.GetData(new CustomerRequest
             {
                 CustomerId = Endpoints.Ids.CustomerId
             });
@@ -80,7 +80,7 @@ namespace Schemio.API.Tests.E2E.Tests
         [Test]
         public void TestDataProviderToFetchPartialCustomerOrdersContractWhenNamesAreIncluded()
         {
-            var customer = dataProvider.GetData(new CustomerContext
+            var customer = dataProvider.GetData(new CustomerRequest
             {
                 CustomerId = Endpoints.Ids.CustomerId,
                 SchemaPaths = ["customer.orders.items"]
@@ -120,7 +120,7 @@ namespace Schemio.API.Tests.E2E.Tests
         [Test]
         public void TestDataProviderToFetchPartialCustomerCommunicationContractWhenNamesAreIncluded()
         {
-            var customer = dataProvider.GetData(new CustomerContext
+            var customer = dataProvider.GetData(new CustomerRequest
             {
                 CustomerId = Endpoints.Ids.CustomerId,
                 SchemaPaths = ["customer.communication"]

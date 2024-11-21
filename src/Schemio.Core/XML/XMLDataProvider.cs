@@ -28,7 +28,7 @@ namespace Schemio.Core.XML
         /// </summary>
         /// <param name="context"></param>
         /// <returns>XDocument</returns>
-        public virtual XDocument GetData(IEntityContext context)
+        public virtual XDocument GetData(IEntityRequest context)
         {
             // Log Request context.
             LogRequest(context);
@@ -63,8 +63,8 @@ namespace Schemio.Core.XML
             return doc;
         }
 
-        private void LogRequest(IEntityContext context) => logger.LogInformation(context.GetType().Name);
+        private void LogRequest(IEntityRequest context) => logger.LogInformation(context.GetType().Name);
 
-        private void ValidateRequest(IEntityContext context) => entityContextValidator.Validate(context);
+        private void ValidateRequest(IEntityRequest context) => entityContextValidator.Validate(context);
     }
 }

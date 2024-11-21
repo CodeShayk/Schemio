@@ -1,8 +1,8 @@
 using Schemio.Core;
 
-namespace Schemio.API.Tests.EntitySetup
+namespace Schemio.EntityFramework.Tests.EntitySetup
 {
-    internal class CustomerContext : IEntityContext
+    internal class CustomerRequest : IEntityRequest
     {
         public int CustomerId { get; set; }
         public string[] SchemaPaths { get; set; }

@@ -2,6 +2,6 @@ namespace Schemio.Core
 {
     public interface IEntityContextValidator
     {
-        public void Validate(IEntityContext context);
+        public void Validate(IEntityRequest context);
     }
 }

@@ -9,7 +9,7 @@ namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
         protected override Func<DbContext, Task<CustomerRecord>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
             // Executes as root or level 1 query. parentQueryResult will be null.
-            var customer = (CustomerContext)context.Entity;
+            var customer = (CustomerRequest)context.Request;
 
             return async dbContext =>
             {

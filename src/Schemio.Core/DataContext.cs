@@ -2,13 +2,13 @@ namespace Schemio.Core
 {
     internal class DataContext : IDataContext
     {
-        public DataContext(IEntityContext entityContext)
+        public DataContext(IEntityRequest request)
         {
-            Entity = entityContext;
+            Request = request;
             Cache = new Dictionary<string, object>();
         }
 
         public Dictionary<string, object> Cache { get; set; }
-        public IEntityContext Entity { get; set; }
+        public IEntityRequest Request { get; set; }
     }
 }
