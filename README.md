@@ -1,4 +1,4 @@
-# <img src="https://github.com/CodeShayk/Schemio/blob/master/Images/ninja-icon-16.png" alt="ninja" style="width:30px;"/> Schemio v2.0 
+# Schemio v2.0 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/CodeShayk/Schemio/blob/master/LICENSE.md) 
 [![Master-Build](https://github.com/CodeShayk/Schemio/actions/workflows/Build-Master.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/Build-Master.yml) 
 [![GitHub Release](https://img.shields.io/github/v/release/CodeShayk/Schemio?logo=github&sort=semver)](https://github.com/CodeShayk/Schemio/releases/latest)
@@ -66,7 +66,7 @@ The main branch is now on .NET 8.0. The following previous versions are availabl
 | Version  | Release Notes | Developer Guide |
 | -------- | --------|--------|
 | [`v1.0.0`](https://github.com/CodeShayk/Schemio/tree/v1.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v1.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v1.0.0/index.md) |
-| [`Pre-Release v2.0.0`](https://github.com/CodeShayk/Schemio/tree/v2.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v2.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v2.0.0/index.md) |
+| [`v2.0.0`](https://github.com/CodeShayk/Schemio/tree/v2.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v2.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v2.0.0/index.md) |
 
 ## Credits
 Thank you for reading. Please fork, explore, contribute and report. Happy Coding !! :)

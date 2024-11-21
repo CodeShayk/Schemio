@@ -22,6 +22,12 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Version>2.0.0</Version>
+    <PackageReleaseNotes>Changes
+- `Entity Schema` renamed to `Entity Configuration` and requires implementing `EntityContfiguration&lt;TEntity&gt;`.
+- `IRootQuery`, `IChildQuery`, `BaseRootQuery&lt;TParameter, TResult&gt;` &amp; `BaseChildQuery&lt;TParameter,TResult&gt;` removed.
+- Both Parent and child queries need to implement `BaseQuery&lt;TResult&gt;` and provide override for `isContextResolved()` and `ResolveQuery()` methods.
+- `IoC` registration streamlined with `fluent interface` for container configuration.
+- Renamed `IEntityContext` to `IEntityRequest`.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
