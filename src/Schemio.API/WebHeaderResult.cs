@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Schemio.Core;
 
 namespace Schemio.API
