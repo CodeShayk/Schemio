@@ -1,3 +1,5 @@
+using Schemio.Core;
+
 namespace Schemio.EntityFramework.Tests.EntitySetup.Entities
 {
     public class Customer : IEntity

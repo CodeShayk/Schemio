@@ -1,9 +1,9 @@
-# <img src="https://github.com/CodeShayk/Schemio/blob/master/Images/ninja-icon-16.png" alt="ninja" style="width:30px;"/> Schemio v1.0 
+# <img src="https://github.com/CodeShayk/Schemio/blob/master/Images/ninja-icon-16.png" alt="ninja" style="width:30px;"/> Schemio v2.0 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/CodeShayk/Schemio/blob/master/LICENSE.md) 
 [![Master-Build](https://github.com/CodeShayk/Schemio/actions/workflows/Build-Master.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/Build-Master.yml) 
 [![GitHub Release](https://img.shields.io/github/v/release/CodeShayk/Schemio?logo=github&sort=semver)](https://github.com/CodeShayk/Schemio/releases/latest)
 [![Master-CodeQL](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml) 
-[![.Net 8.0](https://img.shields.io/badge/.Net-8.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+[![.Net 9.0](https://img.shields.io/badge/.Net-9.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 --
  #### Nuget Packages
 | Package | Latest  | Details | 
@@ -11,12 +11,15 @@
 | Schemio.Core|[![NuGet version](https://badge.fury.io/nu/Schemio.Core.svg)](https://badge.fury.io/nu/Schemio.Core) | Provides `core` functionality to configure nested queries and transformers. With ability to map schema paths (XPath/JSONPath) to entity's object graph. `No QueryEngine` provided and requires implementing IQueryEngine to execute IQuery instances. |
 | Schemio.SQL|[![NuGet version](https://badge.fury.io/nu/Schemio.SQL.svg)](https://badge.fury.io/nu/Schemio.SQL)| Provides schemio with query engine using `Dapper` to execute SQL queries. |
 | Schemio.EntityFramework|[![NuGet version](https://badge.fury.io/nu/Schemio.EntityFramework.svg)](https://badge.fury.io/nu/Schemio.EntityFramework)| Provides schemio with `Entity Framework` query engine to execute queries using DbContext. |
+| Schemio.API|[![NuGet version](https://badge.fury.io/nu/Schemio.Api.svg)](https://badge.fury.io/nu/Schemio.Api)| Provides schemio with `Web Api` query engine to execute apis using HttpClient. |
 
 ## Concept
 ### What is Schemio?
-`Schemio` is a data aggregation framework that   
-- allows fetching `aggregated data` from `heterogeneous` data storages. You could combine queries targetting different data platforms (example. SQL, API, Cache) to return an aggregated data entity.
-- allows `conditionally` fetching only `parts` of the data entity. You could retrieve an aggregated data entity with selective sections of its `object graph` populated depending on the context passed with the request.
+`Schemio` is a data aggregation framework using queries that can target different data platforms.
+
+Key benefits:
+- allows fetching `aggregated` data from `heterogeneous` data storages. You could combine queries targetting different data platforms (example. `SQL`, `API`, `Cache`) to return an aggregated data `entity`.
+- allows `selectively` fetching only `parts` of the aggregated data entity. You could retrieve an aggregated data entity with only `sections` of its `object graph` populated with data depending upon the `schema paths` passed with the request.
 
 ### When to use Schemio?
 Schemio is perfect fit for many use cases. Few examples that require the service tier to dynamically fetch aggregated data with high performance, availability and scalability are
@@ -28,7 +31,7 @@ Schemio is perfect fit for many use cases. Few examples that require the service
 
 ## Getting Started?
 ### i. Installation
-Install the latest nuget package as appropriate for Core, SQL using Dapper or EntityFramework. 
+Install the latest nuget package as appropriate for `Core`, `Web API`, `SQL` using `Dapper` or `EntityFramework` using commands below. 
 
 `Scemio.Core` - for installing schemio for `bespoke` implementation of query engine.
 ```
@@ -36,13 +39,16 @@ NuGet\Install-Package Schemio.Core
 ```
 `Schemio.SQL` - for installing schemio for SQL with `Dapper` engine.
 ```
-NuGet\Install-Package Schemio.SQL
+NuGet\Install-Package Schemio.SQL 
 ```
 `Schemio.EntityFramework` - for installing schemio for SQL with `EntityFramework` engine.
 ```
 NuGet\Install-Package Schemio.EntityFramework
 ```
-
+`Schemio.API` - for installing schemio for Web API with `HttpClient` engine.
+```
+NuGet\Install-Package Schemio.API
+```
 ### ii. Developer Guide
 
 Please see [Developer Guide](https://codeshayk.github.io/Schemio/) for details on how to implement schemio in your project.
@@ -56,11 +62,11 @@ If you are having problems, please let me know by [raising a new issue](https://
 This project is licensed with the [MIT license](LICENSE).
 
 ## Version History
-The main branch is now on .NET 8.0. The following previous versions are available:
+The main branch is now on .NET 9.0. The following previous versions are available:
 | Version  | Release Notes | Developer Guide |
 | -------- | --------|--------|
 | [`v1.0.0`](https://github.com/CodeShayk/Schemio/tree/v1.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v1.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v1.0.0/index.md) |
-| [`Pre-Release v2.0.0`](https://github.com/CodeShayk/Schemio/tree/v2.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v2.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v2.0.0/index.md) |
+| [`v2.0.0`](https://github.com/CodeShayk/Schemio/tree/v2.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v2.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v2.0.0/index.md) |
 
 ## Credits
 Thank you for reading. Please fork, explore, contribute and report. Happy Coding !! :)

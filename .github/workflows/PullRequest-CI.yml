@@ -10,7 +10,7 @@ jobs:
   Run-Lint:
     runs-on: ubuntu-latest
     env:
-      github-token: '${{ secrets.GITHUB_TOKEN }}'
+      github-token: '${{ secrets.GH_Packages }}'
     steps:
       - name: Step-01 Checkout code
         uses: actions/checkout@v3
@@ -52,7 +52,7 @@ jobs:
       - name: Step-04 Install .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 9.0.x
 
       - name: Step-05 Restore dependencies
         run: dotnet restore
@@ -85,7 +85,7 @@ jobs:
     outputs:
       semVersion: ${{ needs.Build-Release.outputs.semVersion }}
     env:
-      github-token: '${{ secrets.GITHUB_TOKEN }}'
+      github-token: '${{ secrets.GH_Packages }}'
       nuget-token: '${{ secrets.NUGET_API_KEY }}' 
       working-directory: /home/runner/work/Schemio/Schemio
     steps:
@@ -100,16 +100,16 @@ jobs:
 
       - name: Step-03 Publish to Github Packages
         run: find -name "*.nupkg" -print -exec gpr push -k ${{env.github-token}} {} \;
-        
-      - name: Step-03 Release to Nuget Org
-        if: ${{ startsWith(github.head_ref, 'release/')}}
-        run: dotnet nuget push ${{env.working-directory}}/src/Schemio/bin/Release/*.nupkg --skip-duplicate --api-key ${{ env.nuget-token }} --source https://api.nuget.org/v3/index.json
 
   Release:
     name: Release to Nuget
     needs: [Package]
     if: ${{ startsWith(github.head_ref, 'release/')}}
     runs-on: ubuntu-latest
+    env:
+      github-token: '${{ secrets.GH_Packages }}'
+      nuget-token: '${{ secrets.NUGET_API_KEY }}' 
+      working-directory: /home/runner/work/Schemio/Schemio
     steps:
       - uses: actions/checkout@v2
 
@@ -145,10 +145,10 @@ jobs:
           # TAG_FORMAT: v*
 
           # API key to authenticate with NuGet server, or a token, issued for GITHUB_USER if you use GPR
-          # NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
           # NuGet server uri hosting the packages, defaults to https://api.nuget.org
-          # NUGET_SOURCE: https://api.nuget.org
+          NUGET_SOURCE: https://api.nuget.org/v3/index.json
 
           # Flag to toggle pushing symbols along with nuget package to the server, disabled by default
           # INCLUDE_SYMBOLS: false

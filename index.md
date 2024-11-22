@@ -1,518 +1,596 @@
 # Developer Guide
-## i. Installation
-Install the latest nuget package as appropriate. 
 
-`Scemio.Core` - for installing schemio for `bespoke` implementation of query engine.
+## i. Installation
+
+`Schemio` allows you to aggregate data from heterogeneous data stores offering `SQL` & `API` packages out of the box below. SQL queries are supported by `Dapper` and `EntityFramework` engines. You could also `extend` Schemio to provide your own implementation(s) of `Query` and supporting `Query Engine` to retrieve data from `custom` data store(s). 
+
+Below are the Nuget packages available. 
+
+`Scemio.Core` - Install  to extend schemio to implement `custom` querying engine. 
 ```
 NuGet\Install-Package Schemio.Core
 ```
-`Schemio.SQL` - for installing schemio for SQL with `Dapper` engine.
+`Schemio.SQL` - Install when you would like to include SQL `Dapper` queries to access SQL database.
 ```
 NuGet\Install-Package Schemio.SQL 
 ```
-`Schemio.EntityFramework` - for installing schemio for SQL with `EntityFramework` engine.
+`Schemio.EntityFramework` - Install when you would like to include SQL `EntityFramework` queries to access SQL database.
 ```
 NuGet\Install-Package Schemio.EntityFramework
 ```
-## ii. Implementation: Usingse Schemio
+`Schemio.Api` - Install when you would like to include web api queries with `HttpClient` query engine.
+```
+NuGet\Install-Package Schemio.Api
+```
+## ii. Implementation: Using Schemio
 
-To use schemio you need to
-> Step 1 - Setup the entity to be fetched.
-> 
-> Step 2 - Construct the `DataProvider` with required dependencies. 
+To use **Schemio** you need to do the below steps
+- **Step 1**: Define the aggregated `Entity`.
+- **Step 2**: Setup the aggregate `Configuration` comprising of `Query`/`Transformer` hierarchical nested mappings.
+- **Step 3**: Construct the `DataProvider` with required dependencies. 
 
-### Step 1. Entity Setup
-Setting up an entity includes the following. 
-* Define the `entity` to be fetched using `DataProvider` - which is basically a class with entire object graph (with nested typed properties).
-* Define the `entity schema` which is schema path mapping of the entire entity object graph. Each mapping consists of a `query` and `transformer` pair mapped to a sections of object graph (using XPaths or JsonPath for schema paths)
+### Step 1. Define Aggregate Entity.
+To create an aggregate `Entity`, implement the class from `IEntity` interface. This is the entity that will be returned as aggregated result from multiple queries assembled to execute against homogeneous or heterogeneous data storage's.
 
-#### 1.1 Entity
-To mark the class as Entity, implement the class from `IEntity` interface.
-Bear in mind this is the root entity to be fetched.
+Below is an example `Customer` entity.
 
->Below is an example `Customer` entity.
->
-> ```
-> public class Customer : IEntity
->    {
->        public int CustomerId { get; set; }
->        public string CustomerCode { get; set; }
->        public string CustomerName { get; set; }
->        public Communication Communication { get; set; }
->        public Order[] Orders { get; set; }
->    }
-> ```
+```
+public class Customer : IEntity
+{
+   public int CustomerId { get; set; }
+   public string CustomerCode { get; set; }
+   public string CustomerName { get; set; }
+   public Communication Communication { get; set; }
+   public Order[] Orders { get; set; }
+}
+```
 
 For the customer class, we can see there are three levels of nesting in the object graph.
 - Level 1 with paths: `Customer`
 - Level 2 with paths: `Customer.Communication` and `Customer.Orders`
 - Level 3 with paths: `Customer.Orders.Items`
 
-If we choose XML Schema Definition (XSD) for the object schema of the above Customer class fo mapping with XPATHs
-then below is the Customer XSD and XPaths for different nesting levels.
+If we choose XML Schema Definition (XSD) for the Customer entity then XPaths for nesting levels should be.
+```
+- Level 1 with XPath: Customer
+- Level 2 with XPaths: Customer/Communication and Customer/Orders
+- Level 3 with XPath: Customer/Orders/Order/Items/Item
+```
+### Step 2: Setup Entity Aggregate Configuration
+To define `Entity Configuration`, derive from `EntityConfiguration<TEntity>` class where `TEntity` is aggregate entity in context (ie. `IEntity`).
 
-> Customer XSD is 
-> ```
-> Coming soon...
-> ```
+The `Entity Configuration` is basically `hierarchies` of `Query` & `Transformer` pairs mapped to the schema `paths` pointing to various `nesting` levels in the entity's object graph.
+* `Query` is an implementation to `fetch` data for mapped sections of object graph. 
+* `Transformer` is an implementation to `map` data fetched by the associated query to the relevant sections of the entity's object graph.
 
-> Schema mappings using XPaths are
-> ```
-> - Level 1 with XPath: Customer
-> - Level 2 with XPaths: Customer/Communication and Customer/Orders
-> - Level 3 with XPath: Customer/Orders/Order/Items/Item
+Below is an example Entity Configuration for the Customer Entity.
 
-#### 1.2 Entity Schema Definition
-Define entity schema definition for the entity in context.
+```
+internal class CustomerConfiguration : EntityConfiguration<Customer>
+{
+   public override IEnumerable<Mapping<Customer, IQueryResult>> GetSchema()
+   {
+       return CreateSchema.For<Customer>()
+           .Map<CustomerQuery, CustomerTransform>(For.Paths("customer"),
+            customer => customer.Dependents
+               .Map<CommunicationQuery, CommunicationTransform>(For.Paths("customer/communication"))
+               .Map<OrdersQuery, OrdersTransform>(For.Paths("customer/orders"),
+                   customerOrders => customerOrders.Dependents
+                       .Map<OrderItemsQuery, OrderItemsTransform>(For.Paths("customer/orders/order/items"))))
+           .End();
+   }
+}
+```
+`CustomerConfiguration` shows `query/transformer` pairs mapped at three levels of nesting as per the `Customer` entity object graph.
+`XPaths` are used to identify the schema paths in the object graph. Alternately, you could use your own representation to name the pairs or map the object graph. However, you would need to provide the `ISchemaPathmatcher` implementation to managing path matching.
 
-* `Entity schema definition` is basically a configuration with hierarchy of `query/transformer` pairs mapped to the schema paths pointing to different levels of the entity's object graph.
-* `Query` is an implementation to fetch data for a certain section of object graph from an underlying data storage. 
-* `Transformer` is an implementation to map the data fetched by the linked query to the relevant sections of the entity's object graph.
-
-To define Entity schema, implement `BaseEntitySchema<T>` interface where T is entity in context.
-
->
-Example Entity Schema Definition (using XPaths)
-> The `Customer` entity with `three` levels of `nesting` is configured below in `CustomerSchema` definition to show `query/transformer` pairs nested accordingly mapping to object graph using the XPath definitions.
->
-> ```
-> internal class CustomerSchema : BaseEntitySchema<Customer>
->    {
->       public override IEnumerable<Mapping<Customer, IQueryResult>> GetSchema()
->       {
->           return CreateSchema.For<Customer>()
->               .Map<CustomerQuery, CustomerTransform>(For.Paths("customer"),
->                customer => customer.Dependents
->                   .Map<CustomerCommunicationQuery, CustomerCommunicationTransform>(For.Paths("customer/communication"))
->                   .Map<CustomerOrdersQuery, CustomerOrdersTransform>(For.Paths("customer/orders"),
->                       customerOrders => customerOrders.Dependents
->                           .Map<CustomerOrderItemsQuery, CustomerOrderItemsTransform>(For.Paths("customer/orders/order/items")))
->               ).Create();
->       }
->   }
->```
-
-##### i. Query/Transformer Mapping
-Every `Query` type in the `EntitySchema` definition should have a complementing `Transformer` type.
+#### i. Query/Transformer Mapping
+Every `Query` type in the Entity `Configuration` definition should have a complementing `Transformer` type.
 You could map multiple `schema paths` to a given query/transformer pair. Currently, `XPath` and `JSONPath` schema languages are supported.
 
->Below is the snippet from `CustomerSchema` definition.
->```
->   .Map<CustomerQuery, CustomerTransform>(For.Paths("customer", "customer/code", "customer/name"))
->```
+Below is the snippet from `CustomerConfiguration` definition shows that `CustomerQuery` has associated `CustomerTransform` and the pair is mapped to the root `Customer` object. 
+```
+  .Map<CustomerQuery, CustomerTransform>(For.Paths("customer"))
+```
 
-##### ii. Nested Query/Transformer Mappings
-* You could nest query/transformer pairs in a `parent/child` hierarchy. In which case the output of the parent query will serve as the input to the child query to resolve its query paramter.
-* The query/transformer mappings can be `nested` to `5` levels down.
-* When certain `schema paths` are included in the DataProvider `request` to fetch the Entity, the relevant query and transformer pairs get executed in the order of their nesting to hydrate the entity. 
+#### ii. Nested Query/Transformer Mappings
+You could nest query/transformer pairs in a `parent/child` hierarchy. In which case the output of the parent query will serve as the input to the child query to resolve its query context.
 
->Example nesting of Communication query under Customer query. 
->```
->     .Map<CustomerQuery, CustomerTransform>(For.Paths("customer"), -- Parent
->           customer => customer.Dependents
->               .Map<CustomerCommunicationQuery, CustomerCommunicationTransform>(For.Paths("customer/communication")) -- Child
->```
+The query/transformer mappings can be `nested` to `5` levels down.
+ 
+Below is snippet to show nesting of `CommunicationQuery` as child to `CustomerQuery`. 
+```
+.Map<CustomerQuery, CustomerTransform>(For.Paths("customer"), -- Parent
+      customer => customer.Dependents
+         .Map<CommunicationQuery, CommunicationTransform>(For.Paths("customer/communication")) -- Child
+```
 
+Execution Flow
+* In parent/child hierarchy, the first parent query executes first, followed by its immediate children. The execution flows in sequence to the last child query in order of its nesting.
+* While executing the output of the parent is passed in to the child query to resolve query context and get it ready for execution. 
+* Transformers are also executed in the same sequence to map data to the Aggregate Entity.
+* When a query path for nested query is included for execution, all the parent queries involved in that object graph get included for execution  in order of its nesting.
 
-Please see the execution sequence below for queries and transformers nested in CustomerSchema implemented above.
+Please see the execution sequence below for queries and transformers nested in `CustomerConfiguration` implemented above.
 
-<img width="1202" alt="image" src="https://github.com/CodeShayk/Schemio/blob/master/Images/EntitySchemaDefinition.png">
+<img width="1202" alt="image" src="/Images/EntitySchemaDefinition.png">
 
+#### iii. Query Class
+`Query` - The purpose of a query class is to execute with supported QueryEngine to fetch data from data storage.
 
-`Please Note:` If you need to support custom schema language for mapping the object graph, then see extending schemio section below.
+`QueryEngine` is an implementation of `IQueryEngine` to execute queries with supported data storage to return query result (ie. Result instance of `IQueryResult`).
 
+Depending on the Nuget package(s) installed, you could implement `SQL` and `API` queries.
+* `SQL` queries execute to get data from SQL database using `Dapper` or `EntityFramework` engines.
+* `API` query executes web api to call an `endpoint` using `HTTPClient` supported engine to get data.
 
-#### 1.2.1 Query Class
-The purpose of a query class is to execute with supported QueryEngine to fetch data from data storage.
+**Important**: You can combine heterogeneous queries in the Entity configuration to target different data stores.
 
-QueryEngine is an implementation of `IQueryEngine` to execute queries against a supported data storage to return a collection of query results (ie. of type IQueryResult).
+Example of SQL & API queries are below. 
+You need to override the `GetQuery(IDataContext context, IQueryResult parentQueryResult)` method to return query delegate (package specific implementation). 
+* `IDataContext` is the context parameter passed to DataProvider to get aggregated results (. Aggregated Entity). This parameter is always available for both parent and child queries.
+* `IQueryResult` parameter is only available when query is configured in child mode, else will be null.
 
-As explained above, You can configure a query in `Parent` or `Child` (nested) mode in nested hierarchies.
+##### `Schemio.SQL` - with `Dapper` Query implementation.
+To create a SQL query you need to derive from `SQLQuery<TQueryResult>` where TQueryResult is `IQueryResult` implementation.
 
-i. Parent Query
+1. Example Parent Query - CustomerQuery
+```
+public class CustomerQuery : SQLQuery<CustomerResult>
+{
+    protected override Func<IDbConnection, Task<CustomerResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+        // Executes as root or level 1 query.
+        var customer = (CustomerRequest)context.Request;
 
-To define a `parent` or `root` query which is usually configured at level 1 to query the root entity, derive from `aseRootQuery<TQueryParameter, TQueryResult>`
-* `TQueryParameter` is basically the class that holds the `inputs` required by the root query for execution. It is an implementation of `IQueryParameter` type.
-* `TQueryResult` is the result that will be returned from executing the root query.  It is an implementation of `IQueryResult` type.
+        return connection => connection.QueryFirstOrDefaultAsync<CustomerResult>(new CommandDefinition
+        (
+            "select CustomerId as Id, " +
+                   "Customer_Name as Name," +
+                   "Customer_Code as Code " +
+            $"from TCustomer where customerId={customer.CustomerId}"
+       ));
+    }
+}
+```
+2. Example Child Query - OrdersQuery
+```
+internal class OrdersQuery : SQLQuery<CollectionResult<OrderResult>>
+{
+    protected override Func<IDbConnection, Task<CollectionResult<OrderResult>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+        // Execute as child to customer query.
+        var customer = (CustomerResult)parentQueryResult;
 
-The query parameter needs to be resolved before executing the query with QueryEngine.
+        return async connection =>
+        {
+            var items = await connection.QueryAsync<OrderResult>(new CommandDefinition
+            (
+                "select OrderId, " +
+                        "OrderNo, " +
+                        "OrderDate " +
+                    "from TOrder " +
+                $"where customerId={customer.Id}"
+            ));
 
-In `parent` mode, the query parameter is resolved using the `IDataContext` parameter passed to data provider class.
+            return new CollectionResult<OrderResult>(items);
+        };
+    }
+}
+```
 
+##### `Schemio.EntityFramework` - with `EntityFramework` Query implementation
+To create a SQL query you need to derive from `SQLQuery<TQueryResult>` where TQueryResult is `IQueryResult` implementation.
 
-> See example `CustomerQuery` implemented to be configured and run in parent mode below. 
-> ```
->internal class CustomerQuery : BaseRootQuery<CustomerParameter, CustomerResult>
->    {
->        public override void ResolveRootQueryParameter(IDataContext context)
->        {
->            // Executes as Parent or Level 1 query.
->            // The query parameter is resolved using IDataContext parameter of data provider class.
->
->            var customer = (CustomerContext)context;
->            QueryParameter = new CustomerParameter
->            {
->                CustomerId = customer.CustomerId
->            };
->        }
->    }
->```
+1. Example Parent Query - CustomerQuery
+```
+public class CustomerQuery : SQLQuery<CustomerResult>
+{
+    protected override Func<DbContext, Task<CustomerResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+        // Executes as root or level 1 query. parentQueryResult will be null.
+        var customer = (CustomerRequest)context.Request;
 
-ii. Child Query
+        return async dbContext =>
+        {
+            var result = await dbContext.Set<Customer>()
+                    .Where(c => c.Id == customer.CustomerId)
+                    .Select(c => new CustomerResult
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Code = c.Code
+                    })
+                    .FirstOrDefaultAsync();
 
-To define a `child` or `dependant` query which is usually configured as child at level below the root query to query, derive from `BaseChildQuery<TQueryParameter, TQueryResult>`
-* `TQueryParameter` is basically the class that holds the `inputs` required by the child query for execution. It is an implementation of `IQueryParameter` type.
-* `TQueryResult` is the result that will be returned by executing the child query.  It is an implementation of `IQueryResult` type.
+            return result;
+        };
+    }
+}
+```
+2. Example Child Query - OrdersQuery
+```
+ internal class OrdersQuery : SQLQuery<CollectionResult<OrderResult>>
+ {
+     protected override Func<DbContext, Task<CollectionResult<OrderResult>>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
+     {
+         // Execute as child to customer query.
+         var customer = (CustomerResult)parentQueryResult;
 
-Similar to Root query, the query parameter of child query needs to be resolved before executing with QueryEngine.
+         return async dbContext =>
+         {
+             var items = await dbContext.Set<Order>()
+             .Where(p => p.Customer.Id == customer.Id)
+             .Select(c => new OrderResult
+             {
+                 CustomerId = c.CustomerId,
+                 OrderId = c.OrderId,
+                 Date = c.Date,
+                 OrderNo = c.OrderNo
+             })
+             .ToListAsync();
 
-In `child` mode, the query parameter is resolved using the `query result` of the `parent` query. You can have a maximum of `5` levels of query nestings.
+             return new CollectionResult<OrderResult>(items);
+         };
+     }
+ }
+```
+##### `Schemio.Api` - with `HttpClient` Query implementation
+To create a Web API query you need to derive from `WebQuery<TQueryResult>` where TQueryResult is `IQueryResult` implementation.
 
-> See example `CustomerCommunicationQuery` implemented to be configured and run as child or nested query to customer query below. Please see `CustomerSchema` definition above for parent/child configuration setup.
->```
->    internal class CustomerCommunicationQuery : BaseChildQuery<CustomerParameter, CommunicationResult>
->    {
->        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
->        {
->            // Execute as child to customer query.
->            // The result from parent customer query is used to resolve the query parameter of the nested communication query.
->
->            var customer = (CustomerResult)parentQueryResult;
->            QueryParameter = new CustomerParameter
->            {
->                CustomerId = customer.Id
->            };
->        }
->    }
->```
+`Important`: If you need to get response headers in the result then TQueryResult should derive from `WebHeaderResult` class.
 
-#### Query Engines
+1. Example Parent Query - CustomerQuery
+```
+public class CustomerWebQuery : WebQuery<CustomerResult>
+{
+    public CustomerWebQuery() : base(Endpoints.BaseAddress)
+    {
+    }
 
-`Please Note:` The above query implementation examples are with respect to parent/child configuration. The actual storage specific query definition should vary with specific implementation of the QueryEngine.
-> Please see supported Query engine implementations below.
-- `Schemio.SQL` - provides the implementation of IQueryEngine to execute SQL queries. Uses `Dapper` for SQL data acess.
-- `Schemio.EntityFramework` - provides implementation of IQueryEngine to execute `Entity Framework` queries.
+    protected override Func<Uri> GetQuery(IDataContext context, IQueryResult parentApiResult)
+    {
+        // Executes as root or level 1 api.
+        var customerRequest = (CustomerRequest)context.Request;
 
-`Query using Schemio.SQL`
-The SQL query needs to implement `BaseSQLRootQuery<TQueryParameter, TQueryResult>` or `BaseSQLChildQuery<TQueryParameter, TQueryResult>` based on parent or child implementation.
-And, requires implementing  `public abstract CommandDefinition GetCommandDefinition()` method to return `command definition` for query to be executed with `Dapper` supported QueryEngine.
+        return () => new Uri(string.Format(Endpoints.BaseAddress + Endpoints.Customer, customerRequest.CustomerId), UriKind.Absolute);
+    }
 
-See below example `CustomerQuery` implemented as Root SQL query
->```
-> internal class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
->    {
->        public override void ResolveRootQueryParameter(IDataContext context)
->        {
->            // Executes as root or level 1 query.
->            var customer = (CustomerContext)context.Entity;
->            QueryParameter = new CustomerParameter
->            {
->                CustomerId = (int)customer.CustomerId
->            };
->        }
->
->       public override IEnumerable<CustomerResult> Execute(IDbConnection conn)
->        {
->            return conn.Query<CustomerResult>(new CommandDefinition
->            (
->                "select CustomerId as Id, " +
->                       "Customer_Name as Name," +
->                       "Customer_Code as Code " +
->                $"from TCustomer where customerId={QueryParameter.CustomerId}"
->           ));
->        }
->    }
->```
->
-See below example `CustomerOrderItemsQuery` implemented as child SQL query.
->```
->internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
->    {
->        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
->        {
->            // Execute as child query to order query taking OrderResult to resolve query parameter.
->            var ordersResult = (OrderResult)parentQueryResult;
->
->            QueryParameter ??= new OrderItemParameter();
->            QueryParameter.OrderIds.Add(ordersResult.OrderId);
->        }
->
->        public override IEnumerable<OrderItemResult> Execute(IDbConnection conn)
->        {
->            return conn.Query<OrderItemResult>(new CommandDefinition
->            (
->                "select OrderId, " +
->                       "OrderItemId as ItemId, " +
->                       "Name, " +
->                       "Cost " +
->                $"from TOrderItem where OrderId in ({QueryParameter.ToCsv()})"
->           ));
->        }
->    }
->```
+    /// <summary>
+    /// Override to pass outgoing request headers.
+    /// </summary>
+    /// <returns></returns>
+    protected override IDictionary<string, string> GetRequestHeaders()
+    {
+        return new Dictionary<string, string>
+        {
+            { "x-meta-branch-code", "London" }
+        };
+    }
 
-`Query using Schemio.EntityFramework`
-The SQL query needs to implement `BaseSQLRootQuery<TQueryParameter, TQueryResult>` or `BaseSQLChildQuery<TQueryParameter, TQueryResult>` based on parent or child implementation.
-And, requires implementing  `public abstract IEnumerable<IQueryResult> Run(DbContext dbContext)` method to implement query using `DbContext` using entity framework.
+    /// <summary>
+    /// Override to subscribe for given Response headers to be added to TQueryResult.
+    /// For receiving response headers, You need to implement the TQueryResult type from `WebHeaderResult` class instead of IQueryResult.
+    /// </summary>
+    /// <returns></returns>
+    protected override IEnumerable<string> GetResponseHeaders()
+    {
+        return new[] { "x-meta-branch-code" };
+    }
+}
+```
+Note: CustomerResult is above query implements from `WebHeaderResult` class to support response headers.
+```
+public class CustomerResult : WebHeaderResult
+{
+    public int Id { get; set; }
+    public string Code { get; set; }
+    public string Name { get; set; }
+}
+```
 
-See below example `CustomerQuery` implemented as Root Entity framework query
->```
-> internal class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
->    {
->        public override void ResolveRootQueryParameter(IDataContext context)
->        {
->            // Executes as root or level 1 query.
->            var customer = (CustomerContext)context.Entity;
->            QueryParameter = new CustomerParameter
->            {
->                CustomerId = (int)customer.CustomerId
->            };
->        }
->
->        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
->        {
->            return dbContext.Set<Customer>()
->                        .Where(c => c.Id == QueryParameter.CustomerId)
->                        .Select(c => new CustomerResult
->                        {
->                            Id = c.Id,
->                            Name = c.Name,
->                            Code = c.Code
->                        });
->        }
->    }
->```
->
-See below example `CustomerOrderItemsQuery` implemented as child Entity framework query.
->```
->internal class CustomerOrderItemsQuery : BaseSQLChildQuery<OrderItemParameter, OrderItemResult>
->    {
->        public override void ResolveChildQueryParameter(IDataContext context, IQueryResult parentQueryResult)
->        {
->            // Execute as child query to order query taking OrderResult to resolve query parameter.
->            var ordersResult = (CustomerOrderResult)parentQueryResult;
->
->            QueryParameter ??= new OrderItemParameter();
->            QueryParameter.OrderIds.Add(ordersResult.OrderId);
->        }
->
->        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
->        {
->            return dbContext.Set<OrderItem>()
->                .Where(p => QueryParameter.OrderIds.Contains(p.Order.OrderId))
->                .Select(c => new OrderItemResult
->                {
->                    ItemId = c.ItemId,
->                    Name = c.Name,
->                    Cost = c.Cost,
->                    OrderId = c.Order.OrderId
->                });
->            ;
->        }
->    }
->```
+2. Example Child Query - OrdersQuery
+```
+internal class OrdersQuery : WebQuery<CollectionResult<OrderResult>>
+{
+     public OrdersQuery() : base(Endpoints.BaseAddress)
+     {
+     }
+    protected override Func<Uri> GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+         // Execute as child to customer api.
+        var customer = (CustomerResult)parentQueryResult;
+    
+        return ()=> new Uri(string.Format($"v2/customers/{customer.Id}/orders);
+    }
+}
+```
 
-
-#### 2.2 Tranformer Class
-The purpose of the transformer class is to transform the data fetched by the linked query class and mapp to the configured object graph of the entity.
+#### iv. Transformer Class
+The purpose of the transformer class is to transform the data fetched by the linked query class and map to the configured object graph of the entity.
 
 To define a transformer class, you need to implement `BaseTransformer<TQueryResult, TEntity>`
-- where TEntity is Entity implementing `IEntity`. eg. Customer. 
+- where TEntity is Aggregate Entity implementing `IEntity`. eg. Customer. 
 - where TQueryResult is Query Result from associated Query. It is an implementation of `IQueryResult` interface. 
 
-Note: It is `important` that the transformer should map data only to the `schema path(s)` pointing `section(s)` of the object graph.
+Example transformer - Customer Transformer
+```
+internal class CustomerTransform : BaseTransformer<CustomerResult, Customer>
+{
+   public override Customer Transform(CustomerResult queryResult, Customer entity)
+    {
+        var customer = entity ?? new Customer();
+        customer.CustomerId = queryResult.Id;
+        customer.CustomerName = queryResult.CustomerName;
+        customer.CustomerCode = queryResult.CustomerCode;
+
+        if (queryResult is WebHeaderResult webHeaderResult)
+            if (webHeaderResult.Headers.TryGetValue("x-meta-branch-code", out var branch))
+                customer.Branch = branch;
+
+        return customer;
+    }
+}
+```
+
+**Note**: It is `important` that the transformer should map data only to the `schema path(s)` pointing `section(s)` of the object graph.
 
 For the example query/transformer mapping
->```
->   .Map<CustomerQuery, CustomerTransform>(For.Paths("customer"))
->```
+```
+.Map<CommunicationQuery, CommunicationTransform>(For.Paths("customer/communication"))
+```
+The Communication transformer should map data only to the `customer/communication` xpath mapped object graph of customer class.
 
-The customer transformer maps data only to the `customer` xpath mapped object graph of customer class.
-ie. - `customer/id`, `customer/customercode`, `customer/customername`
+### Step 3. DataProvider Setup
+Data provider needs to be setup with required dependencies. Provide implementations of below dependencies to construct the data provider.
 
-In below transformer example, `CustomerTransformer` is implemented to transform entity `Customer` with `CustomerResult` query result obtained from `CustomerQuery` execution.
+#### Container Registrations
 
->
->```
->internal class CustomerTransform : BaseTransformer<CustomerResult, Customer>
->    {
->        public override Customer Transform(CustomerResult queryResult, Customer entity)
->        {
->            var customer = entity ?? new Customer();
->            customer.CustomerId = queryResult.Id;
->            customer.CustomerName = queryResult.CustomerName;
->            customer.CustomerCode = queryResult.CustomerCode;
->            return customer;
->        }
->    }
->```
-
-### DataProvider Setup
-Data provider needs to setup with required dependencies. Provide implementations of below dependencies to construct the data provider.
-
-- `ILogger<DataProvider<TEntity>>` - logger implementation. default no logger.
-- `IEntitySchema<TEntity>` - mandatory entity schema definition for entity's object graph. 
-- `IQueryEngine` - implementation of query engine to execute queries (of type IQuery) with supported data storage.
-- `ISchemaPathMatcher` - implementation of schema path matcher to use custom schema paths with entity schema definition.
-
-Example constructors:
-
-i. With `EntitySchema` and `QueryEngine` implementations.
+With ServiceCollection, you need to register the below dependencies.
 
 ```
-    public DataProvider(IEntitySchema<TEntity> entitySchema, params IQueryEngine[] queryEngines)
-```      
-ii. With `Logger`, `EntitySchema`, `QueryEngine`, and `SchemaPathmMatcher` for custom schema paths mapping in entity schema definition.
+    // Register core services
+    services.AddTransient(typeof(IQueryBuilder<>), typeof(QueryBuilder<>));
+    services.AddTransient(typeof(IEntityBuilder<>), typeof(EntityBuilder<>));
+    services.AddTransient(typeof(IDataProvider<>), typeof(DataProvider<>));
+    services.AddTransient<IQueryExecutor, QueryExecutor>();
+
+    // Register instance of ISchemaPathMatcher - Json, XPath or Custom.
+    services.AddTransient(c => new XPathMatcher());
+
+    // Enable logging
+    services.AddLogging();
+
+    //For Dapper SQL engine - Schemio.SQL
+    services.AddTransient<IQueryEngine>(c => new QueryEngine(new SQLConfiguration {  ConnectionSettings = new ConnectionSettings {
+                Providername = "System.Data.SqlClient", 
+                ConnectionString ="Data Source=Powerstation; Initial Catalog=Customer; Integrated Security=SSPI;"            
+            }}); 
+
+    // For entity framework engine - Schemio.EntityFramework
+    services.AddDbContextFactory<CustomerDbContext>(options => options.UseSqlServer(YourSqlConnection), ServiceLifetime.Scoped);
+    services.AddTransient<IQueryEngine>(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>());
+               
+    // For HTTPClient Engine for web APIs - Schemio.API
+    
+    // Enable HttpClient
+    services.AddHttpClient();
+    services.AddTransient<IQueryEngine, QueryEngine>();
+
+    // Register each entity configuration. eg CustomerConfiguration
+    services.AddTransient<IEntityConfiguration<Customer>, CustomerConfiguration>();
+    
+ ```
+
+`Please Note:` You can combine multiple query engines and implement supporting types of queries to execute on target data platforms.
+
+
+#### Using Fluent interface for registrations
+
+i. Example registration: Schemio.SQL
+
 ```
-    public DataProvider(ILogger<DataProvider<TEntity>> logger, IEntitySchema<TEntity> entitySchema, ISchemaPathMatcher schemaPathMatcher, params IQueryEngine[] queryEngines)
+// Enable DbProviderFactory.
+ DbProviderFactories.RegisterFactory(DbProviderName, SqliteFactory.Instance);
+ 
+ var connectionString = $"DataSource={Environment.CurrentDirectory}//Customer.db;mode=readonly;cache=shared";
+ 
+ var configuration = new SQLConfiguration { ConnectionSettings = new ConnectionSettings { ConnectionString = connectionString, ProviderName = DbProviderName } };
+
+// Enable logging
+ services.AddLogging();
+
+ services.UseSchemio()
+     .WithEngine(c => new QueryEngine(configuration))
+     .WithPathMatcher(c => new XPathMatcher())
+        .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
+```
+
+ii. Example registration: Schemio.EntityFramework
+
+```
+ var connectionString = $"DataSource={Environment.CurrentDirectory}//Customer.db;mode=readonly;cache=shared";
+
+// Enable DBContext Factory
+ services.AddDbContextFactory<CustomerDbContext>(options =>
+         options.UseSqlite(connectionString));
+
+// Enable logging
+ services.AddLogging();
+ 
+  services.UseSchemio()
+      .WithEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
+      .WithPathMatcher(c => new XPathMatcher())
+      .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
            
 ```
-#### Schemio.SQL
-Construct DataProvider using `Schemio.SQL.QueryEngine` query engine.
-
+iii. Example registration: Schemio.API
 ```
-var provider = new DataProvider(new CustomerSchema(), new Schemio.SQL.QueryEngine(new SQLConfiguration()));
+ // Enable logging
+ services.AddLogging();
+
+ // Enable HttpClient
+  services.AddHttpClient();
+  
+  services.UseSchemio()
+      .WithEngine<QueryEngine>()
+      .WithPathMatcher(c => new XPathMatcher())
+      .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
+  
 ```
-
-#### Schemio.EntityFramework
-Construct DataProvider using `Schemio.EntityFramework.QueryEngine` query engine.
-
+iv. Example registration: Multiple Engines
 ```
-var provider = new DataProvider(new CustomerSchema(), Schemio.EntityFramework.QueryEngine());
-```
+ // Enable logging
+ services.AddLogging();
 
-### Using IOC for registrations
+ // Enable HttpClient
+  services.AddHttpClient();
+  
+ var connectionString = $"DataSource={Environment.CurrentDirectory}//Customer.db;mode=readonly;cache=shared";
 
-With ServiceCollection, you should call the `services.UseSchemio()` method for IoC registration.
-
-To configure Data provider with SQL Query engine, use fluent registration apis as shown below - 
- ```
-   services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
-                .AddEngine(c => new QueryEngine(new SQLConfiguration {  ConnectionSettings = new ConnectionSettings {
-                        Providername = "System.Data.SqlClient", 
-                        ConnectionString ="Data Source=Powerstation; Initial Catalog=Customer; Integrated Security=SSPI;"            
-                    }}))
-                .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
-```
-
-To configure Data provider with Entity Framework Query engine, use fluent registration apis shown as below - 
- ```
-   services.AddDbContextFactory<CustomerDbContext>(options => options.UseSqlServer(YourSqlConnection), ServiceLifetime.Scoped);
-
-   services.AddLogging();
-
-   services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
-     .AddEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
-     .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
-
+// Enable DBContext Factory
+ services.AddDbContextFactory<CustomerDbContext>(options =>
+         options.UseSqlite(connectionString));
+  
+  services.UseSchemio()
+      .WithEngine<QueryEngine>()
+      .WithEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
+      .WithPathMatcher(c => new XPathMatcher())
+      .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
 ```
 
-`Please Note:` You can combine multiple query engines and implement different types of queries to execute on different supported platforms.
+#### Use Data Provider 
 
-To use Data provider, Inject IDataProvider<T> using constructor & property injection method or explicity Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<>))`
+##### i. Dependency Inject - IDataProvider
 
-## Extend Schemio
-### Custom Query Engine
-To provide custom query engine and query implementations, you need to extend the base interfaces as depicted below
-- IQueryEngine interface to implement the custom query engine to be used with schemio.
+To use Data provider, Inject `IDataProvider<T>` where T is IEntity, using constructor & property injection method or explicitly Resolve using service provider ie. `IServiceProvider.GetService(typeof(IDataProvider<Customer>))`
+
+##### ii. Call DataProvider.GetData(IEntityRequest context) method.
+You need to call the `GetData()` method with an instance of parameter class derived from `IEntityRequest` interface.
+
+The `IEntityRequest` provides a `SchemaPaths` property, which is a list of schema paths to include for the given request to fetch aggregated data.
+- When `no` paths are passed in the parameter then entire aggregated entity for all configured queries is returned.
+- When list of schema paths are included in the request then the returned aggregated data entity only includes query results from included queries.
+
+When nested path for a nested query is included (eg. customer/orders/order/items) then all parent queries in the respective parent paths also get included for execution.
+
+Example - Control Flow
+
+<img width="1202" alt="image" src="/Images/Schemio-Control-Flow.png">
+
+
+## Extending Schemio
+
+You could extend Schemio by providing your own custom implementation of the query engine (`IQueryEngine`) and query (`IQuery`) to execute queries on custom target data platform. 
+
+To do this, you need to extend the base interfaces as depicted below.
+### i. IQueryEngine
+Implement `IQueryEngine` interface to provide the custom query engine to be used with schemio.
 ```
 public interface IQueryEngine
-    {
-        /// <summary>
-        /// Detrmines whether an instance of query can be executed with this engine.
-        /// </summary>
-        /// <param name="query">instance of IQuery.</param>
-        /// <returns>Boolean; True when supported.</returns>
-        bool CanExecute(IQuery query);
+{
+    /// <summary>
+    /// Detrmines whether an instance of query can be executed with this engine.
+    /// </summary>
+    /// <param name="query">instance of IQuery.</param>
+    /// <returns>Boolean; True when supported.</returns>
+    bool CanExecute(IQuery query);
 
-        /// <summary>
-        /// Executes a list of queries returning a list of aggregated results.
-        /// </summary>
-        /// <param name="queries">List of IQuery instances.</param>
-        /// <returns>List of query results. Instances of IQueryResult.</returns>
-        IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries);
-    }
+    /// <summary>
+    /// Executes a given query returning query result.
+    /// </summary>
+    /// <param name="queries">Custom instance of IQuery.</param>
+    /// <returns>Task of IQueryResult.</returns>
+    Task<IQueryResult> Execute(IQuery> query);
+}
 ```
 Example Entity Framework implementation is below
 ```
 public class QueryEngine<T> : IQueryEngine where T : DbContext
+{
+    private readonly IDbContextFactory<T> _dbContextFactory;
+
+    public QueryEngine(IDbContextFactory<T> _dbContextFactory)
     {
-        private readonly IDbContextFactory<T> _dbContextFactory;
+        this._dbContextFactory = _dbContextFactory;
+    }
 
-        public QueryEngine(IDbContextFactory<T> _dbContextFactory)
+    public bool CanExecute(IQuery query) => query != null && query is ISQLQuery;
+
+    public Task<IQueryResult> Execute(IQuery query)
+    {
+        using (var dbcontext = _dbContextFactory.CreateDbContext())
         {
-            this._dbContextFactory = _dbContextFactory;
-        }
-
-        public bool CanExecute(IQuery query) => query != null && query is ISQLQuery;
-
-        public IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries)
-        {
-            var output = new List<IQueryResult>();
-
-            using (var dbcontext = _dbContextFactory.CreateDbContext())
-            {
-                foreach (var query in queries)
-                {
-                    var results = ((ISQLQuery)query).Run(dbcontext);
-
-                    if (results == null)
-                        continue;
-
-                    output.AddRange(results);
-                }
-
-                return output.ToArray();
-            }
+            var result = ((ISQLQuery)query).Run(dbcontext);
+            return result;
         }
     }
+}
 ```
-- Provide base implementation supporting IQuery, IRootQuery & IChildQuery interfaces. 
-- You can implement the parent and child base class implementations to construct for queries to be executed with custom engine implementation above. 
+### ii. IQuery
+With the Query Engine implementation, you also need to provide custom implementation of `IQuery` for executing the query with custom query engine.
 
-For Parent Query base implementation, see example below.
-```
-public abstract class BaseSQLRootQuery<TQueryParameter, TQueryResult>
-        : BaseRootQuery<TQueryParameter, TQueryResult>, ISQLQuery
-       where TQueryParameter : IQueryParameter
-       where TQueryResult : IQueryResult
-    {
-        /// <summary>
-        /// Get query delegate with implementation to return query result.
-        /// Delegate returns a collection from db.
-        /// </summary>
-        /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
-        public abstract IEnumerable<IQueryResult> Run(DbContext dbContext);
-    }
-```
-For Child Query implementation, see example below.
-```
-public abstract class BaseSQLChildQuery<TQueryParameter, TQueryResult>
-        : BaseChildQuery<TQueryParameter, TQueryResult>, ISQLQuery
-       where TQueryParameter : IQueryParameter
-       where TQueryResult : IQueryResult
-    {
-        /// <summary>
-        /// Get query delegate with implementation to return query result.
-        /// Delegate returns a collection from db.
-        /// </summary>
-        /// <returns>Func<DbContext, IEnumerable<IQueryResult>></returns>
-        public abstract IEnumerable<IQueryResult> Run(DbContext dbContext);
-    }
-```
-### Custom Schema Language
-You can provide your own schema language support for use in entity schema definition to map sections of object graph.
+To do this, you need to extend `BaseQuery<TResult>` where TQueryResult is `IQueryResult`. And, provide overrides for below methods.
+- `bool IsContextResolved()`
+Engine calls this method to confirm whether the query is ready for execution. Return true when query context is resolved.
+- `void ResolveQuery(IDataContext context, IQueryResult parentQueryResult)`
+This method is invoked by schemio to resolve the query context required for execution ith supporting query engine. `IQueryResult` parameter is only available when the custom query is configured in nested or child mode.
 
-To do this you need to follow the below steps
-* Provide entity schema definition with query/transformer pairs using custom schema language paths
-* Provide implementation of `ISchemaPathMatcher` interface and implement `IsMatch()` method to provide logic for matching custom paths. This matcher is used by query builder to pick queries for matched paths against the configured p in Entity schema definition. 
+
+Example - EntityFramework Supported query implementation is shown below.
+```
+ public abstract class SQLQuery<TQueryResult>
+     : BaseQuery<TQueryResult>, ISQLQuery
+    where TQueryResult : IQueryResult
+ {
+     private Func<DbContext, Task<TQueryResult>> QueryDelegate = null;
+
+     public override bool IsContextResolved() => QueryDelegate != null;
+
+     public override void ResolveQuery(IDataContext context, IQueryResult parentQueryResult)
+     {
+         QueryDelegate = GetQuery(context, parentQueryResult);
+     }
+
+     async Task<IQueryResult> ISQLQuery.Run(DbContext dbContext)
+     {
+         return await QueryDelegate(dbContext);
+     }
+
+     /// <summary>
+     /// Get query delegate to return query result.
+     /// </summary>
+     /// <param name="context"></param>
+     /// <param name="parentQueryResult"></param>
+     /// <returns></returns>
+     protected abstract Func<DbContext, Task<TQueryResult>> GetQuery(IDataContext context, IQueryResult parentQueryResult);
+ }
+```
+
+### iii. Custom Schema Paths
+
+Additionally, You can use your own schema language instead of XPath/JSONPath to map aggregated entity's object graph, and register with schemio.
+
+To do this you need to follow the below steps:
+#### i. Use schema paths in Entity Configuration.
+
+Provide entity schema definition with query/transformer pairs using custom schema language paths. 
+
+Example - with Dummy schema mapping
+```
+.Map<OrderQuery, OrderTransform>(For.Paths("customer$orders"))
+```
+#### ii. ISchemaPathMatcher 
+Provide implementation of `ISchemaPathMatcher` interface and implement `IsMatch()` method to provide logic for matching custom paths. 
+
+`Important`: This matcher is used by query builder to filter queries based matched paths, to include only required queries for execution to optimize performance.
 ```
 public interface ISchemaPathMatcher
-    {
-        bool IsMatch(string inputPath, ISchemaPaths configuredPaths);
-    }
+{
+    bool IsMatch(string inputPath, ISchemaPaths configuredPaths);
+}
 ```
-Example implementation of XPath matcher is below.
+Example implementation of XPathMatcher is below.
 ```
 public class XPathMatcher : ISchemaPathMatcher
     {
@@ -534,4 +612,3 @@ public class XPathMatcher : ISchemaPathMatcher
         }
     }
 ```
-

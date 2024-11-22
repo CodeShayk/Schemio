@@ -1,30 +1,30 @@
 using Microsoft.EntityFrameworkCore;
+using Schemio.Core;
 using Schemio.EntityFramework.Tests.Domain;
 
 namespace Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas.Queries
 {
-    public class CustomerQuery : BaseSQLRootQuery<CustomerParameter, CustomerResult>
+    public class CustomerQuery : SQLQuery<CustomerRecord>
     {
-        public override void ResolveRootQueryParameter(IDataContext context)
+        protected override Func<DbContext, Task<CustomerRecord>> GetQuery(IDataContext context, IQueryResult parentQueryResult)
         {
-            // Executes as root or level 1 query.
-            var customer = (CustomerContext)context.Entity;
-            QueryParameter = new CustomerParameter
-            {
-                CustomerId = customer.CustomerId
-            };
-        }
+            // Executes as root or level 1 query. parentQueryResult will be null.
+            var customer = (CustomerRequest)context.Request;
 
-        public override IEnumerable<IQueryResult> Run(DbContext dbContext)
-        {
-            return dbContext.Set<Customer>()
-                        .Where(c => c.Id == QueryParameter.CustomerId)
-                        .Select(c => new CustomerResult
+            return async dbContext =>
+            {
+                var result = await dbContext.Set<Customer>()
+                        .Where(c => c.Id == customer.CustomerId)
+                        .Select(c => new CustomerRecord
                         {
                             Id = c.Id,
                             Name = c.Name,
                             Code = c.Code
-                        });
+                        })
+                        .FirstOrDefaultAsync();
+
+                return result;
+            };
         }
     }
 }

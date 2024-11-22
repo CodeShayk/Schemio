@@ -1,6 +1,9 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Schemio.Core;
+using Schemio.Core.Helpers;
+using Schemio.Core.PathMatchers;
 using Schemio.EntityFramework.Tests.EntitySetup.Entities;
 using Schemio.EntityFramework.Tests.EntitySetup.EntitySchemas;
 
@@ -9,6 +12,20 @@ namespace Schemio.EntityFramework.Tests
     public class BaseTest
     {
         protected ServiceProvider _serviceProvider;
+
+        protected void AssertAreEqual(Customer expected, Customer actual)
+        {
+            var actualCustomer = actual.ToJson();
+            var expectedCustomer = expected.ToJson();
+
+            Console.WriteLine("expected:");
+            Console.WriteLine(expectedCustomer);
+
+            Console.WriteLine("actual:");
+            Console.WriteLine(actualCustomer);
+
+            Assert.That(actualCustomer, Is.EqualTo(expectedCustomer));
+        }
 
         [OneTimeSetUp]
         public void Setup()
@@ -22,9 +39,10 @@ namespace Schemio.EntityFramework.Tests
 
             services.AddLogging();
 
-            services.UseSchemio<Customer>(With.Schema<Customer>(c => new CustomerSchema())
-                .AddEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
-                .LogWith(c => new Logger<IDataProvider<Customer>>(c.GetService<ILoggerFactory>())));
+            services.UseSchemio()
+                .WithEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
+                .WithPathMatcher(c => new XPathMatcher())
+                .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
 
             // 4. Build the service provider
             _serviceProvider = services.BuildServiceProvider();
@@ -33,7 +51,8 @@ namespace Schemio.EntityFramework.Tests
         [OneTimeTearDown]
         public void TearDown()
         {
-            _serviceProvider = null;
+            if (_serviceProvider is IDisposable disposable)
+                disposable.Dispose();
         }
     }
 }

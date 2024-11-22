@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Schemio.Core;
 
 namespace Schemio.EntityFramework
 {
@@ -13,23 +14,12 @@ namespace Schemio.EntityFramework
 
         public bool CanExecute(IQuery query) => query != null && query is ISQLQuery;
 
-        public IEnumerable<IQueryResult> Execute(IEnumerable<IQuery> queries)
+        public Task<IQueryResult> Execute(IQuery query)
         {
-            var output = new List<IQueryResult>();
-
             using (var dbcontext = _dbContextFactory.CreateDbContext())
             {
-                foreach (var query in queries)
-                {
-                    var results = ((ISQLQuery)query).Run(dbcontext);
-
-                    if (results == null)
-                        continue;
-
-                    output.AddRange(results);
-                }
-
-                return output.ToArray();
+                var result = ((ISQLQuery)query).Run(dbcontext);
+                return result;
             }
         }
     }

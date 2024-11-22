@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
+using Schemio.Core;
+using Schemio.Core.Impl;
 using Schemio.EntityFramework.Tests;
-using Schemio.Impl;
 using Schemio.SQL.Tests.EntitySetup;
 using Schemio.SQL.Tests.EntitySetup.Entities;
 
@@ -19,40 +20,131 @@ namespace Schemio.SQL.Tests
         [Test]
         public void TestDataProviderToFetchWholeEntityWhenPathsAreNull()
         {
-            var customer = _provider.GetData(new CustomerContext
+            var customer = _provider.GetData(new CustomerRequest
             {
                 CustomerId = 1
             });
 
-            Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12 inch Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            var expected = new Customer
+            {
+                Id = 1,
+                Name = "Jack Sparrow",
+                Code = "AB123",
+                Communication = new Communication
+                {
+                    ContactId = 1,
+                    Phone = "0123456789",
+                    Email = "jack.sparrow@gmail.com",
+                    Address = new Address
+                    {
+                        AddressId = 1,
+                        HouseNo = "77",
+                        City = "Wansted",
+                        Region = "Belfast",
+                        PostalCode = "BL34Y56",
+                        Country = "United Kingdom",
+                    }
+                },
+                Orders = [ new Order {
+                        OrderId = 1,
+                        OrderNo = "ZX123VH",
+                        Date = DateTime.Parse("2021-10-22T12:13:04"),
+                        Items =
+                        [
+                            new OrderItem
+                            {
+                                ItemId = 1, Name = "12 inch Cake", Cost = 30m
+                            },
+                            new OrderItem
+                            {
+                                ItemId = 2, Name = "20 Cake Candles", Cost = 5m
+                            }
+                        ]
+                    }]
+            };
+
+            AssertAreEqual(expected, customer);
         }
 
         [Test]
-        public void TestDataProviderToFetchEntityWhenPathsNotNull()
+        public void TestDataProviderToFetchEntityWhenPathsContainsOrderItems()
         {
-            var customer = _provider.GetData(new CustomerContext
+            var customer = _provider.GetData(new CustomerRequest
             {
                 CustomerId = 1,
                 SchemaPaths = new[] { "Customer/orders/order/items/item" }
             });
 
-            Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":null,\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12 inch Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            var expected = new Customer
+            {
+                Id = 1,
+                Name = "Jack Sparrow",
+                Code = "AB123",
+                Orders = [ new Order
+                    {
+                        OrderId = 1,
+                        OrderNo = "ZX123VH",
+                        Date = DateTime.Parse("2021-10-22T12:13:04"),
+                        Items =
+                        [
+                            new OrderItem
+                            {
+                                ItemId = 1, Name = "12 inch Cake", Cost = 30m
+                            },
+                            new OrderItem
+                            {
+                                ItemId = 2, Name = "20 Cake Candles", Cost = 5m
+                            }
+                        ]
+                    }]
+            };
+
+            AssertAreEqual(expected, customer);
+        }
+
+        [Test]
+        public void TestDataProviderToFetchEntityWhenPathsContainsCommunication()
+        {
+            var customer = _provider.GetData(new CustomerRequest
+            {
+                CustomerId = 1,
+                SchemaPaths = new[] { "Customer/Communication" }
+            });
+
+            var expected = new Customer
+            {
+                Id = 1,
+                Name = "Jack Sparrow",
+                Code = "AB123",
+                Communication = new Communication
+                {
+                    ContactId = 1,
+                    Phone = "0123456789",
+                    Email = "jack.sparrow@gmail.com",
+                    Address = new Address
+                    {
+                        AddressId = 1,
+                        HouseNo = "77",
+                        City = "Wansted",
+                        Region = "Belfast",
+                        PostalCode = "BL34Y56",
+                        Country = "United Kingdom",
+                    }
+                }
+            };
+
+            AssertAreEqual(expected, customer);
         }
 
         [Test]
         public void TestDataProviderToCacheResultForResultsWithAttributeApplied()
         {
-            var context = new DataContext(new CustomerContext
+            var context = new DataContext(new CustomerRequest
             {
                 CustomerId = 1
             });
 
-            var customer = ((DataProvider<Customer>)_provider).GetData(context);
-
-            Assert.IsNotNull(customer);
-            Assert.That(customer.ToJson(), Is.EqualTo("{\"Id\":1,\"Code\":\"AB123\",\"Name\":\"Jack Sparrow\",\"Communication\":{\"ContactId\":1,\"Phone\":\"0123456789\",\"Email\":\"jack.sparrow@schemio.com\",\"Address\":{\"AddressId\":0,\"HouseNo\":\"77\",\"City\":\"Wansted\",\"Region\":\"Belfast\",\"PostalCode\":\"BL34Y56\",\"Country\":\"United Kingdom\"}},\"Orders\":[{\"OrderId\":1,\"OrderNo\":\"ZX123VH\",\"Date\":\"0001-01-01T00:00:00\",\"Items\":[{\"ItemId\":1,\"Name\":\"12 inch Cake\",\"Cost\":30},{\"ItemId\":2,\"Name\":\"20 Cake Candles\",\"Cost\":5}]}]}"));
+            ((DataProvider<Customer>)_provider).GetData(context);
 
             Assert.That(context.Cache, Is.Not.Null);
             Assert.That(context.Cache.Count, Is.EqualTo(1));
