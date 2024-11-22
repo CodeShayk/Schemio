@@ -48,7 +48,7 @@ namespace Schemio.SQL.Tests
                 Orders = [ new Order {
                         OrderId = 1,
                         OrderNo = "ZX123VH",
-                        Date = DateTime.Parse("2021-10-22T00:00:00"),
+                        Date = DateTime.Parse("2021-10-22T12:13:04"),
                         Items =
                         [
                             new OrderItem
@@ -84,7 +84,7 @@ namespace Schemio.SQL.Tests
                     {
                         OrderId = 1,
                         OrderNo = "ZX123VH",
-                        Date = DateTime.Parse("2021-10-22T00:00:00"),
+                        Date = DateTime.Parse("2021-10-22T12:13:04"),
                         Items =
                         [
                             new OrderItem

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Schemio.Core.Helpers;
 using Schemio.EntityFramework.Tests.Domain;
@@ -54,7 +55,7 @@ namespace Schemio.EntityFramework.Tests
                  eb.HasKey(b => b.OrderId);
                  eb.Property(b => b.OrderNo);
                  eb.Property(b => b.Date).HasColumnName("OrderDate")
-                                         .HasConversion(v => v.ToShortDateString(), s => s.IsNotNullOrEmpty() ? DateTime.ParseExact(s, "dd/MM/yyyy", null) : DateTime.MinValue);
+                                         .HasConversion(v => v.ToShortDateString(), s => s.IsNotNullOrEmpty() ? DateTime.ParseExact(s, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture) : DateTime.MinValue);
                  eb.HasOne(b => b.Customer);
                  eb.HasMany(b => b.Items);
              });

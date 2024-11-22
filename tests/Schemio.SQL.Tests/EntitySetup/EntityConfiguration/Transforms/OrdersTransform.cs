@@ -1,3 +1,4 @@
+using System.Globalization;
 using Schemio.Core;
 using Schemio.SQL.Tests.EntitySetup.Entities;
 using Schemio.SQL.Tests.EntitySetup.EntitySchemas.Queries;
@@ -19,7 +20,7 @@ namespace Schemio.SQL.Tests.EntitySetup.EntitySchemas.Transforms
             {
                 customer.Orders[index] = new Order
                 {
-                    Date = DateTime.Parse(collectionResult[index].OrderDate),
+                    Date = DateTime.ParseExact(collectionResult[index].OrderDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                     OrderId = collectionResult[index].OrderId,
                     OrderNo = collectionResult[index].OrderNo
                 };
