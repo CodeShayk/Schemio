@@ -62,7 +62,7 @@ If you are having problems, please let me know by [raising a new issue](https://
 This project is licensed with the [MIT license](LICENSE).
 
 ## Version History
-The main branch is now on .NET 8.0. The following previous versions are available:
+The main branch is now on .NET 9.0. The following previous versions are available:
 | Version  | Release Notes | Developer Guide |
 | -------- | --------|--------|
 | [`v1.0.0`](https://github.com/CodeShayk/Schemio/tree/v1.0.0) |  [Notes](https://github.com/CodeShayk/Schemio/releases/tag/v1.0.0) | [Guide](https://github.com/CodeShayk/Schemio/blob/v1.0.0/index.md) |
