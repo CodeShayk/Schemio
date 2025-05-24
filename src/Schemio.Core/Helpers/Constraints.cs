@@ -1,4 +1,6 @@
-﻿namespace Schemio.Core.Helpers
+using System;
+
+namespace Schemio.Core.Helpers
 {
     public static class Constraints
     {

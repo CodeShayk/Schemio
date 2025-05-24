@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Schemio.Core
 {
     public interface IEntityBuilder<out TEntity> where TEntity : IEntity

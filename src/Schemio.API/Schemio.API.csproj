@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>net462;netstandard2.0;netstandard2.1;net9.0</TargetFrameworks>
     <IsPackable>true</IsPackable>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <Title>Schemio with EntityFramework</Title>
     <Authors>Code Shayk</Authors>
     <Company>Code Shayk</Company>
     <Description>.Net Library to hydrate data entities by object graph using schema paths (supports XPath &amp; JSONPath). Supports Web API using HttpClient. </Description>
-    <Copyright>Copyright (c) 2024 Code Shayk</Copyright>
+    <Copyright>Copyright (c) 2025 Code Shayk</Copyright>
     <PackageProjectUrl>https://github.com/CodeShayk/Schemio/wiki/i.-Home</PackageProjectUrl>
     <PackageIcon>ninja-icon-16.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -20,7 +20,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

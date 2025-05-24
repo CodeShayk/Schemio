@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Schemio.Core.PathMatchers
@@ -15,7 +16,8 @@ namespace Schemio.Core.PathMatchers
                 return true;
 
             if (configuredXPaths.Paths.Any(x => inputXPath.Contains("ancestor::")
-                    && ancestorRegex.Matches(inputXPath).Select(match => match.Groups["path"].Value).Distinct().Any(match => x.EndsWith(match))))
+                    && ancestorRegex.Matches(inputXPath).Cast<Match>()
+                    .Select(match => match.Groups["path"].Value).Distinct().Any(match => x.EndsWith(match))))
                 return true;
 
             return false;

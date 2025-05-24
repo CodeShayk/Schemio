@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Schemio.Core.Impl
 {
     public class EntityBuilder<T> : IEntityBuilder<T> where T : IEntity, new()
@@ -44,11 +48,11 @@ namespace Schemio.Core.Impl
             }
 
             return entity;
+        }
 
-            static bool IsMatch(Type transformer, Type queryResult)
-            {
-                return transformer == queryResult;
-            }
+        private bool IsMatch(Type transformer, Type queryResult)
+        {
+            return transformer == queryResult;
         }
     }
 }

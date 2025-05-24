@@ -1,4 +1,6 @@
-﻿namespace Schemio.Core
+using System.Threading.Tasks;
+
+namespace Schemio.Core
 {
     public interface IQueryRunner
     {

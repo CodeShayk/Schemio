@@ -1,4 +1,6 @@
+using System;
 using System.Data.Common;
+using System.Threading.Tasks;
 using Schemio.Core;
 
 namespace Schemio.SQL

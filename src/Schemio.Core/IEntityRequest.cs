@@ -5,6 +5,6 @@ namespace Schemio.Core
         /// <summary>
         /// Entity schema paths for data retrieval.
         /// </summary>
-        public string[] SchemaPaths { get; set; }
+        string[] SchemaPaths { get; set; }
     }
 }

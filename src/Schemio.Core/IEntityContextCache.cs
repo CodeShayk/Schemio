@@ -1,4 +1,6 @@
-﻿namespace Schemio.Core
+using System.Collections.Generic;
+
+namespace Schemio.Core
 {
     public interface IEntityContextCache
     {

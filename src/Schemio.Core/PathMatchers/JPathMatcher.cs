@@ -1,3 +1,4 @@
+using System.Linq;
 using Schemio.Core.Helpers;
 
 namespace Schemio.Core.PathMatchers

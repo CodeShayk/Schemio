@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <TargetFrameworks>net462;netstandard2.1;net9.0</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
     <IsPackable>true</IsPackable>
     <Title>Schemio with SQL</Title>
     <Authors>Code Shayk</Authors>
@@ -14,14 +14,14 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>ninja-icon-16.png</PackageIcon>
     <PackageProjectUrl>https://github.com/CodeShayk/Schemio/wiki/i.-Home</PackageProjectUrl>
-    <Copyright>Copyright (c) 2024 Code Shayk</Copyright>
+    <Copyright>Copyright (c) 2025 Code Shayk</Copyright>
     <Description>.Net Library to hydrate data entities by object graph using schema paths (supports XPath &amp; JSONPath). Supports Dapper for querying SQL database. </Description>   
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
