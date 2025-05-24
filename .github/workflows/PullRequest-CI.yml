@@ -59,12 +59,12 @@ jobs:
         working-directory: '${{ env.working-directory }}'
 
       - name: Step-06 Build Version (Beta)
-        if: ${{ !startsWith(github.head_ref, 'release/')}}
+        if: ('!startsWith(github.ref, ''refs/heads/release'')') 
         run: dotnet build  --configuration Release --no-restore -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersion }}
         working-directory: '${{ env.working-directory }}'
       
       - name: Step-06 Build Version (Release)
-        if:  ${{ startsWith(github.head_ref, 'release/')}}
+        if: ('startsWith(github.ref, ''refs/heads/release'')') 
         run: dotnet build  --configuration Release --no-restore -p:PackageVersion=${{ steps.gitversion.outputs.MajorMinorPatch }}
         working-directory: '${{ env.working-directory }}'
 
@@ -104,7 +104,7 @@ jobs:
   Release:
     name: Release to Nuget
     needs: [Package]
-    if: ${{ startsWith(github.head_ref, 'release/')}}
+    if: ('startsWith(github.ref, ''refs/heads/release'')') 
     runs-on: ubuntu-latest
     env:
       github-token: '${{ secrets.GH_Packages }}'
