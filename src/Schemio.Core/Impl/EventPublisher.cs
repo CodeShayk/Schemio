@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Schemio.Core.Impl
 {
     public class EventPublisher

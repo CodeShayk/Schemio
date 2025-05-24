@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFrameworks>net9.0</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
 	<IsPackable>true</IsPackable>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <Title>Schemio with EntityFramework</Title>
     <Authors>Code Shayk</Authors>
     <Company>Code Shayk</Company>
     <Description>.Net Library to hydrate data entities by object graph using schema paths (supports XPath &amp; JSONPath). Supports Entity Framework for querying database. </Description>
-    <Copyright>Copyright (c) 2024 Code Shayk</Copyright>
+    <Copyright>Copyright (c) 2025 Code Shayk</Copyright>
     <PackageProjectUrl>https://github.com/CodeShayk/Schemio/wiki/i.-Home</PackageProjectUrl>
     <PackageIcon>ninja-icon-16.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -21,7 +21,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,3 +52,4 @@
   </ItemGroup>
 
 </Project>
+

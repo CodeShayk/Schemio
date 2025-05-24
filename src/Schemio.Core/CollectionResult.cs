@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Schemio.Core
 {
     public class CollectionResult<T> : List<T>, IQueryResult

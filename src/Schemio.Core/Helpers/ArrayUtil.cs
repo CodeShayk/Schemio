@@ -1,3 +1,5 @@
+using System;
+
 namespace Schemio.Core.Helpers
 {
     public static class ArrayUtil

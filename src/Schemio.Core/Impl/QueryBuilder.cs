@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Schemio.Core.Impl
 {
     public class QueryBuilder<T> : IQueryBuilder<T> where T : IEntity

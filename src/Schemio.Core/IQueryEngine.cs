@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace Schemio.Core
 {
     public interface IQueryEngine

@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <TargetFrameworks>net462;netstandard2.0;netstandard2.1;net9.0</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
     <IsPackable>true</IsPackable>
     <Authors>Code Shayk</Authors>
     <Company>Code Shayk</Company>
-    <Copyright>Copyright (c) 2024 Code Shayk</Copyright>
+    <Copyright>Copyright (c) 2025 Code Shayk</Copyright>
     <RepositoryUrl>https://github.com/CodeShayk/Schemio</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -21,8 +21,8 @@
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>2.0.0</Version>
-    <PackageReleaseNotes>Changes
+    <Version>2.0.1</Version>
+    <PackageReleaseNotes> Targets .net 4.6.2, .net standard 2.0, .net standard 2.1 and .net 9.0.
 - `Entity Schema` renamed to `Entity Configuration` and requires implementing `EntityContfiguration&lt;TEntity&gt;`.
 - `IRootQuery`, `IChildQuery`, `BaseRootQuery&lt;TParameter, TResult&gt;` &amp; `BaseChildQuery&lt;TParameter,TResult&gt;` removed.
 - Both Parent and child queries need to implement `BaseQuery&lt;TResult&gt;` and provide override for `isContextResolved()` and `ResolveQuery()` methods.
@@ -48,6 +48,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.5" />
   </ItemGroup>
 
 </Project>

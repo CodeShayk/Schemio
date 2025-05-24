@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Schemio.Core.Helpers.Xml

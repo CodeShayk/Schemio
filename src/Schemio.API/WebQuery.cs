@@ -49,7 +49,7 @@ namespace Schemio.API
         /// </summary>
         /// <returns></returns>
         protected virtual IEnumerable<string> GetResponseHeaders()
-        { return []; }
+        { return Enumerable.Empty<string>(); }
 
         /// <summary>
         /// Implement to construct the api web query.
@@ -149,7 +149,7 @@ namespace Schemio.API
             return null;
         }
 
-        private void SetResponseHeaders(HttpResponseMessage response, TQueryResult? result)
+        private void SetResponseHeaders(HttpResponseMessage response, TQueryResult result)
         {
             if (response.Headers == null || result == null)
                 return;
@@ -173,7 +173,8 @@ namespace Schemio.API
                                             ? responseHeader.Value.ElementAt(0)
                                             : string.Empty;
 
-                webResult.Headers ??= new Dictionary<string, string>();
+                if (webResult.Headers == null)
+                    webResult.Headers = new Dictionary<string, string>();
 
                 webResult.Headers.Add(responseHeader.Key, value);
             }

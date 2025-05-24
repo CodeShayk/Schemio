@@ -39,7 +39,7 @@ jobs:
           versionSpec: 5.x
 
       - name: Step-02 Check out Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -59,12 +59,12 @@ jobs:
         working-directory: '${{ env.working-directory }}'
 
       - name: Step-06 Build Version (Beta)
-        if: ${{ !startsWith(github.head_ref, 'release/')}}
+        if: ('!startsWith(github.ref, ''refs/heads/release'')') 
         run: dotnet build  --configuration Release --no-restore -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersion }}
         working-directory: '${{ env.working-directory }}'
       
       - name: Step-06 Build Version (Release)
-        if:  ${{ startsWith(github.head_ref, 'release/')}}
+        if: ('startsWith(github.ref, ''refs/heads/release'')') 
         run: dotnet build  --configuration Release --no-restore -p:PackageVersion=${{ steps.gitversion.outputs.MajorMinorPatch }}
         working-directory: '${{ env.working-directory }}'
 
@@ -73,7 +73,7 @@ jobs:
         working-directory: '${{ env.working-directory }}'
 
       - name: Step-08 Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: ${{env.working-directory}}
@@ -90,7 +90,7 @@ jobs:
       working-directory: /home/runner/work/Schemio/Schemio
     steps:
       - name: Step-01 Retrieve Build Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-artifact
           path: ${{env.working-directory}}
@@ -104,14 +104,14 @@ jobs:
   Release:
     name: Release to Nuget
     needs: [Package]
-    if: ${{ startsWith(github.head_ref, 'release/')}}
+    if: ('startsWith(github.ref, ''refs/heads/release'')') 
     runs-on: ubuntu-latest
     env:
       github-token: '${{ secrets.GH_Packages }}'
       nuget-token: '${{ secrets.NUGET_API_KEY }}' 
       working-directory: /home/runner/work/Schemio/Schemio
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # - name: Setup dotnet
       #   uses: actions/setup-dotnet@v1
