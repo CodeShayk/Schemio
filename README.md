@@ -5,6 +5,7 @@
 [![Master-CodeQL](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml/badge.svg)](https://github.com/CodeShayk/Schemio/actions/workflows/Master-CodeQL.yml) 
 [![.Net 9.0](https://img.shields.io/badge/.Net-9.0-blue)](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 --
+Schemio is a powerful .NET library designed to aggregate data from heterogeneous data stores using a schema-driven approach. It enables developers to hydrate complex object graphs by fetching data from multiple sources (SQL databases, Web APIs, NoSQL stores) using XPath and JSONPath schema mappings.
  #### Nuget Packages
 | Package | Latest  | Details | 
 | --------| --------| --------|
@@ -19,15 +20,7 @@
 
 Key benefits:
 - allows fetching `aggregated` data from `heterogeneous` data storages. You could combine queries targetting different data platforms (example. `SQL`, `API`, `Cache`) to return an aggregated data `entity`.
-- allows `selectively` fetching only `parts` of the aggregated data entity. You could retrieve an aggregated data entity with only `sections` of its `object graph` populated with data depending upon the `schema paths` passed with the request.
-
-### When to use Schemio?
-Schemio is perfect fit for many use cases. Few examples that require the service tier to dynamically fetch aggregated data with high performance, availability and scalability are
-> - Aggregated APIs
-> - Data Reporting
-> - Document Generation (with templated data)
-> - Content Management Systems
-> - Many more
+- allows `conditional` fetching of `parts` of the aggregated data entity. You could retrieve parts of object graph in the aggregated entity by specifying schema paths (using `XPath` or `JSonPath`) to identify respective sections.
 
 ## Getting Started?
 ### i. Installation
@@ -51,7 +44,7 @@ NuGet\Install-Package Schemio.API
 ```
 ### ii. Developer Guide
 
-Please see [Developer Guide](https://codeshayk.github.io/Schemio/) for details on how to implement schemio in your project.
+Please see [Developer Guide](https://github.com/CodeShayk/Schemio/wiki) for complete details to use Schemio in your project.
 
 ## Support
 
