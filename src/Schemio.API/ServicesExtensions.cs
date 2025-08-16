@@ -40,9 +40,13 @@ namespace Schemio.API
         /// Adds an HTTP client query engine with Schemio. Requires registering HttpClientFactory separately.
         /// </summary>
         /// <param name="options">ISchemioOptions.</param>
+        /// <param name="registerHttpClientFactory">Determines whether default HTTPClientFactory needs to be registered.</param>
         /// <returns></returns>
-        public static ISchemioOptions WithHttpClientEngine(this ISchemioOptions options)
+        public static ISchemioOptions WithHttpClientEngine(this ISchemioOptions options, bool registerHttpClientFactory = false)
         {
+            if (registerHttpClientFactory)
+                ((SchemioOptionsBuilder)options).Services.AddHttpClient();
+
             options.WithEngine(c => new QueryEngine(c.GetRequiredService<IHttpClientFactory>(), c.GetService<ILogger<QueryEngine>>()));
             return options;
         }

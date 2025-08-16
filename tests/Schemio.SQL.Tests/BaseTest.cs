@@ -43,7 +43,7 @@ namespace Schemio.EntityFramework.Tests
             services.AddLogging();
 
             services.UseSchemio(config => config
-                .WithEngine(c => new QueryEngine(configuration))
+                .WithSQLEngine(configuration)
                 .WithPathMatcher(c => new XPathMatcher())
                 .WithEntityConfiguration<Customer>(c => new CustomerConfiguration()));
 

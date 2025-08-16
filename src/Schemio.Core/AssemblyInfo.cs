@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Schemio.SQL")]
 [assembly: InternalsVisibleTo("Schemio.SQL.Tests")]
 [assembly: InternalsVisibleTo("Schemio.EntityFramework.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 

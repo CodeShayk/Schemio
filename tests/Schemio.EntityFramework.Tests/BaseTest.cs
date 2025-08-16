@@ -34,13 +34,10 @@ namespace Schemio.EntityFramework.Tests
 
             var connectionString = $"DataSource={Environment.CurrentDirectory}//Customer.db;mode=readonly;cache=shared";
 
-            services.AddDbContextFactory<CustomerDbContext>(options =>
-                    options.UseSqlite(connectionString));
-
             services.AddLogging();
 
             services.UseSchemio(configuration => configuration
-                .WithEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
+                .WithDbContextEngine<CustomerDbContext>(options => options.UseSqlite(connectionString))
                 .WithPathMatcher(c => new XPathMatcher())
                 .WithEntityConfiguration<Customer>(c => new CustomerConfiguration()));
 
