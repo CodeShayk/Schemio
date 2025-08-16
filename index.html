@@ -5,214 +5,466 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schemio Framework - Complete Developer Guide</title>
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --info-color: #0284c7;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f1f5f9;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f8f9fa;
+            background: var(--bg-primary);
+            box-shadow: var(--shadow-lg);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
         }
-        
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        
-        h1 {
-            color: #2c3e50;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-            font-size: 2.5em;
-            margin-bottom: 30px;
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a" cx="50%" cy="40%"><stop offset="0%" stop-opacity=".05"/><stop offset="100%" stop-opacity="0"/></radialGradient></defs><rect width="100" height="20" fill="url(%23a)"/></svg>');
+            opacity: 0.3;
         }
-        
-        h2 {
-            color: #34495e;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 8px;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            font-size: 1.8em;
+
+        .header h1 {
+            margin: 0;
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: -0.025em;
+            position: relative;
+            z-index: 1;
         }
-        
-        h3 {
-            color: #2c3e50;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.4em;
+
+        .header .subtitle {
+            font-size: 1.25rem;
+            margin-top: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
         }
-        
-        h4 {
-            color: #34495e;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            font-size: 1.2em;
+
+        .content {
+            padding: 2rem;
         }
-        
+
         .toc {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 40px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
         }
-        
+
         .toc h2 {
             margin-top: 0;
-            color: #495057;
-            font-size: 1.4em;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
         }
-        
+
+        .toc h2::before {
+            content: '📋';
+            margin-right: 0.5rem;
+            font-size: 1.25rem;
+        }
+
         .toc ol {
             margin: 0;
-            padding-left: 20px;
+            padding-left: 1.5rem;
+            counter-reset: toc-counter;
         }
-        
+
         .toc li {
-            margin-bottom: 5px;
+            margin-bottom: 0.75rem;
+            counter-increment: toc-counter;
+            position: relative;
         }
-        
+
+        .toc li::marker {
+            content: counter(toc-counter, decimal) '. ';
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
         .toc a {
-            color: #007bff;
+            color: var(--text-primary);
             text-decoration: none;
-        }
-        
-        .toc a:hover {
-            text-decoration: underline;
-        }
-        
-        code {
-            background: #f1f3f4;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 0.9em;
-            color: #d73a49;
-        }
-        
-        pre {
-            background: #f6f8fa;
-            border: 1px solid #e1e4e8;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 0.25rem 0.5rem;
             border-radius: 6px;
-            padding: 16px;
-            overflow-x: auto;
-            margin: 16px 0;
+            display: inline-block;
         }
-        
+
+        .toc a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        h2 {
+            color: var(--text-primary);
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary-color);
+            position: relative;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        h3 {
+            color: var(--text-primary);
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            color: var(--text-secondary);
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        code {
+            background: #f1f5f9;
+            color: #e11d48;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        pre {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow);
+        }
+
         pre code {
             background: none;
+            color: #e2e8f0;
             padding: 0;
-            color: #24292e;
-            font-size: 0.85em;
+            border-radius: 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
         }
-        
+
         .highlight {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #f59e0b;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow);
         }
-        
+
         .highlight strong {
-            color: #856404;
+            color: #92400e;
         }
-        
-        blockquote {
-            border-left: 4px solid #dfe2e5;
-            padding: 0 16px;
-            margin: 16px 0;
-            color: #6a737d;
-        }
-        
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 20px 0;
-        }
-        
-        th, td {
-            border: 1px solid #dfe2e5;
-            padding: 12px;
-            text-align: left;
-        }
-        
-        th {
-            background: #f6f8fa;
-            font-weight: 600;
-        }
-        
+
         .benefits {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border: 1px solid var(--success-color);
+            border-left: 4px solid var(--success-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow);
         }
-        
-        .benefits ul {
-            margin: 10px 0;
-            padding-left: 20px;
+
+        .benefits strong {
+            color: #065f46;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
         }
-        
-        .benefits li {
-            margin-bottom: 5px;
+
+        .benefits strong::before {
+            content: '🎯';
+            margin-right: 0.5rem;
         }
-        
+
         .installation {
-            background: #e2e3e5;
-            border: 1px solid #d6d8db;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border: 1px solid #64748b;
+            border-left: 4px solid #64748b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow);
         }
-        
+
+        .installation strong {
+            color: #334155;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .installation strong::before {
+            content: '📦';
+            margin-right: 0.5rem;
+        }
+
         .warning {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
-            color: #721c24;
+            background: linear-gradient(135deg, #fef2f2, #fecaca);
+            border: 1px solid var(--danger-color);
+            border-left: 4px solid var(--danger-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            color: #7f1d1d;
+            box-shadow: var(--shadow);
         }
-        
+
+        .warning strong {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .warning strong::before {
+            content: '⚠️';
+            margin-right: 0.5rem;
+        }
+
         .info {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
-            color: #0c5460;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border: 1px solid var(--info-color);
+            border-left: 4px solid var(--info-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            color: #1e3a8a;
+            box-shadow: var(--shadow);
         }
-        
+
+        .info strong {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .info strong::before {
+            content: '💡';
+            margin-right: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.875rem;
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
         .checklist {
             list-style: none;
             padding-left: 0;
         }
-        
-        .checklist li:before {
-            content: "✅ ";
-            margin-right: 8px;
+
+        .checklist li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
         }
-        
+
+        .checklist li::before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+        }
+
         .flow-diagram {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
             text-align: center;
-            margin: 20px 0;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .flow-diagram pre {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-color), transparent);
+            margin: 3rem 0;
+        }
+
+        footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            color: #d1d5db;
+            margin: 0.5rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .content {
+                padding: 1rem;
+            }
+            
+            .container {
+                margin: 1rem;
+                border-radius: 8px;
+            }
+            
+            h2 {
+                font-size: 1.875rem;
+            }
+            
+            pre {
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Schemio Framework - Complete Developer Guide</h1>
+        <div class="header">
+            <h1>Schemio Framework</h1>
+            <div class="subtitle">Complete Developer Guide</div>
+        </div>
         
+        <div class="content">
         <div class="toc">
             <h2>Table of Contents</h2>
             <ol>
@@ -826,4 +1078,1041 @@ Return Aggregated Entity</pre>
         <h3>Entity Configuration Patterns</h3>
 
         <h4>1. Simple Linear Configuration</h4>
-        <pre><code class="language-csharp">
+        <pre><code class="language-csharp">return CreateSchema.For&lt;Customer&gt;()
+    .Map&lt;CustomerQuery, CustomerTransformer&gt;(For.Paths("customer"))
+    .Map&lt;AddressQuery, AddressTransformer&gt;(For.Paths("customer/address"))
+    .End();</code></pre>
+
+        <h4>2. Branching Configuration</h4>
+        <pre><code class="language-csharp">return CreateSchema.For&lt;Customer&gt;()
+    .Map&lt;CustomerQuery, CustomerTransformer&gt;(For.Paths("customer"),
+        customer =&gt; customer.Dependents
+            .Map&lt;ContactQuery, ContactTransformer&gt;(For.Paths("customer/contact"))
+            .Map&lt;PreferencesQuery, PreferencesTransformer&gt;(For.Paths("customer/preferences")))
+    .End();</code></pre>
+
+        <h4>3. Deep Nesting Configuration</h4>
+        <pre><code class="language-csharp">return CreateSchema.For&lt;Customer&gt;()
+    .Map&lt;CustomerQuery, CustomerTransformer&gt;(For.Paths("customer"),
+        customer =&gt; customer.Dependents
+            .Map&lt;OrdersQuery, OrdersTransformer&gt;(For.Paths("customer/orders"),
+                orders =&gt; orders.Dependents
+                    .Map&lt;OrderItemsQuery, OrderItemsTransformer&gt;(For.Paths("customer/orders/order/items"))))
+    .End();</code></pre>
+
+        <h3>Path Matching Strategies</h3>
+
+        <h4>XPath Patterns</h4>
+        <ul>
+            <li><code>customer</code> - Exact match</li>
+            <li><code>customer/orders</code> - Nested path</li>
+            <li><code>customer/orders/order/items</code> - Deep nesting</li>
+            <li><code>//orders</code> - Descendant matching (with ancestor support)</li>
+        </ul>
+
+        <h4>JSONPath Patterns</h4>
+        <ul>
+            <li><code>$.customer</code> - Root level</li>
+            <li><code>$.customer.orders</code> - Nested property</li>
+            <li><code>$.customer.orders[*].items</code> - Array elements</li>
+        </ul>
+
+        <h3>Schema Path Filtering</h3>
+
+        <p>Control which parts of the object graph to load:</p>
+
+        <pre><code class="language-csharp">// Load only customer basic info
+var request = new CustomerRequest
+{
+    CustomerId = 123,
+    SchemaPaths = new[] { "customer" }
+};
+
+// Load customer with orders but no items
+var request = new CustomerRequest
+{
+    CustomerId = 123,
+    SchemaPaths = new[] { "customer", "customer/orders" }
+};
+
+// Load everything
+var request = new CustomerRequest
+{
+    CustomerId = 123
+    // SchemaPaths = null loads all configured paths
+};</code></pre>
+
+        <hr>
+
+        <h2 id="query-implementation-guide">Query Implementation Guide</h2>
+
+        <h3>SQL Queries with Dapper</h3>
+
+        <h4>Basic Query</h4>
+        <pre><code class="language-csharp">public class CustomerQuery : SQLQuery&lt;CustomerResult&gt;
+{
+    protected override Func&lt;IDbConnection, Task&lt;CustomerResult&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult)
+    {
+        var request = (CustomerRequest)context.Request;
+        
+        return connection =&gt; connection.QueryFirstOrDefaultAsync&lt;CustomerResult&gt;(
+            @"SELECT CustomerId as Id, 
+                     CustomerName as Name, 
+                     CustomerCode as Code 
+              FROM Customers 
+              WHERE CustomerId = @CustomerId",
+            new { CustomerId = request.CustomerId });
+    }
+}</code></pre>
+
+        <h4>Collection Query</h4>
+        <pre><code class="language-csharp">public class OrdersQuery : SQLQuery&lt;CollectionResult&lt;OrderResult&gt;&gt;
+{
+    protected override Func&lt;IDbConnection, Task&lt;CollectionResult&lt;OrderResult&gt;&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult)
+    {
+        var customer = (CustomerResult)parentQueryResult;
+        
+        return async connection =&gt;
+        {
+            var orders = await connection.QueryAsync&lt;OrderResult&gt;(
+                @"SELECT OrderId, OrderNumber, OrderDate, TotalAmount
+                  FROM Orders 
+                  WHERE CustomerId = @CustomerId",
+                new { CustomerId = customer.Id });
+                
+            return new CollectionResult&lt;OrderResult&gt;(orders);
+        };
+    }
+}</code></pre>
+
+        <h4>Complex Query with Parameters</h4>
+        <pre><code class="language-csharp">public class ProductSearchQuery : SQLQuery&lt;CollectionResult&lt;ProductResult&gt;&gt;
+{
+    protected override Func&lt;IDbConnection, Task&lt;CollectionResult&lt;ProductResult&gt;&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult)
+    {
+        var request = (ProductSearchRequest)context.Request;
+        
+        return async connection =&gt;
+        {
+            var sql = @"
+                SELECT p.ProductId as Id, p.Name, p.Price, p.CategoryId
+                FROM Products p
+                WHERE (@CategoryId IS NULL OR p.CategoryId = @CategoryId)
+                  AND (@MinPrice IS NULL OR p.Price &gt;= @MinPrice)
+                  AND (@MaxPrice IS NULL OR p.Price &lt;= @MaxPrice)
+                  AND (@SearchTerm IS NULL OR p.Name LIKE @SearchPattern)
+                ORDER BY p.Name";
+            
+            var products = await connection.QueryAsync&lt;ProductResult&gt;(sql, new
+            {
+                CategoryId = request.CategoryId,
+                MinPrice = request.MinPrice,
+                MaxPrice = request.MaxPrice,
+                SearchTerm = request.SearchTerm,
+                SearchPattern = $"%{request.SearchTerm}%"
+            });
+            
+            return new CollectionResult&lt;ProductResult&gt;(products);
+        };
+    }
+}</code></pre>
+
+        <h3>Entity Framework Queries</h3>
+
+        <h4>Basic EF Query</h4>
+        <pre><code class="language-csharp">public class CustomerQuery : SQLQuery&lt;CustomerResult&gt;
+{
+    protected override Func&lt;DbContext, Task&lt;CustomerResult&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult)
+    {
+        var request = (CustomerRequest)context.Request;
+        
+        return async dbContext =&gt;
+        {
+            var result = await dbContext.Set&lt;CustomerEntity&gt;()
+                .Where(c =&gt; c.CustomerId == request.CustomerId)
+                .Select(c =&gt; new CustomerResult
+                {
+                    Id = c.CustomerId,
+                    Name = c.Name,
+                    Code = c.Code,
+                    Email = c.Email
+                })
+                .FirstOrDefaultAsync();
+                
+            return result;
+        };
+    }
+}</code></pre>
+
+        <h3>Web API Queries</h3>
+
+        <h4>Basic API Query</h4>
+        <pre><code class="language-csharp">public class UserProfileQuery : WebQuery&lt;UserProfileResult&gt;
+{
+    public UserProfileQuery() : base("https://api.userservice.com/") { }
+
+    protected override Func&lt;Uri&gt; GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+        var request = (UserRequest)context.Request;
+        return () =&gt; new Uri($"users/{request.UserId}", UriKind.Relative);
+    }
+}</code></pre>
+
+        <h4>API Query with Headers</h4>
+        <pre><code class="language-csharp">public class AuthenticatedApiQuery : WebQuery&lt;UserDataResult&gt;
+{
+    public AuthenticatedApiQuery() : base("https://api.secure.com/") { }
+
+    protected override Func&lt;Uri&gt; GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+        var request = (SecureRequest)context.Request;
+        return () =&gt; new Uri($"secure/data/{request.Id}", UriKind.Relative);
+    }
+
+    protected override IDictionary&lt;string, string&gt; GetRequestHeaders()
+    {
+        return new Dictionary&lt;string, string&gt;
+        {
+            { "Authorization", "Bearer " + GetAccessToken() },
+            { "X-Client-Version", "1.0" },
+            { "Accept", "application/json" }
+        };
+    }
+
+    protected override IEnumerable&lt;string&gt; GetResponseHeaders()
+    {
+        return new[] { "X-Rate-Limit-Remaining", "X-Request-Id" };
+    }
+
+    private string GetAccessToken()
+    {
+        // Implement token retrieval logic
+        return "your-access-token";
+    }
+}</code></pre>
+
+        <h3>Query Result Types</h3>
+
+        <h4>Simple Result</h4>
+        <pre><code class="language-csharp">public class CustomerResult : IQueryResult
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Code { get; set; }
+    public string Email { get; set; }
+}</code></pre>
+
+        <h4>Collection Result</h4>
+        <pre><code class="language-csharp">public class CollectionResult&lt;T&gt; : List&lt;T&gt;, IQueryResult
+{
+    public CollectionResult(IEnumerable&lt;T&gt; items) : base(items) { }
+    public CollectionResult() { }
+}</code></pre>
+
+        <h4>Cached Result</h4>
+        <pre><code class="language-csharp">[CacheResult]
+public class CategoryResult : IQueryResult
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+}</code></pre>
+
+        <hr>
+
+        <h2 id="transformer-implementation-guide">Transformer Implementation Guide</h2>
+
+        <h3>Basic Transformers</h3>
+
+        <h4>Simple Property Mapping</h4>
+        <pre><code class="language-csharp">public class CustomerTransformer : BaseTransformer&lt;CustomerResult, Customer&gt;
+{
+    public override void Transform(CustomerResult queryResult, Customer entity)
+    {
+        entity.CustomerId = queryResult.Id;
+        entity.CustomerName = queryResult.Name;
+        entity.CustomerCode = queryResult.Code;
+        entity.Email = queryResult.Email;
+    }
+}</code></pre>
+
+        <h4>Collection Transformation</h4>
+        <pre><code class="language-csharp">public class OrdersTransformer : BaseTransformer&lt;CollectionResult&lt;OrderResult&gt;, Customer&gt;
+{
+    public override void Transform(CollectionResult&lt;OrderResult&gt; queryResult, Customer entity)
+    {
+        if (queryResult == null || !queryResult.Any())
+        {
+            entity.Orders = new Order[0];
+            return;
+        }
+
+        entity.Orders = queryResult.Select(orderResult =&gt; new Order
+        {
+            OrderId = orderResult.OrderId,
+            OrderNumber = orderResult.OrderNumber,
+            OrderDate = orderResult.OrderDate,
+            TotalAmount = orderResult.TotalAmount
+        }).ToArray();
+    }
+}</code></pre>
+
+        <h3>Advanced Transformers</h3>
+
+        <h4>Context-Aware Transformation</h4>
+        <pre><code class="language-csharp">public class PersonalizedProductTransformer : BaseTransformer&lt;ProductResult, Product&gt;
+{
+    public override void Transform(ProductResult queryResult, Product entity)
+    {
+        entity.ProductId = queryResult.Id;
+        entity.Name = queryResult.Name;
+        entity.Price = queryResult.Price;
+
+        // Access request context
+        var request = Context.Request as ProductRequest;
+        if (request?.UserId.HasValue == true)
+        {
+            // Apply user-specific logic
+            entity.IsInWishlist = CheckWishlist(request.UserId.Value, entity.ProductId);
+            entity.UserRating = GetUserRating(request.UserId.Value, entity.ProductId);
+        }
+    }
+
+    private bool CheckWishlist(int userId, int productId)
+    {
+        // Check if product is in user's wishlist
+        return false;
+    }
+
+    private int? GetUserRating(int userId, int productId)
+    {
+        // Get user's rating for this product
+        return null;
+    }
+}</code></pre>
+
+        <h3>Transformation Best Practices</h3>
+
+        <h4>1. Null Safety</h4>
+        <pre><code class="language-csharp">public override void Transform(CustomerResult queryResult, Customer entity)
+{
+    if (queryResult == null) return;
+
+    entity.CustomerId = queryResult.Id;
+    entity.CustomerName = queryResult.Name ?? string.Empty;
+    entity.Email = queryResult.Email?.ToLowerInvariant();
+    
+    // Initialize collections to prevent null reference exceptions
+    if (entity.Orders == null)
+        entity.Orders = new List&lt;Order&gt;();
+}</code></pre>
+
+        <h4>2. Data Validation</h4>
+        <pre><code class="language-csharp">public override void Transform(ProductResult queryResult, Product entity)
+{
+    entity.ProductId = queryResult.Id;
+    entity.Name = ValidateAndCleanName(queryResult.Name);
+    entity.Price = Math.Max(0, queryResult.Price); // Ensure non-negative price
+    entity.Description = SanitizeHtml(queryResult.Description);
+}
+
+private string ValidateAndCleanName(string name)
+{
+    if (string.IsNullOrWhiteSpace(name))
+        return "Unknown Product";
+        
+    return name.Trim().Length &gt; 100 
+        ? name.Trim().Substring(0, 100) + "..."
+        : name.Trim();
+}</code></pre>
+
+        <hr>
+
+        <h2 id="advanced-features">Advanced Features</h2>
+
+        <h3>Caching Support</h3>
+
+        <p>Schemio provides built-in caching for expensive query results:</p>
+
+        <h4>Enable Caching</h4>
+        <pre><code class="language-csharp">[CacheResult]
+public class CategoryResult : IQueryResult
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}</code></pre>
+
+        <h4>Access Cached Results</h4>
+        <p>The cached results are available to queries and transformers via context object.</p>
+
+        <pre><code class="language-csharp">public class ProductTransformer : BaseTransformer&lt;ProductResult, Product&gt;
+{
+    public override void Transform(ProductResult queryResult, Product entity)
+    {
+        entity.ProductId = queryResult.Id;
+        entity.Name = queryResult.Name;
+
+        // Access cached category data
+        if (Context.Cache.TryGetValue("CategoryResult", out var cachedCategory))
+        {
+            var category = (CategoryResult)cachedCategory;
+            entity.CategoryName = category.Name;
+        }
+    }
+}</code></pre>
+
+        <h3>Selective Data Loading</h3>
+
+        <p>Control which parts of the object graph to load based on request parameters:</p>
+
+        <pre><code class="language-csharp">public class CustomerRequest : IEntityRequest
+{
+    public int CustomerId { get; set; }
+    public string[] SchemaPaths { get; set; }
+    public bool IncludeOrders { get; set; }
+    public bool IncludeOrderItems { get; set; }
+}
+
+// Usage
+var fullCustomer = dataProvider.GetData(new CustomerRequest
+{
+    CustomerId = 123,
+    SchemaPaths = new[] { "customer", "customer/orders", "customer/orders/order/items" }
+});
+
+var basicCustomer = dataProvider.GetData(new CustomerRequest
+{
+    CustomerId = 123,
+    SchemaPaths = new[] { "customer" }
+});</code></pre>
+
+        <h3>Error Handling and Resilience</h3>
+
+        <h4>Query-Level Error Handling</h4>
+        <pre><code class="language-csharp">public class ResilientApiQuery : WebQuery&lt;UserResult&gt;
+{
+    public ResilientApiQuery() : base("https://api.external.com/") { }
+
+    protected override Func&lt;Uri&gt; GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+        var request = (UserRequest)context.Request;
+        return () =&gt; new Uri($"users/{request.UserId}", UriKind.Relative);
+    }
+
+    // Override to handle HTTP errors
+    protected override async Task&lt;IQueryResult&gt; HandleError(Exception ex)
+    {
+        if (ex is HttpRequestException httpEx)
+        {
+            // Return default result or try alternative endpoint
+            return new UserResult { Id = -1, Name = "Unknown User" };
+        }
+        
+        throw ex; // Re-throw if not handled
+    }
+}</code></pre>
+
+        <h3>Parallel Query Execution</h3>
+
+        <p>Schemio automatically executes independent queries in parallel:</p>
+
+        <pre><code class="language-csharp">// These queries will execute in parallel since they're at the same level
+return CreateSchema.For&lt;Customer&gt;()
+    .Map&lt;CustomerQuery, CustomerTransformer&gt;(For.Paths("customer"),
+        customer =&gt; customer.Dependents
+            .Map&lt;ContactQuery, ContactTransformer&gt;(For.Paths("customer/contact"))        // Parallel
+            .Map&lt;PreferencesQuery, PreferencesTransformer&gt;(For.Paths("customer/preferences")) // Parallel
+            .Map&lt;AddressQuery, AddressTransformer&gt;(For.Paths("customer/address")))       // Parallel
+    .End();</code></pre>
+
+        <hr>
+
+        <h2 id="extension-points">Extension Points</h2>
+
+        <h3>Creating Custom Query Engines</h3>
+
+        <p>Implement <code>IQueryEngine</code> to support new data sources:</p>
+
+        <pre><code class="language-csharp">public class RedisQueryEngine : IQueryEngine
+{
+    private readonly IConnectionMultiplexer redis;
+
+    public RedisQueryEngine(IConnectionMultiplexer redis)
+    {
+        this.redis = redis;
+    }
+
+    public bool CanExecute(IQuery query) 
+        =&gt; query != null && query is IRedisQuery;
+
+    public async Task&lt;IQueryResult&gt; Execute(IQuery query)
+    {
+        var serviceBusQuery = (IServiceBusQuery)query;
+        var sender = serviceBusClient.CreateSender(serviceBusQuery.QueueName);
+        
+        var message = new ServiceBusMessage(serviceBusQuery.GetMessageBody());
+        await sender.SendMessageAsync(message);
+        
+        // Wait for response (implement request-response pattern)
+        var response = await WaitForResponse(serviceBusQuery.CorrelationId);
+        return serviceBusQuery.ProcessResponse(response);
+    }
+}</code></pre>
+
+        <h4>2. AWS Lambda Integration</h4>
+        <pre><code class="language-csharp">public class LambdaQueryEngine : IQueryEngine
+{
+    private readonly IAmazonLambda lambdaClient;
+
+    public LambdaQueryEngine(IAmazonLambda lambdaClient)
+    {
+        this.lambdaClient = lambdaClient;
+    }
+
+    public bool CanExecute(IQuery query) =&gt; query is ILambdaQuery;
+
+    public async Task&lt;IQueryResult&gt; Execute(IQuery query)
+    {
+        var lambdaQuery = (ILambdaQuery)query;
+        
+        var request = new InvokeRequest
+        {
+            FunctionName = lambdaQuery.FunctionName,
+            Payload = JsonSerializer.Serialize(lambdaQuery.GetPayload())
+        };
+
+        var response = await lambdaClient.InvokeAsync(request);
+        var responsePayload = Encoding.UTF8.GetString(response.Payload.ToArray());
+        
+        return lambdaQuery.ProcessLambdaResponse(responsePayload);
+    }
+}</code></pre>
+
+        <h3>Performance Monitoring Extensions</h3>
+
+        <h4>1. Application Insights Integration</h4>
+        <pre><code class="language-csharp">public class ApplicationInsightsDataProvider&lt;T&gt; : IDataProvider&lt;T&gt; where T : IEntity
+{
+    private readonly IDataProvider&lt;T&gt; innerProvider;
+    private readonly TelemetryClient telemetryClient;
+
+    public T GetData(IEntityRequest request)
+    {
+        using var operation = telemetryClient.StartOperation&lt;DependencyTelemetry&gt;("Schemio.GetData");
+        operation.Telemetry.Type = "Schemio";
+        operation.Telemetry.Target = typeof(T).Name;
+
+        try
+        {
+            var result = innerProvider.GetData(request);
+            operation.Telemetry.Success = true;
+            
+            telemetryClient.TrackMetric($"Schemio.{typeof(T).Name}.Success", 1);
+            
+            return result;
+        }
+        catch (Exception ex)
+        {
+            operation.Telemetry.Success = false;
+            telemetryClient.TrackException(ex);
+            telemetryClient.TrackMetric($"Schemio.{typeof(T).Name}.Error", 1);
+            throw;
+        }
+    }
+}</code></pre>
+
+        <h4>2. Prometheus Metrics</h4>
+        <pre><code class="language-csharp">public class PrometheusDataProvider&lt;T&gt; : IDataProvider&lt;T&gt; where T : IEntity
+{
+    private readonly IDataProvider&lt;T&gt; innerProvider;
+    private static readonly Counter RequestCounter = Metrics
+        .CreateCounter("schemio_requests_total", "Total requests", new[] { "entity_type", "status" });
+    private static readonly Histogram RequestDuration = Metrics
+        .CreateHistogram("schemio_request_duration_seconds", "Request duration", new[] { "entity_type" });
+
+    public T GetData(IEntityRequest request)
+    {
+        var entityType = typeof(T).Name;
+        
+        using (RequestDuration.WithLabels(entityType).NewTimer())
+        {
+            try
+            {
+                var result = innerProvider.GetData(request);
+                RequestCounter.WithLabels(entityType, "success").Inc();
+                return result;
+            }
+            catch
+            {
+                RequestCounter.WithLabels(entityType, "error").Inc();
+                throw;
+            }
+        }
+    }
+}</code></pre>
+
+        <h3>Testing Extensions</h3>
+
+        <h4>1. Test Data Providers</h4>
+        <pre><code class="language-csharp">public class TestDataProvider&lt;T&gt; : IDataProvider&lt;T&gt; where T : IEntity, new()
+{
+    private readonly Dictionary&lt;string, T&gt; testData;
+
+    public TestDataProvider(Dictionary&lt;string, T&gt; testData)
+    {
+        this.testData = testData;
+    }
+
+    public T GetData(IEntityRequest request)
+    {
+        var key = GenerateKey(request);
+        return testData.TryGetValue(key, out var data) ? data : new T();
+    }
+
+    private string GenerateKey(IEntityRequest request)
+    {
+        // Generate key based on request properties
+        return request.GetType().Name + "_" + GetRequestId(request);
+    }
+}</code></pre>
+
+        <h4>Usage in Tests</h4>
+        <pre><code class="language-csharp">[Test]
+public void Should_Return_Customer_Data()
+{
+    var testData = new Dictionary&lt;string, Customer&gt;
+    {
+        ["CustomerRequest_123"] = new Customer
+        {
+            CustomerId = 123,
+            Name = "Test Customer",
+            Email = "test@example.com"
+        }
+    };
+
+    var testProvider = new TestDataProvider&lt;Customer&gt;(testData);
+    var request = new CustomerRequest { CustomerId = 123 };
+    
+    var result = testProvider.GetData(request);
+    
+    Assert.AreEqual(123, result.CustomerId);
+    Assert.AreEqual("Test Customer", result.Name);
+}</code></pre>
+
+        <h4>2. Mock Query Engines</h4>
+        <pre><code class="language-csharp">public class MockQueryEngine : IQueryEngine
+{
+    private readonly Dictionary&lt;Type, Func&lt;IQuery, IQueryResult&gt;&gt; mockImplementations;
+
+    public MockQueryEngine()
+    {
+        mockImplementations = new Dictionary&lt;Type, Func&lt;IQuery, IQueryResult&gt;&gt;();
+    }
+
+    public MockQueryEngine Setup&lt;TQuery&gt;(Func&lt;TQuery, IQueryResult&gt; implementation) 
+        where TQuery : IQuery
+    {
+        mockImplementations[typeof(TQuery)] = query =&gt; implementation((TQuery)query);
+        return this;
+    }
+
+    public bool CanExecute(IQuery query) 
+        =&gt; mockImplementations.ContainsKey(query.GetType());
+
+    public Task&lt;IQueryResult&gt; Execute(IQuery query)
+    {
+        var implementation = mockImplementations[query.GetType()];
+        var result = implementation(query);
+        return Task.FromResult(result);
+    }
+}</code></pre>
+
+        <hr>
+
+        <h2>Conclusion</h2>
+
+        <p>Schemio provides a powerful, extensible framework for aggregating data from heterogeneous data sources. Its schema-driven approach, combined with flexible query and transformation capabilities, makes it an ideal choice for modern applications that need to combine data from multiple systems.</p>
+
+        <h3>Key Takeaways</h3>
+
+        <div class="benefits">
+            <ol>
+                <li><strong>Declarative Configuration</strong>: Define your data aggregation logic through configuration rather than imperative code</li>
+                <li><strong>Extensible Architecture</strong>: Easy to add support for new data sources and transformation logic</li>
+                <li><strong>Performance Optimized</strong>: Built-in support for parallel execution and selective loading</li>
+                <li><strong>Type Safe</strong>: Strong typing throughout the pipeline reduces runtime errors</li>
+                <li><strong>Testable</strong>: Clear separation of concerns makes unit testing straightforward</li>
+            </ol>
+        </div>
+
+        <h3>When to Use Schemio</h3>
+
+        <ul>
+            <li><strong>Microservices Architectures</strong>: When you need to aggregate data from multiple services</li>
+            <li><strong>Legacy System Integration</strong>: When modernizing applications that need to pull from various data sources</li>
+            <li><strong>API Gateway Patterns</strong>: When building composite APIs that combine multiple backend services</li>
+            <li><strong>Data Migration Projects</strong>: When moving from monolithic to distributed architectures</li>
+            <li><strong>Reporting Systems</strong>: When building reports that require data from multiple sources</li>
+        </ul>
+
+        <h3>Getting Support</h3>
+
+        <div class="info">
+            <ul>
+                <li><strong>Documentation</strong>: Visit the <a href="https://github.com/CodeShayk/Schemio/wiki" target="_blank">GitHub Wiki</a> for detailed documentation</li>
+                <li><strong>Issues</strong>: Report bugs and feature requests on <a href="https://github.com/CodeShayk/Schemio/issues" target="_blank">GitHub Issues</a></li>
+                <li><strong>Discussions</strong>: Join the community discussions for questions and best practices</li>
+                <li><strong>Samples</strong>: Check out the example projects in the repository for real-world usage patterns</li>
+            </ul>
+        </div>
+
+        <div class="highlight">
+            <p><strong>The Schemio framework continues to evolve with the community's needs. Its extensible design ensures that as new data sources and patterns emerge, the framework can adapt while maintaining backward compatibility and ease of use.</strong></p>
+        </div>
+
+        <hr>
+
+        <footer>
+            <p><strong>Schemio Framework</strong> - Complete Developer Guide</p>
+            <p>A powerful .NET library for schema-driven data aggregation</p>
+            <p>Generated on <span id="currentDate"></span></p>
+            <script>
+                document.getElementById('currentDate').textContent = new Date().toLocaleDateString();
+            </script>
+        </footer>
+
+        </div>
+    </div>
+</body>
+</html>IQueryResult&gt; Execute(IQuery query)
+    {
+        var redisQuery = (IRedisQuery)query;
+        var database = redis.GetDatabase();
+        return await redisQuery.Execute(database);
+    }
+}</code></pre>
+
+        <h4>Custom Query Interface</h4>
+        <pre><code class="language-csharp">public interface IRedisQuery : IQuery
+{
+    Task&lt;IQueryResult&gt; Execute(IDatabase database);
+}</code></pre>
+
+        <h4>Custom Query Implementation</h4>
+        <pre><code class="language-csharp">public abstract class RedisQuery&lt;TResult&gt; : BaseQuery&lt;TResult&gt;, IRedisQuery
+    where TResult : IQueryResult
+{
+    private Func&lt;IDatabase, Task&lt;TResult&gt;&gt; queryDelegate;
+
+    public override bool IsContextResolved() =&gt; queryDelegate != null;
+
+    public override void ResolveQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+        queryDelegate = GetQuery(context, parentQueryResult);
+    }
+
+    public async Task&lt;IQueryResult&gt; Execute(IDatabase database)
+    {
+        return await queryDelegate(database);
+    }
+
+    protected abstract Func&lt;IDatabase, Task&lt;TResult&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult);
+}</code></pre>
+
+        <hr>
+
+        <h2 id="best-practices">Best Practices</h2>
+
+        <h3>1. Entity Design</h3>
+
+        <h4>Keep Entities Simple</h4>
+        <pre><code class="language-csharp">// Good: Simple, focused entity
+public class Customer : IEntity
+{
+    public int CustomerId { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public Address Address { get; set; }
+    public Order[] Orders { get; set; }
+}</code></pre>
+
+        <div class="warning">
+            <strong>Avoid:</strong> Overly complex entities with too many responsibilities
+        </div>
+
+        <h4>Use Composition</h4>
+        <pre><code class="language-csharp">public class Customer : IEntity
+{
+    public int CustomerId { get; set; }
+    public string Name { get; set; }
+    public ContactInfo Contact { get; set; }
+    public ShippingInfo Shipping { get; set; }
+    public BillingInfo Billing { get; set; }
+}
+
+public class ContactInfo
+{
+    public string Email { get; set; }
+    public string Phone { get; set; }
+}</code></pre>
+
+        <h3>2. Query Design</h3>
+
+        <h4>Single Responsibility</h4>
+        <div class="benefits">
+            <strong>Good:</strong> Focused queries
+            <ul>
+                <li>CustomerBasicInfoQuery - Fetches only basic customer information</li>
+                <li>CustomerOrdersQuery - Fetches only customer orders</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>Avoid:</strong> Monolithic queries that try to fetch everything in one query
+        </div>
+
+        <h4>Parameterization</h4>
+        <pre><code class="language-csharp">public class ProductSearchQuery : SQLQuery&lt;CollectionResult&lt;ProductResult&gt;&gt;
+{
+    protected override Func&lt;IDbConnection, Task&lt;CollectionResult&lt;ProductResult&gt;&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult)
+    {
+        var request = (ProductSearchRequest)context.Request;
+        
+        return async connection =&gt;
+        {
+            // Good: Parameterized query
+            var sql = @"
+                SELECT * FROM Products 
+                WHERE (@CategoryId IS NULL OR CategoryId = @CategoryId)
+                  AND (@SearchTerm IS NULL OR Name LIKE @SearchPattern)";
+                  
+            var results = await connection.QueryAsync&lt;ProductResult&gt;(sql, new
+            {
+                CategoryId = request.CategoryId,
+                SearchTerm = request.SearchTerm,
+                SearchPattern = $"%{request.SearchTerm}%"
+            });
+            
+            return new CollectionResult&lt;ProductResult&gt;(results);
+        };
+    }
+}</code></pre>
+
+        <hr>
+
+        <h2 id="performance-considerations">Performance Considerations</h2>
+
+        <h3>Query Optimization</h3>
+
+        <h4>1. Selective Loading</h4>
+        <p>Only load what you need:</p>
+
+        <pre><code class="language-csharp">// Load only basic customer info
+var basicRequest = new CustomerRequest
+{
+    CustomerId = 123,
+    SchemaPaths = new[] { "customer" }
+};
+
+// Load customer with orders when needed
+var detailedRequest = new CustomerRequest
+{
+    CustomerId = 123,
+    SchemaPaths = new[] { "customer", "customer/orders" }
+};</code></pre>
+
+        <h4>2. Parallel Execution</h4>
+        <p>Structure your configuration to maximize parallelism:</p>
+
+        <pre><code class="language-csharp">// Good: Independent queries can run in parallel
+return CreateSchema.For&lt;Customer&gt;()
+    .Map&lt;CustomerQuery, CustomerTransformer&gt;(For.Paths("customer"),
+        customer =&gt; customer.Dependents
+            .Map&lt;AddressQuery, AddressTransformer&gt;(For.Paths("customer/address"))
+            .Map&lt;ContactQuery, ContactTransformer&gt;(For.Paths("customer/contact"))
+            .Map&lt;PreferencesQuery, PreferencesTransformer&gt;(For.Paths("customer/preferences")))
+    .End();</code></pre>
+
+        <h4>3. Caching Strategy</h4>
+        <p>Use caching for static or slow-changing data:</p>
+
+        <pre><code class="language-csharp">[CacheResult]
+public class CountryResult : IQueryResult
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Code { get; set; }
+}</code></pre>
+
+        <hr>
+
+        <h2 id="troubleshooting">Troubleshooting</h2>
+
+        <h3>Common Issues and Solutions</h3>
+
+        <h4>1. Query Not Executing</h4>
+        <div class="warning">
+            <strong>Problem:</strong> Query doesn't execute or returns null results.
+        </div>
+
+        <div class="info">
+            <strong>Causes & Solutions:</strong>
+            <ul>
+                <li><strong>Path mismatch:</strong> Ensure schema paths in configuration match request paths</li>
+                <li><strong>Query engine mismatch:</strong> Verify the correct query engine is registered</li>
+                <li><strong>Context resolution failure:</strong> Check <code>IsContextResolved()</code> returns true</li>
+            </ul>
+        </div>
+
+        <h4>2. Transformation Errors</h4>
+        <div class="warning">
+            <strong>Problem:</strong> Data not mapped correctly to entity.
+        </div>
+
+        <div class="info">
+            <strong>Solutions:</strong>
+            <ul>
+                <li><strong>Null checks:</strong> Always check for null query results</li>
+                <li><strong>Type compatibility:</strong> Ensure transformer types match query result types</li>
+                <li><strong>Property mapping:</strong> Verify property names and types align</li>
+            </ul>
+        </div>
+
+        <h4>3. Performance Problems</h4>
+        <div class="warning">
+            <strong>Problem:</strong> Slow query execution or high memory usage.
+        </div>
+
+        <div class="info">
+            <strong>Solutions:</strong>
+            <ul>
+                <li><strong>Enable parallel execution:</strong> Structure queries to run independently</li>
+                <li><strong>Use selective loading:</strong> Only load required data paths</li>
+                <li><strong>Implement caching:</strong> Cache expensive or static data</li>
+                <li><strong>Optimize SQL queries:</strong> Use proper indexing and query optimization</li>
+            </ul>
+        </div>
+
+        <h3>Debugging Tips</h3>
+
+        <h4>1. Enable Detailed Logging</h4>
+        <pre><code class="language-csharp">services.AddLogging(builder =&gt;
+{
+    builder.AddConsole();
+    builder.SetMinimumLevel(LogLevel.Debug);
+});</code></pre>
+
+        <h4>2. Validate Configuration</h4>
+        <pre><code class="language-csharp">public static class ConfigurationValidator
+{
+    public static void ValidateConfiguration&lt;T&gt;(IEntityConfiguration&lt;T&gt; configuration) 
+        where T : IEntity
+    {
+        var mappings = configuration.Mappings.ToList();
+        
+        // Check for duplicate paths
+        var duplicates = mappings
+            .SelectMany(m =&gt; m.SchemaPaths.Paths)
+            .GroupBy(p =&gt; p)
+            .Where(g =&gt; g.Count() &gt; 1)
+            .Select(g =&gt; g.Key);
+            
+        if (duplicates.Any())
+        {
+            throw new InvalidOperationException(
+                $"Duplicate schema paths found: {string.Join(", ", duplicates)}");
+        }
+    }
+}</code></pre>
+
+        <hr>
+
+        <h2 id="future-extensions">Future Extensions</h2>
+
+        <h3>Potential Framework Enhancements</h3>
+
+        <h4>1. GraphQL Integration</h4>
+        <pre><code class="language-csharp">public class GraphQLQueryEngine : IQueryEngine
+{
+    private readonly IGraphQLClient graphQLClient;
+
+    public GraphQLQueryEngine(IGraphQLClient graphQLClient)
+    {
+        this.graphQLClient = graphQLClient;
+    }
+
+    public bool CanExecute(IQuery query) =&gt; query is IGraphQLQuery;
+
+    public async Task&lt;IQueryResult&gt; Execute(IQuery query)
+    {
+        var graphQLQuery = (IGraphQLQuery)query;
+        var request = graphQLQuery.BuildRequest();
+        var response = await graphQLClient.SendQueryAsync&lt;dynamic&gt;(request);
+        return graphQLQuery.ProcessResponse(response);
+    }
+}</code></pre>
+
+        <h4>2. Message Queue Integration</h4>
+        <pre><code class="language-csharp">public class MessageQueueQueryEngine : IQueryEngine
+{
+    private readonly IMessageBus messageBus;
+    
+    public MessageQueueQueryEngine(IMessageBus messageBus)
+    {
+        this.messageBus = messageBus;
+    }
+
+    public bool CanExecute(IQuery query) =&gt; query is IMessageQuery;
+
+    public async Task&lt;IQueryResult&gt; Execute(IQuery query)
+    {
+        var messageQuery = (IMessageQuery)query;
+        var message = messageQuery.BuildMessage();
+        
+        // Send message and wait for response
+        var response = await messageBus.SendAsync&lt;MessageQueryResponse&gt;(message);
+        return messageQuery.ProcessResponse(response);
+    }
+}</code></pre>
+
+        <h4>3. NoSQL Database Support</h4>
+        <pre><code class="language-csharp">// MongoDB Integration
+public class MongoQueryEngine : IQueryEngine
+{
+    private readonly IMongoDatabase database;
+
+    public MongoQueryEngine(IMongoDatabase database)
+    {
+        this.database = database;
+    }
+
+    public bool CanExecute(IQuery query) =&gt; query is IMongoQuery;
+
+    public async Task&lt;IQueryResult&gt; Execute(IQuery query)
+    {
+        var mongoQuery = (IMongoQuery)query;
+        return await mongoQuery.Execute(database);
+    }
+}</code></pre>
+
+        <h3>Cloud-Native Extensions</h3>
+
+        <h4>1. Azure Service Bus Integration</h4>
+        <pre><code class="language-csharp">public class ServiceBusQueryEngine : IQueryEngine
+{
+    private readonly ServiceBusClient serviceBusClient;
+
+    public ServiceBusQueryEngine(ServiceBusClient serviceBusClient)
+    {
+        this.serviceBusClient = serviceBusClient;
+    }
+
+    public bool CanExecute(IQuery query) =&gt; query is IServiceBusQuery;
+
+    public async Task&lt;
