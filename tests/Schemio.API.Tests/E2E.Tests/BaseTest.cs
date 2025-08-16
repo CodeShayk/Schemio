@@ -62,10 +62,10 @@ namespace Schemio.API.Tests.E2E.Tests
             services.AddLogging(c => c.AddConsole());
             services.AddHttpClient();
 
-            services.UseSchemio()
+            services.UseSchemio(configuration => configuration
                .WithEngine<QueryEngine>()
                .WithPathMatcher(c => new JPathMatcher())
-                  .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
+                  .WithEntityConfiguration<Customer>(c => new CustomerConfiguration()));
 
             // 4. Build the service provider
             serviceProvider = services.BuildServiceProvider();

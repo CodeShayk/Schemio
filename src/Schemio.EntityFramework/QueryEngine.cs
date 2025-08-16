@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Schemio.Core;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Schemio.EntityFramework
 {

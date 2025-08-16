@@ -1,5 +1,5 @@
-using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Schemio.Core;
 using Schemio.Core.Helpers;
@@ -39,10 +39,10 @@ namespace Schemio.EntityFramework.Tests
 
             services.AddLogging();
 
-            services.UseSchemio()
+            services.UseSchemio(configuration => configuration
                 .WithEngine(c => new QueryEngine<CustomerDbContext>(c.GetService<IDbContextFactory<CustomerDbContext>>()))
                 .WithPathMatcher(c => new XPathMatcher())
-                .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
+                .WithEntityConfiguration<Customer>(c => new CustomerConfiguration()));
 
             // 4. Build the service provider
             _serviceProvider = services.BuildServiceProvider();

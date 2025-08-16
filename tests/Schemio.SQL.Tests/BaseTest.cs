@@ -1,4 +1,3 @@
-using System;
 using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,10 +42,10 @@ namespace Schemio.EntityFramework.Tests
 
             services.AddLogging();
 
-            services.UseSchemio()
+            services.UseSchemio(config => config
                 .WithEngine(c => new QueryEngine(configuration))
                 .WithPathMatcher(c => new XPathMatcher())
-                   .WithEntityConfiguration<Customer>(c => new CustomerConfiguration());
+                   .WithEntityConfiguration<Customer>(c => new CustomerConfiguration()));
 
             // 4. Build the service provider
             _serviceProvider = services.BuildServiceProvider();

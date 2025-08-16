@@ -44,15 +44,50 @@ namespace Schemio.Core.Impl
 
                 foreach (var queryResult in queryResults)
                     transformers.Where(transformer => IsMatch(((ITransformerQueryResult)transformer).SupportedQueryResult, queryResult.GetType())).ToList()
-                        .ForEach(supportedtransformer => supportedtransformer?.Transform(queryResult, entity));
+                        .ForEach(transformer => TransformWithHooks(new TransformContext(context, queryResult, transformer, entity)));
             }
 
             return entity;
         }
 
-        private bool IsMatch(Type transformer, Type queryResult)
+        /// <summary>
+        /// Checks if the transformer query result type matches the query result type.
+        /// </summary>
+        /// <param name="transformerQueryResult"></param>
+        /// <param name="queryResult"></param>
+        /// <returns></returns>
+        private bool IsMatch(Type transformerQueryResult, Type queryResult)
         {
-            return transformer == queryResult;
+            return transformerQueryResult == queryResult;
+        }
+
+        /// <summary>
+        /// Transform method that includes hooks for pre and post transformation.
+        /// </summary>
+        /// <param name="context"></param>
+        private void TransformWithHooks(TransformContext context)
+        {
+            // Create a pre-transform context to pass the data before transformation.
+            var preTransformContext = new PreTransformContext(context);
+            // Call the pre-transform method with the context.
+            if (context.Transformer is ITransformerHooks transformerPreHook)
+                transformerPreHook.PreTransform(preTransformContext);
+
+            // If the pre-transform context is cancelled, skip the transformation.
+            if (!preTransformContext.IsCancelled)
+                context.Transformer.Transform(context.QueryResult, context.Entity);
+
+            // Post-transform hook can be used to perform any post-transformation logic if needed.
+            if (context.Transformer is ITransformerHooks transformerPostHook)
+            {
+                // Create a post-transform context to pass the data after transformation.
+                var postTransformContext = new PostTransformContext(context);
+                // Call the post-transform method with the context.
+                transformerPostHook.PostTransform(postTransformContext);
+                // If the post-transform context is repeat, transform again.
+                if (postTransformContext.IsRepeat)
+                    context.Transformer.Transform(context.QueryResult, context.Entity);
+            }
         }
     }
 }
