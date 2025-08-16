@@ -6,23 +6,29 @@
     <title>Schemio Framework - Complete Developer Guide</title>
     <style>
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --accent-color: #3b82f6;
-            --success-color: #059669;
-            --warning-color: #d97706;
-            --danger-color: #dc2626;
-            --info-color: #0284c7;
-            --dark-color: #1f2937;
-            --light-color: #f8fafc;
-            --border-color: #e2e8f0;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
+            --primary-color: #0969da;
+            --primary-dark: #0550ae;
+            --secondary-color: #656d76;
+            --accent-color: #7c3aed;
+            --success-color: #1a7f37;
+            --warning-color: #bf8700;
+            --danger-color: #cf222e;
+            --info-color: #0969da;
+            --dark-color: #24292f;
+            --light-color: #f6f8fa;
+            --border-color: #d0d7de;
+            --border-muted: #21262d;
+            --text-primary: #24292f;
+            --text-secondary: #656d76;
+            --text-muted: #8b949e;
             --bg-primary: #ffffff;
-            --bg-secondary: #f1f5f9;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --bg-secondary: #f6f8fa;
+            --bg-tertiary: #f0f0f0;
+            --code-bg: #f6f8fa;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-lg: 0 8px 24px rgba(140, 149, 159, 0.2);
+            --border-radius: 6px;
+            --font-mono: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
         }
 
         * {
@@ -30,13 +36,13 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'Helvetica', 'Arial', sans-serif;
+            line-height: 1.6;
             color: var(--text-primary);
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: var(--bg-secondary);
+            font-size: 16px;
         }
 
         .container {
@@ -44,68 +50,144 @@
             margin: 0 auto;
             background: var(--bg-primary);
             box-shadow: var(--shadow-lg);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--dark-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-muted);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo::before {
+            content: '⚡';
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #f0f6fc;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: rgba(240, 246, 252, 0.1);
+            color: #fff;
         }
 
         .header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(135deg, #0969da 0%, #7c3aed 100%);
             color: white;
-            padding: 3rem 2rem;
+            padding: 4rem 2rem;
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
 
-        .header::before {
+        .header::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a" cx="50%" cy="40%"><stop offset="0%" stop-opacity=".05"/><stop offset="100%" stop-opacity="0"/></radialGradient></defs><rect width="100" height="20" fill="url(%23a)"/></svg>');
-            opacity: 0.3;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
         }
 
         .header h1 {
             margin: 0;
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            letter-spacing: -0.025em;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
         }
 
         .header .subtitle {
-            font-size: 1.25rem;
-            margin-top: 1rem;
+            font-size: 1.125rem;
             opacity: 0.9;
             font-weight: 400;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 2rem;
+        }
+
+        .header .badges {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .content {
-            padding: 2rem;
+            padding: 3rem 2rem;
         }
 
         .toc {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: var(--border-radius);
             padding: 2rem;
             margin-bottom: 3rem;
-            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .toc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .toc h2 {
             margin-top: 0;
             color: var(--text-primary);
-            font-size: 1.5rem;
+            font-size: 1.375rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             display: flex;
@@ -114,245 +196,296 @@
 
         .toc h2::before {
             content: '📋';
-            margin-right: 0.5rem;
+            margin-right: 0.75rem;
             font-size: 1.25rem;
         }
 
         .toc ol {
             margin: 0;
             padding-left: 1.5rem;
-            counter-reset: toc-counter;
+            columns: 2;
+            column-gap: 2rem;
         }
 
         .toc li {
-            margin-bottom: 0.75rem;
-            counter-increment: toc-counter;
-            position: relative;
-        }
-
-        .toc li::marker {
-            content: counter(toc-counter, decimal) '. ';
-            font-weight: 600;
-            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            break-inside: avoid;
+            padding: 0.25rem 0;
         }
 
         .toc a {
-            color: var(--text-primary);
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.2s ease;
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            display: inline-block;
+            transition: color 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .toc a:hover {
-            background: var(--primary-color);
-            color: white;
-            transform: translateX(4px);
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        h1 {
+            color: var(--text-primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
         }
 
         h2 {
             color: var(--text-primary);
-            font-size: 2.25rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-top: 4rem;
             margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 3px solid var(--primary-color);
-            position: relative;
-        }
-
-        h2::before {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: var(--accent-color);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            scroll-margin-top: 5rem;
         }
 
         h3 {
             color: var(--text-primary);
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: 600;
             margin-top: 2.5rem;
             margin-bottom: 1rem;
+            scroll-margin-top: 5rem;
         }
 
         h4 {
             color: var(--text-secondary);
-            font-size: 1.375rem;
+            font-size: 1.25rem;
             font-weight: 600;
             margin-top: 2rem;
             margin-bottom: 0.75rem;
+            scroll-margin-top: 5rem;
         }
 
         p {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
             color: var(--text-secondary);
             font-size: 1rem;
+            line-height: 1.75;
         }
 
         code {
-            background: #f1f5f9;
-            color: #e11d48;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
-            font-size: 0.875rem;
-            font-weight: 500;
+            background: var(--code-bg);
+            color: #d73a49;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: var(--font-mono);
+            font-size: 0.85em;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
         }
 
         pre {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 1.5rem;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: var(--border-radius);
+            padding: 1rem;
             overflow-x: auto;
             margin: 1.5rem 0;
-            box-shadow: var(--shadow);
+            position: relative;
+            font-size: 0.875rem;
+            line-height: 1.45;
+        }
+
+        pre::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 0;
+            right: 1rem;
+            background: #21262d;
+            color: #7d8590;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0 0 3px 3px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
         pre code {
             background: none;
-            color: #e2e8f0;
+            color: #e6edf3;
             padding: 0;
-            border-radius: 0;
+            border: none;
             font-size: 0.875rem;
-            line-height: 1.6;
+            font-weight: 400;
         }
 
-        .highlight {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 1px solid #f59e0b;
-            border-left: 4px solid #f59e0b;
-            padding: 1.5rem;
-            border-radius: 8px;
+        .alert {
+            padding: 1rem 1rem 1rem 3rem;
             margin: 1.5rem 0;
-            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            border-left: 4px solid;
+            position: relative;
+            font-size: 0.9rem;
         }
 
-        .highlight strong {
+        .alert::before {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            font-size: 1rem;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: var(--info-color);
+            color: #1e40af;
+        }
+
+        .alert-info::before {
+            content: 'ℹ️';
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            border-color: var(--success-color);
+            color: #166534;
+        }
+
+        .alert-success::before {
+            content: '✅';
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: var(--warning-color);
             color: #92400e;
         }
 
-        .benefits {
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-            border: 1px solid var(--success-color);
-            border-left: 4px solid var(--success-color);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            box-shadow: var(--shadow);
+        .alert-warning::before {
+            content: '⚠️';
         }
 
-        .benefits strong {
-            color: #065f46;
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
+        .alert-danger {
+            background: #fee2e2;
+            border-color: var(--danger-color);
+            color: #991b1b;
         }
 
-        .benefits strong::before {
-            content: '🎯';
-            margin-right: 0.5rem;
+        .alert-danger::before {
+            content: '🚨';
         }
 
         .installation {
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            border: 1px solid #64748b;
-            border-left: 4px solid #64748b;
-            padding: 1.5rem;
-            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: var(--border-radius);
             margin: 1.5rem 0;
-            box-shadow: var(--shadow);
+            position: relative;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
         }
 
-        .installation strong {
-            color: #334155;
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .installation strong::before {
+        .installation::before {
             content: '📦';
-            margin-right: 0.5rem;
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+        }
+
+        .benefits {
+            background: #f0fdf4;
+            border: 1px solid #22c55e;
+            border-left: 4px solid #22c55e;
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .benefits::before {
+            content: '🎯';
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+        }
+
+        .highlight {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .highlight::before {
+            content: '💡';
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
         }
 
         .warning {
-            background: linear-gradient(135deg, #fef2f2, #fecaca);
-            border: 1px solid var(--danger-color);
-            border-left: 4px solid var(--danger-color);
-            padding: 1.5rem;
-            border-radius: 8px;
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            border-left: 4px solid #ef4444;
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: var(--border-radius);
             margin: 1.5rem 0;
-            color: #7f1d1d;
-            box-shadow: var(--shadow);
+            color: #b91c1c;
+            position: relative;
         }
 
-        .warning strong {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .warning strong::before {
+        .warning::before {
             content: '⚠️';
-            margin-right: 0.5rem;
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
         }
 
         .info {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            border: 1px solid var(--info-color);
-            border-left: 4px solid var(--info-color);
-            padding: 1.5rem;
-            border-radius: 8px;
+            background: #eff6ff;
+            border: 1px solid #3b82f6;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: var(--border-radius);
             margin: 1.5rem 0;
-            color: #1e3a8a;
-            box-shadow: var(--shadow);
+            color: #1e40af;
+            position: relative;
         }
 
-        .info strong {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .info strong::before {
-            content: '💡';
-            margin-right: 0.5rem;
+        .info::before {
+            content: 'ℹ️';
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 2rem 0;
-            box-shadow: var(--shadow);
-            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             overflow: hidden;
-            background: white;
+            font-size: 0.875rem;
         }
 
         th, td {
-            padding: 1rem;
+            padding: 0.75rem 1rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
 
         th {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
+            background: var(--bg-secondary);
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.875rem;
+            color: var(--text-primary);
+            position: sticky;
+            top: 0;
         }
 
-        tr:hover {
-            background: var(--bg-secondary);
+        tbody tr:hover {
+            background: #f8fafc;
         }
 
         .checklist {
@@ -361,7 +494,154 @@
         }
 
         .checklist li {
-            padding: 0.5rem 0;
+            padding: 0.5rem 0 0.5rem 2rem;
+            position: relative;
+            border-left: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .checklist li::before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+        }
+
+        .checklist li:hover {
+            border-left-color: var(--success-color);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .flow-diagram {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .flow-diagram pre {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: var(--border-color);
+            margin: 3rem 0;
+        }
+
+        footer {
+            background: var(--dark-color);
+            color: #f0f6fc;
+            text-align: center;
+            padding: 3rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: #8b949e;
+            margin: 0.5rem 0;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        footer .footer-links a {
+            color: #7d8590;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        footer .footer-links a:hover {
+            color: #f0f6fc;
+        }
+
+        .github-corner {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .github-corner svg {
+            fill: var(--dark-color);
+            color: #fff;
+            width: 80px;
+            height: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 2rem 1rem;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .toc ol {
+                columns: 1;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .alert, .benefits, .highlight, .warning, .info, .installation {
+                padding: 1rem;
+                padding-left: 3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .header .badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>5rem 0;
             position: relative;
             padding-left: 2rem;
         }
@@ -459,9 +739,35 @@
 </head>
 <body>
     <div class="container">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="#" class="logo">Schemio</a>
+                <ul class="nav-links">
+                    <li><a href="#introduction">Docs</a></li>
+                    <li><a href="#getting-started">Getting Started</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                    <li><a href="https://github.com/CodeShayk/Schemio" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </nav>
+
         <div class="header">
             <h1>Schemio Framework</h1>
-            <div class="subtitle">Complete Developer Guide</div>
+            <div class="subtitle">A powerful .NET library for schema-driven data aggregation</div>
+            <div class="badges">
+                <span class="badge">.NET 9.0</span>
+                <span class="badge">Schema-Driven</span>
+                <span class="badge">Multi-Source</span>
+                <span class="badge">Type-Safe</span>
+            </div>
+        </div>
+
+        <div class="github-corner">
+            <svg viewBox="0 0 250 250" style="position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+                <path d="m0,0 0,250 250,250 0,-250 z"></path>
+                <path d="m128.3,109.3 c15.3,-8.5 23.8,-26.5 23.8,-46.4 0,-50.6 -41.2,-91.8 -91.8,-91.8 -50.6,0 -91.8,41.2 -91.8,91.8 0,19.9 8.5,37.9 23.8,46.4 l-6.9,6.9 c0,12.2 9.9,22.1 22.1,22.1 l105.7,0 c12.2,0 22.1,-9.9 22.1,-22.1 z" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+                <path d="m115,115 c-1.1,0 -1.9,0.9 -1.9,1.9 l0,6.2 c0,1.1 0.9,1.9 1.9,1.9 l17,0 c1.1,0 1.9,-0.9 1.9,-1.9 l0,-6.2 c0,-1.1 -0.9,-1.9 -1.9,-1.9 z m-93.8,-4.2 c1.2,0 2.2,-1 2.2,-2.2 l0,-6.2 c0,-1.2 -1,-2.2 -2.2,-2.2 l-17,0 c-1.2,0 -2.2,1 -2.2,2.2 l0,6.2 c0,1.2 1,2.2 2.2,2.2 z" fill="currentColor" class="octo-body"></path>
+            </svg>
         </div>
         
         <div class="content">
@@ -492,7 +798,7 @@
 
         <h3>Key Benefits</h3>
         
-        <div class="benefits">
+        <div class="benefits alert-success">
             <ul class="checklist">
                 <li><strong>Unified Data Access</strong>: Aggregate data from SQL databases, REST APIs, and custom data sources</li>
                 <li><strong>Schema-Driven</strong>: Use XPath or JSONPath to define object graph mappings</li>
@@ -547,7 +853,7 @@ var communication = GetCommunicationFromService(customerId);
 customer.Orders = orders;
 customer.Communication = communication;</code></pre>
 
-        <div class="warning">
+        <div class="warning alert-danger">
             <strong>Problems:</strong>
             <ul>
                 <li>Tight coupling between data sources</li>
@@ -576,7 +882,7 @@ public class CustomerConfiguration : EntityConfiguration&lt;Customer&gt;
     }
 }</code></pre>
 
-        <div class="benefits">
+        <div class="benefits alert-success">
             <strong>Benefits:</strong>
             <ul class="checklist">
                 <li>Declarative configuration</li>
@@ -1761,7 +2067,7 @@ public void Should_Return_Customer_Data()
 
         <h3>Getting Support</h3>
 
-        <div class="info">
+        <div class="info alert-info">
             <ul>
                 <li><strong>Documentation</strong>: Visit the <a href="https://github.com/CodeShayk/Schemio/wiki" target="_blank">GitHub Wiki</a> for detailed documentation</li>
                 <li><strong>Issues</strong>: Report bugs and feature requests on <a href="https://github.com/CodeShayk/Schemio/issues" target="_blank">GitHub Issues</a></li>
@@ -1777,9 +2083,20 @@ public void Should_Return_Customer_Data()
         <hr>
 
         <footer>
-            <p><strong>Schemio Framework</strong> - Complete Developer Guide</p>
-            <p>A powerful .NET library for schema-driven data aggregation</p>
-            <p>Generated on <span id="currentDate"></span></p>
+            <div>
+                <p><strong>Schemio Framework</strong></p>
+                <p>A powerful .NET library for schema-driven data aggregation</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/CodeShayk/Schemio">GitHub</a>
+                <a href="https://github.com/CodeShayk/Schemio/wiki">Documentation</a>
+                <a href="https://github.com/CodeShayk/Schemio/issues">Issues</a>
+                <a href="https://github.com/CodeShayk/Schemio/releases">Releases</a>
+            </div>
+            <p style="margin-top: 2rem; font-size: 0.875rem;">
+                Generated on <span id="currentDate"></span> | 
+                <a href="https://github.com/CodeShayk" style="color: #7d8590;">© CodeShayk</a>
+            </p>
             <script>
                 document.getElementById('currentDate').textContent = new Date().toLocaleDateString();
             </script>
@@ -1841,7 +2158,7 @@ public class Customer : IEntity
     public Order[] Orders { get; set; }
 }</code></pre>
 
-        <div class="warning">
+        <div class="warning alert-danger">
             <strong>Avoid:</strong> Overly complex entities with too many responsibilities
         </div>
 
@@ -1864,7 +2181,7 @@ public class ContactInfo
         <h3>2. Query Design</h3>
 
         <h4>Single Responsibility</h4>
-        <div class="benefits">
+        <div class="benefits alert-success">
             <strong>Good:</strong> Focused queries
             <ul>
                 <li>CustomerBasicInfoQuery - Fetches only basic customer information</li>
@@ -1872,7 +2189,7 @@ public class ContactInfo
             </ul>
         </div>
 
-        <div class="warning">
+        <div class="warning alert-danger">
             <strong>Avoid:</strong> Monolithic queries that try to fetch everything in one query
         </div>
 
@@ -1957,11 +2274,11 @@ public class CountryResult : IQueryResult
         <h3>Common Issues and Solutions</h3>
 
         <h4>1. Query Not Executing</h4>
-        <div class="warning">
+        <div class="warning alert-danger">
             <strong>Problem:</strong> Query doesn't execute or returns null results.
         </div>
 
-        <div class="info">
+        <div class="info alert-info">
             <strong>Causes & Solutions:</strong>
             <ul>
                 <li><strong>Path mismatch:</strong> Ensure schema paths in configuration match request paths</li>
@@ -1971,11 +2288,11 @@ public class CountryResult : IQueryResult
         </div>
 
         <h4>2. Transformation Errors</h4>
-        <div class="warning">
+        <div class="warning alert-danger">
             <strong>Problem:</strong> Data not mapped correctly to entity.
         </div>
 
-        <div class="info">
+        <div class="info alert-info">
             <strong>Solutions:</strong>
             <ul>
                 <li><strong>Null checks:</strong> Always check for null query results</li>
@@ -1985,11 +2302,11 @@ public class CountryResult : IQueryResult
         </div>
 
         <h4>3. Performance Problems</h4>
-        <div class="warning">
+        <div class="warning alert-danger">
             <strong>Problem:</strong> Slow query execution or high memory usage.
         </div>
 
-        <div class="info">
+        <div class="info alert-info">
             <strong>Solutions:</strong>
             <ul>
                 <li><strong>Enable parallel execution:</strong> Structure queries to run independently</li>
