@@ -1,1 +1,829 @@
-Hi
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schemio Framework - Complete Developer Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        h4 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #495057;
+            font-size: 1.4em;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+            color: #d73a49;
+        }
+        
+        pre {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: #24292e;
+            font-size: 0.85em;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .highlight strong {
+            color: #856404;
+        }
+        
+        blockquote {
+            border-left: 4px solid #dfe2e5;
+            padding: 0 16px;
+            margin: 16px 0;
+            color: #6a737d;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #dfe2e5;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f6f8fa;
+            font-weight: 600;
+        }
+        
+        .benefits {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .benefits ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .benefits li {
+            margin-bottom: 5px;
+        }
+        
+        .installation {
+            background: #e2e3e5;
+            border: 1px solid #d6d8db;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: #721c24;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: #0c5460;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .checklist li:before {
+            content: "✅ ";
+            margin-right: 8px;
+        }
+        
+        .flow-diagram {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Schemio Framework - Complete Developer Guide</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#the-need-for-data-aggregation">The Need for Data Aggregation</a></li>
+                <li><a href="#core-concepts">Core Concepts</a></li>
+                <li><a href="#package-overview">Package Overview</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#architecture-deep-dive">Architecture Deep Dive</a></li>
+                <li><a href="#configuration-guide">Configuration Guide</a></li>
+                <li><a href="#query-implementation-guide">Query Implementation Guide</a></li>
+                <li><a href="#transformer-implementation-guide">Transformer Implementation Guide</a></li>
+                <li><a href="#advanced-features">Advanced Features</a></li>
+                <li><a href="#extension-points">Extension Points</a></li>
+                <li><a href="#best-practices">Best Practices</a></li>
+                <li><a href="#performance-considerations">Performance Considerations</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#future-extensions">Future Extensions</a></li>
+            </ol>
+        </div>
+
+        <h2 id="introduction">Introduction</h2>
+        
+        <p><strong>Schemio</strong> is a powerful .NET library designed to aggregate data from heterogeneous data stores using a schema-driven approach. It enables developers to hydrate complex object graphs by fetching data from multiple sources (SQL databases, Web APIs, NoSQL stores) using XPath and JSONPath schema mappings.</p>
+
+        <h3>Key Benefits</h3>
+        
+        <div class="benefits">
+            <ul class="checklist">
+                <li><strong>Unified Data Access</strong>: Aggregate data from SQL databases, REST APIs, and custom data sources</li>
+                <li><strong>Schema-Driven</strong>: Use XPath or JSONPath to define object graph mappings</li>
+                <li><strong>Performance Optimized</strong>: Execute queries in parallel with dependency management</li>
+                <li><strong>Extensible</strong>: Easily add support for new data sources</li>
+                <li><strong>Type-Safe</strong>: Strongly-typed entities and query results</li>
+                <li><strong>Flexible</strong>: Support for nested queries up to 5 levels deep</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2 id="the-need-for-data-aggregation">The Need for Data Aggregation</h2>
+
+        <h3>Modern Application Challenges</h3>
+
+        <p>In today's microservices and distributed system architectures, applications often need to:</p>
+
+        <h4>1. Combine Data from Multiple Sources</h4>
+        <ul>
+            <li>User profiles from identity services</li>
+            <li>Order history from e-commerce APIs</li>
+            <li>Product catalogs from different databases</li>
+            <li>Analytics data from various platforms</li>
+        </ul>
+
+        <h4>2. Handle Different Data Formats</h4>
+        <ul>
+            <li>SQL database records</li>
+            <li>JSON responses from REST APIs</li>
+            <li>XML from legacy systems</li>
+            <li>NoSQL document stores</li>
+        </ul>
+
+        <h4>3. Manage Complex Dependencies</h4>
+        <ul>
+            <li>Parent-child relationships across systems</li>
+            <li>Conditional data loading based on context</li>
+            <li>Performance optimization through selective loading</li>
+        </ul>
+
+        <h3>Traditional Approaches and Their Limitations</h3>
+
+        <p><strong>Manual Data Assembly</strong></p>
+        
+        <pre><code class="language-csharp">// Traditional approach - brittle and hard to maintain
+var customer = GetCustomerFromDatabase(customerId);
+var orders = GetOrdersFromAPI(customerId);
+var communication = GetCommunicationFromService(customerId);
+
+// Manual assembly - error-prone
+customer.Orders = orders;
+customer.Communication = communication;</code></pre>
+
+        <div class="warning">
+            <strong>Problems:</strong>
+            <ul>
+                <li>Tight coupling between data sources</li>
+                <li>Difficult to maintain and extend</li>
+                <li>No standard approach for error handling</li>
+                <li>Limited reusability</li>
+                <li>Performance issues with sequential calls</li>
+            </ul>
+        </div>
+
+        <h3>Schemio's Solution</h3>
+
+        <p>Schemio provides a declarative, schema-driven approach:</p>
+
+        <pre><code class="language-csharp">// Schemio approach - declarative and maintainable
+public class CustomerConfiguration : EntityConfiguration&lt;Customer&gt;
+{
+    public override IEnumerable&lt;Mapping&lt;Customer, IQueryResult&gt;&gt; GetSchema()
+    {
+        return CreateSchema.For&lt;Customer&gt;()
+            .Map&lt;CustomerQuery, CustomerTransform&gt;(For.Paths("customer"),
+                customer =&gt; customer.Dependents
+                    .Map&lt;CommunicationQuery, CommunicationTransform&gt;(For.Paths("customer/communication"))
+                    .Map&lt;OrdersQuery, OrdersTransform&gt;(For.Paths("customer/orders")))
+            .End();
+    }
+}</code></pre>
+
+        <div class="benefits">
+            <strong>Benefits:</strong>
+            <ul class="checklist">
+                <li>Declarative configuration</li>
+                <li>Automatic dependency management</li>
+                <li>Parallel query execution</li>
+                <li>Type-safe transformations</li>
+                <li>Extensible to new data sources</li>
+                <li>Built-in caching support</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2 id="core-concepts">Core Concepts</h2>
+
+        <h3>Entities</h3>
+        
+        <p>Entities represent the final aggregated data structure implementing <code>IEntity</code>. They define the complete object graph that will be hydrated with data from multiple sources:</p>
+
+        <pre><code class="language-csharp">public class Customer : IEntity
+{
+    // Level 1: Root properties
+    public int CustomerId { get; set; }
+    public string CustomerCode { get; set; }
+    public string CustomerName { get; set; }
+    
+    // Level 2: Nested objects
+    public Communication Communication { get; set; }
+    public Address Address { get; set; }
+    public Order[] Orders { get; set; }
+}
+
+public class Order
+{
+    public int OrderId { get; set; }
+    public string OrderNumber { get; set; }
+    public DateTime OrderDate { get; set; }
+    
+    // Level 3: Deep nesting
+    public OrderItem[] Items { get; set; }
+    public Payment Payment { get; set; }
+}
+
+public class OrderItem
+{
+    public int ItemId { get; set; }
+    public string ProductName { get; set; }
+    public int Quantity { get; set; }
+    public decimal Price { get; set; }
+}</code></pre>
+
+        <h3>Queries and Parent-Child Relationships</h3>
+
+        <p>Queries form a hierarchical structure where child queries depend on data from their parent queries. This creates a powerful data flow where each query can use the results of its parent to customize its own execution.</p>
+
+        <h4>Parent Query (Root Level)</h4>
+        <p>Parent queries execute first and don't depend on other query results:</p>
+
+        <pre><code class="language-csharp">public class CustomerQuery : SQLQuery&lt;CustomerResult&gt;
+{
+    protected override Func&lt;IDbConnection, Task&lt;CustomerResult&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult)
+    {
+        // parentQueryResult is null for root queries
+        var request = (CustomerRequest)context.Request;
+        
+        return connection =&gt; connection.QueryFirstOrDefaultAsync&lt;CustomerResult&gt;(
+            "SELECT CustomerId as Id, CustomerName as Name, CustomerCode as Code FROM Customers WHERE CustomerId = @Id",
+            new { Id = request.CustomerId });
+    }
+}</code></pre>
+
+        <h4>Child Query (Dependent Level)</h4>
+        <p>Child queries receive their parent's result and use it to determine what data to fetch:</p>
+
+        <pre><code class="language-csharp">public class OrdersQuery : SQLQuery&lt;CollectionResult&lt;OrderResult&gt;&gt;
+{
+    protected override Func&lt;IDbConnection, Task&lt;CollectionResult&lt;OrderResult&gt;&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult)
+    {
+        // parentQueryResult contains the CustomerResult from the parent query
+        var customer = (CustomerResult)parentQueryResult;
+        
+        return async connection =&gt;
+        {
+            var orders = await connection.QueryAsync&lt;OrderResult&gt;(
+                "SELECT OrderId, OrderNumber, OrderDate FROM Orders WHERE CustomerId = @CustomerId",
+                new { CustomerId = customer.Id });
+                
+            return new CollectionResult&lt;OrderResult&gt;(orders);
+        };
+    }
+}</code></pre>
+
+        <h4>Query Execution Flow</h4>
+        
+        <div class="flow-diagram">
+            <p>The parent-child relationship creates a specific execution order:</p>
+            <pre>1. Parent Query (CustomerQuery) executes first
+   ↓ (CustomerResult passed to children)
+   
+2. Child Queries execute in parallel:
+   - OrdersQuery (uses CustomerId from CustomerResult)
+   - CommunicationQuery (uses CustomerId from CustomerResult)
+   - AddressQuery (uses CustomerId from CustomerResult)
+   ↓ (OrderResult passed to grandchildren)
+   
+3. Grandchild Queries execute:
+   - OrderItemsQuery (uses OrderId from OrderResult)
+   - PaymentQuery (uses OrderId from OrderResult)</pre>
+        </div>
+
+        <hr>
+
+        <h2 id="package-overview">Package Overview</h2>
+
+        <h3>Core Packages</h3>
+
+        <h4>1. Schemio.Core</h4>
+        <p><strong>Purpose</strong>: Foundation package providing core interfaces and implementations.</p>
+
+        <p><strong>Key Components:</strong></p>
+        <ul>
+            <li><code>IEntity</code>, <code>IQuery</code>, <code>ITransformer</code> interfaces</li>
+            <li><code>DataProvider&lt;T&gt;</code> - Main orchestration class</li>
+            <li><code>QueryBuilder&lt;T&gt;</code> - Builds query execution plan</li>
+            <li><code>EntityBuilder&lt;T&gt;</code> - Assembles final entity</li>
+            <li>Path matchers for XPath and JSONPath</li>
+        </ul>
+
+        <div class="installation">
+            <strong>Installation:</strong><br>
+            <code>Install-Package Schemio.Core</code>
+        </div>
+
+        <h4>2. Schemio.SQL</h4>
+        <p><strong>Purpose</strong>: SQL database support using Dapper for query execution.</p>
+
+        <p><strong>Key Components:</strong></p>
+        <ul>
+            <li><code>SQLQuery&lt;TResult&gt;</code> - Base class for SQL queries</li>
+            <li><code>QueryEngine</code> - Dapper-based query execution</li>
+            <li><code>SQLConfiguration</code> - Connection and query settings</li>
+        </ul>
+
+        <div class="installation">
+            <strong>Installation:</strong><br>
+            <code>Install-Package Schemio.SQL</code>
+        </div>
+
+        <p><strong>Supported Databases:</strong></p>
+        <ul>
+            <li>SQL Server</li>
+            <li>SQLite</li>
+            <li>MySQL</li>
+            <li>PostgreSQL</li>
+            <li>Oracle (with appropriate providers)</li>
+        </ul>
+
+        <h4>3. Schemio.EntityFramework</h4>
+        <p><strong>Purpose</strong>: Entity Framework Core integration for advanced ORM scenarios.</p>
+
+        <p><strong>Key Components:</strong></p>
+        <ul>
+            <li><code>SQLQuery&lt;TResult&gt;</code> - EF Core query implementation</li>
+            <li><code>QueryEngine&lt;T&gt;</code> - DbContext factory integration</li>
+            <li>Full LINQ query support</li>
+        </ul>
+
+        <div class="installation">
+            <strong>Installation:</strong><br>
+            <code>Install-Package Schemio.EntityFramework</code>
+        </div>
+
+        <h4>4. Schemio.API</h4>
+        <p><strong>Purpose</strong>: HTTP/REST API data source support using HttpClient.</p>
+
+        <p><strong>Key Components:</strong></p>
+        <ul>
+            <li><code>WebQuery&lt;TResult&gt;</code> - Base class for API queries</li>
+            <li><code>QueryEngine</code> - HttpClient-based execution</li>
+            <li><code>WebHeaderResult</code> - Support for response headers</li>
+            <li>Request/response header management</li>
+        </ul>
+
+        <div class="installation">
+            <strong>Installation:</strong><br>
+            <code>Install-Package Schemio.API</code>
+        </div>
+
+        <h3>Package Compatibility Matrix</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Package</th>
+                    <th>.NET Framework</th>
+                    <th>.NET Standard</th>
+                    <th>.NET Core/.NET</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Schemio.Core</td>
+                    <td>4.6.2+</td>
+                    <td>2.0, 2.1</td>
+                    <td>9.0+</td>
+                </tr>
+                <tr>
+                    <td>Schemio.SQL</td>
+                    <td>4.6.2+</td>
+                    <td>2.1</td>
+                    <td>9.0+</td>
+                </tr>
+                <tr>
+                    <td>Schemio.EntityFramework</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>9.0+</td>
+                </tr>
+                <tr>
+                    <td>Schemio.API</td>
+                    <td>4.6.2+</td>
+                    <td>2.0, 2.1</td>
+                    <td>9.0+</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2 id="getting-started">Getting Started</h2>
+
+        <h3>1. Basic Setup</h3>
+
+        <p>First, install the required packages:</p>
+
+        <div class="installation">
+            <pre><code>Install-Package Schemio.Core
+Install-Package Schemio.SQL  # For SQL database support
+Install-Package Schemio.API  # For REST API support
+Install-Package Schemio.EntityFramework # For Entity Framework support</code></pre>
+        </div>
+
+        <h3>2. Define Your Entity</h3>
+
+        <pre><code class="language-csharp">public class Product : IEntity
+{
+    public int ProductId { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public Category Category { get; set; }
+    public Review[] Reviews { get; set; }
+}
+
+public class Category
+{
+    public int CategoryId { get; set; }
+    public string Name { get; set; }
+}
+
+public class Review
+{
+    public int ReviewId { get; set; }
+    public string Comment { get; set; }
+    public int Rating { get; set; }
+}</code></pre>
+
+        <h3>3. Create Query Results</h3>
+
+        <pre><code class="language-csharp">public class ProductResult : IQueryResult
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public int CategoryId { get; set; }
+}
+
+public class CategoryResult : IQueryResult
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+public class ReviewResult : IQueryResult
+{
+    public int Id { get; set; }
+    public string Comment { get; set; }
+    public int Rating { get; set; }
+    public int ProductId { get; set; }
+}</code></pre>
+
+        <h3>4. Implement Queries</h3>
+
+        <h4>SQL Query Example:</h4>
+        <pre><code class="language-csharp">public class ProductQuery : SQLQuery&lt;ProductResult&gt;
+{
+    protected override Func&lt;IDbConnection, Task&lt;ProductResult&gt;&gt; GetQuery(
+        IDataContext context, IQueryResult parentQueryResult)
+    {
+        var request = (ProductRequest)context.Request;
+        
+        return connection =&gt; connection.QueryFirstOrDefaultAsync&lt;ProductResult&gt;(
+            "SELECT ProductId as Id, Name, Price, CategoryId FROM Products WHERE ProductId = @Id",
+            new { Id = request.ProductId });
+    }
+}</code></pre>
+
+        <h4>API Query Example:</h4>
+        <pre><code class="language-csharp">public class ReviewsApiQuery : WebQuery&lt;CollectionResult&lt;ReviewResult&gt;&gt;
+{
+    public ReviewsApiQuery() : base("https://api.reviews.com/") { }
+
+    protected override Func&lt;Uri&gt; GetQuery(IDataContext context, IQueryResult parentQueryResult)
+    {
+        var product = (ProductResult)parentQueryResult;
+        return () =&gt; new Uri($"products/{product.Id}/reviews", UriKind.Relative);
+    }
+}</code></pre>
+
+        <h3>5. Create Transformers</h3>
+
+        <pre><code class="language-csharp">public class ProductTransformer : BaseTransformer&lt;ProductResult, Product&gt;
+{
+    public override void Transform(ProductResult queryResult, Product entity)
+    {
+        entity.ProductId = queryResult.Id;
+        entity.Name = queryResult.Name;
+        entity.Price = queryResult.Price;
+    }
+}
+
+public class CategoryTransformer : BaseTransformer&lt;CategoryResult, Product&gt;
+{
+    public override void Transform(CategoryResult queryResult, Product entity)
+    {
+        if (entity.Category == null)
+            entity.Category = new Category();
+            
+        entity.Category.CategoryId = queryResult.Id;
+        entity.Category.Name = queryResult.Name;
+    }
+}</code></pre>
+
+        <h3>6. Configure Entity Schema</h3>
+
+        <pre><code class="language-csharp">public class ProductConfiguration : EntityConfiguration&lt;Product&gt;
+{
+    public override IEnumerable&lt;Mapping&lt;Product, IQueryResult&gt;&gt; GetSchema()
+    {
+        return CreateSchema.For&lt;Product&gt;()
+            .Map&lt;ProductQuery, ProductTransformer&gt;(For.Paths("product"),
+                product =&gt; product.Dependents
+                    .Map&lt;CategoryQuery, CategoryTransformer&gt;(For.Paths("product/category"))
+                    .Map&lt;ReviewsApiQuery, ReviewsTransformer&gt;(For.Paths("product/reviews")))
+            .End();
+    }
+}</code></pre>
+
+        <h3>7. Register Dependencies</h3>
+
+        <pre><code class="language-csharp">// Using fluent interface
+services.UseSchemio()
+    .WithEngine(c =&gt; new QueryEngine(sqlConfiguration))  // SQL support
+    .WithEngine&lt;Schemio.API.QueryEngine&gt;()              // API support
+    .WithPathMatcher(c =&gt; new XPathMatcher())
+    .WithEntityConfiguration&lt;Product&gt;(c =&gt; new ProductConfiguration());
+
+// Enable logging
+services.AddLogging();
+
+// For API queries
+services.AddHttpClient();
+
+// For SQL queries  
+DbProviderFactories.RegisterFactory("System.Data.SqlClient", SqlClientFactory.Instance);</code></pre>
+
+        <h3>8. Use the Data Provider</h3>
+
+        <pre><code class="language-csharp">public class ProductService
+{
+    private readonly IDataProvider&lt;Product&gt; dataProvider;
+    
+    public ProductService(IDataProvider&lt;Product&gt; dataProvider)
+    {
+        this.dataProvider = dataProvider;
+    }
+    
+    public Product GetProduct(int productId)
+    {
+        var request = new ProductRequest { ProductId = productId };
+        return dataProvider.GetData(request);
+    }
+    
+    public Product GetProductWithReviews(int productId)
+    {
+        var request = new ProductRequest 
+        { 
+            ProductId = productId,
+            SchemaPaths = new[] { "product", "product/reviews" }
+        };
+        return dataProvider.GetData(request);
+    }
+}</code></pre>
+
+        <hr>
+
+        <h2 id="architecture-deep-dive">Architecture Deep Dive</h2>
+
+        <h3>Execution Flow</h3>
+
+        <div class="flow-diagram">
+            <pre>Client Request
+    ↓
+DataProvider
+    ↓
+QueryBuilder
+    ↓
+Generate Query Plan
+    ↓
+QueryExecutor
+    ↓
+Execute Level 1 Queries
+    ↓
+Resolve Dependencies
+    ↓
+Execute Level 2 Queries
+    ↓
+Continue Until All Levels Complete
+    ↓
+EntityBuilder
+    ↓
+Apply Transformers
+    ↓
+Return Aggregated Entity</pre>
+        </div>
+
+        <h3>Component Interactions</h3>
+
+        <h4>1. DataProvider Orchestration</h4>
+        <p>The <code>DataProvider&lt;T&gt;</code> serves as the main orchestrator:</p>
+
+        <pre><code class="language-csharp">public TEntity GetData(IEntityRequest request)
+{
+    var context = new DataContext(request);
+    
+    // Build execution plan
+    var queries = queryBuilder.Build(context);
+    
+    // Execute queries
+    var results = queryExecutor.Execute(context, queries);
+    
+    // Build final entity
+    var entity = entityBuilder.Build(context, results);
+    
+    return entity;
+}</code></pre>
+
+        <h4>2. Query Building Process</h4>
+        <p>The <code>QueryBuilder&lt;T&gt;</code> creates an optimized execution plan:</p>
+
+        <ol>
+            <li><strong>Filter by Schema Paths</strong>: Only include queries matching requested paths</li>
+            <li><strong>Resolve Dependencies</strong>: Build parent-child query relationships</li>
+            <li><strong>Optimize Execution</strong>: Determine optimal query execution order</li>
+        </ol>
+
+        <h4>3. Query Execution Strategy</h4>
+        <p>The <code>QueryExecutor</code> manages parallel execution with dependency resolution:</p>
+
+        <ol>
+            <li><strong>Level-by-Level Execution</strong>: Execute queries level by level to handle dependencies</li>
+            <li><strong>Parallel Processing</strong>: Run independent queries at the same level in parallel</li>
+            <li><strong>Result Propagation</strong>: Pass parent results to child queries</li>
+            <li><strong>Caching</strong>: Cache results marked with <code>[CacheResult]</code> attribute</li>
+        </ol>
+
+        <h4>4. Entity Building Process</h4>
+        <p>The <code>EntityBuilder&lt;T&gt;</code> assembles the final entity:</p>
+
+        <ol>
+            <li><strong>Transformer Resolution</strong>: Match query results to appropriate transformers</li>
+            <li><strong>Sequential Application</strong>: Apply transformers in dependency order</li>
+            <li><strong>Type Safety</strong>: Ensure type compatibility between results and transformers</li>
+        </ol>
+
+        <h3>Memory Management</h3>
+
+        <ul>
+            <li><strong>Query Results</strong>: Results are collected and passed to transformers</li>
+            <li><strong>Caching</strong>: Optional caching for expensive operations</li>
+            <li><strong>Disposal</strong>: Proper disposal of database connections and HTTP clients</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="configuration-guide">Configuration Guide</h2>
+
+        <h3>Entity Configuration Patterns</h3>
+
+        <h4>1. Simple Linear Configuration</h4>
+        <pre><code class="language-csharp">
