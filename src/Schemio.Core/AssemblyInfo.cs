@@ -12,6 +12,9 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 [assembly: InternalsVisibleTo("Schemio.Core.Tests")]
+[assembly: InternalsVisibleTo("Schemio.API")]
+[assembly: InternalsVisibleTo("Schemio.EntityFramework")]
+[assembly: InternalsVisibleTo("Schemio.SQL")]
 [assembly: InternalsVisibleTo("Schemio.SQL.Tests")]
 [assembly: InternalsVisibleTo("Schemio.EntityFramework.Tests")]
 

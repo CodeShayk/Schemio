@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Schemio.Core.Impl
 {
-    public class EntityBuilder<T> : IEntityBuilder<T> where T : IEntity, new()
+    internal class EntityBuilder<T> : IEntityBuilder<T> where T : IEntity, new()
     {
         private readonly IEntityConfiguration<T> entitySchema;
 

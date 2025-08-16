@@ -1,6 +1,6 @@
 namespace Schemio.Core.Helpers
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         public static bool IsNotNullOrEmpty(this string value) => !string.IsNullOrEmpty(value);
     }

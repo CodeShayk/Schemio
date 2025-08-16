@@ -4,6 +4,7 @@ using Schemio.Core.Tests.EntitySetup.Entities;
 
 namespace Schemio.Core.Tests.EntitySetup.Configuration
 {
+    [EntityConfiguration(typeof(Customer))]
     internal class CustomerConfiguration : EntityConfiguration<Customer>
     {
         public override IEnumerable<Mapping<Customer, IQueryResult>> GetSchema()

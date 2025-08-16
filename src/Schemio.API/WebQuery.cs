@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Schemio.Core;
 using Schemio.Core.Helpers;
@@ -61,7 +62,8 @@ namespace Schemio.API
 
         async Task<IQueryResult> IWebQuery.Run(IHttpClientFactory httpClientFactory, ILogger logger)
         {
-            Constraints.NotNull(httpClientFactory);
+            if (httpClientFactory == null)
+                throw new ArgumentNullException(nameof(httpClientFactory));
 
             logger?.LogInformation($"Run api: {GetType().Name}");
 

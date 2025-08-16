@@ -1,8 +1,8 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Schemio.Core;
-using Schemio.Core.Helpers;
 
 namespace Schemio.API
 {
@@ -16,7 +16,8 @@ namespace Schemio.API
             this.httpClientFactory = httpClientFactory;
             this.logger = logger;
 
-            Constraints.NotNull(httpClientFactory);
+            if (httpClientFactory == null)
+                throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         public bool CanExecute(IQuery query) => query != null && query is IWebQuery;

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Schemio.Core.Impl
 {
-    public class QueryExecutor : IQueryExecutor
+    internal class QueryExecutor : IQueryExecutor
     {
         private readonly IEnumerable<IQueryEngine> queryEngines;
 

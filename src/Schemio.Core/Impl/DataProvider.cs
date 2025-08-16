@@ -29,7 +29,7 @@ namespace Schemio.Core.Impl
         {
         }
 
-        public DataProvider(
+        internal DataProvider(
             ILogger<IDataProvider<TEntity>> logger,
             IQueryBuilder<TEntity> queryBuilder,
             IQueryExecutor queryExecutor,

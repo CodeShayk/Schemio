@@ -5,7 +5,7 @@ namespace Schemio.Core
     /// <summary>
     /// Implement to get supported Query result.
     /// </summary>
-    public interface ITransformerQueryResult
+    internal interface ITransformerQueryResult
     {
         /// <summary>
         /// Supported query reslt.

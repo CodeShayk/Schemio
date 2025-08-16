@@ -82,6 +82,7 @@ namespace Schemio.Core.Tests
     }
 
     // Test query engine
+    [QueryEngine]
     public class TestQueryEngine : IQueryEngine
     {
         public bool CanExecute(IQuery query)

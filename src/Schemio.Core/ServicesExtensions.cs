@@ -28,7 +28,7 @@ namespace Schemio.Core
             if (!options.Silent && options.EngineCount == 0)
                 throw new InvalidOperationException("At least one query engine must be registered using WithEngine or WithEngines method.");
 
-            services.AddTransient<IQueryExecutor, QueryExecutor>();
+            services.AddTransient<IQueryExecutor, QueryExecutor>(c => new QueryExecutor(c.GetServices<IQueryEngine>()));
         }
     }
 }

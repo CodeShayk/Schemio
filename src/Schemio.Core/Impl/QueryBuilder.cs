@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Schemio.Core.Impl
 {
-    public class QueryBuilder<T> : IQueryBuilder<T> where T : IEntity
+    internal class QueryBuilder<T> : IQueryBuilder<T> where T : IEntity
     {
         private readonly IEntityConfiguration<T> entitySchema;
         private readonly ISchemaPathMatcher schemaPathMatcher;

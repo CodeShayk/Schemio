@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.1;net9.0</TargetFrameworks>
@@ -21,9 +21,9 @@
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <PackageReleaseNotes>
-      v2.1.0 - Targets .net 4.6.2, .net standard 2.0, .net standard 2.1 and .net 9.0.
+      v2.1.1 - Targets .net 4.6.2, .net standard 2.0, .net standard 2.1 and .net 9.0.
       - Provides Pre and Post Transform hooks.
     </PackageReleaseNotes>
   </PropertyGroup>

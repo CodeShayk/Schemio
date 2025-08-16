@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Schemio.Core.Impl
 {
-    public class EventPublisher
+    internal class EventPublisher
     {
         private readonly ISubscriber<ExecutorResultArgs> subscriber;
 
@@ -15,7 +15,7 @@ namespace Schemio.Core.Impl
         public void PublishEvent(IDataContext context, ExecutorResultArgs args) => subscriber.OnEventHandler(context, args);
     }
 
-    public class ExecutorResultArgs : EventArgs
+    internal class ExecutorResultArgs : EventArgs
     {
         public ExecutorResultArgs(IEnumerable<IQueryResult> result)
         {
@@ -25,7 +25,7 @@ namespace Schemio.Core.Impl
         public IEnumerable<IQueryResult> Result { get; }
     }
 
-    public interface ISubscriber<ExecutorResultArgs>
+    internal interface ISubscriber<ExecutorResultArgs>
     {
         void OnEventHandler(IDataContext context, ExecutorResultArgs e);
     }

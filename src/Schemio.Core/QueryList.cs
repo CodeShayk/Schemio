@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Schemio.Core
 {
-    public class QueryList : IQueryList
+    internal class QueryList : IQueryList
     {
         private readonly List<IQuery> queryList;
 

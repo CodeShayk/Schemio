@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Schemio.Core.Impl
 {
-    public class EventSubscriber : ISubscriber<ExecutorResultArgs>
+    internal class EventSubscriber : ISubscriber<ExecutorResultArgs>
     {
         private readonly IList<ChildrenQueries> dependentQueries;
 

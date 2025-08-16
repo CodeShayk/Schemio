@@ -45,7 +45,7 @@ namespace Schemio.EntityFramework.Tests
             services.UseSchemio(config => config
                 .WithEngine(c => new QueryEngine(configuration))
                 .WithPathMatcher(c => new XPathMatcher())
-                   .WithEntityConfiguration<Customer>(c => new CustomerConfiguration()));
+                .WithEntityConfiguration<Customer>(c => new CustomerConfiguration()));
 
             // 4. Build the service provider
             _serviceProvider = services.BuildServiceProvider();

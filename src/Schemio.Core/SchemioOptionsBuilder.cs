@@ -9,7 +9,7 @@ namespace Schemio.Core
     /// <summary>
     /// Builder for Schemio options.
     /// </summary>
-    public class SchemioOptionsBuilder : ISchemioOptions
+    internal class SchemioOptionsBuilder : ISchemioOptions
     {
         public SchemioOptionsBuilder(IServiceCollection services)
         {
@@ -91,15 +91,15 @@ namespace Schemio.Core
             {
                 Services.AddTransient(typeof(IEntityConfiguration<TEntity>), c => entityConfiguration(c));
 
-                Services.AddTransient<IQueryBuilder<TEntity>, QueryBuilder<TEntity>>(c => new QueryBuilder<TEntity>(c.GetService<IEntityConfiguration<TEntity>>(), c.GetService<ISchemaPathMatcher>()));
-                Services.AddTransient<IEntityBuilder<TEntity>, EntityBuilder<TEntity>>(c => new EntityBuilder<TEntity>(c.GetService<IEntityConfiguration<TEntity>>()));
+                Services.AddTransient<IQueryBuilder<TEntity>, QueryBuilder<TEntity>>(c => new QueryBuilder<TEntity>(c.GetRequiredService<IEntityConfiguration<TEntity>>(), c.GetRequiredService<ISchemaPathMatcher>()));
+                Services.AddTransient<IEntityBuilder<TEntity>, EntityBuilder<TEntity>>(c => new EntityBuilder<TEntity>(c.GetRequiredService<IEntityConfiguration<TEntity>>()));
 
                 Services.AddTransient<IDataProvider<TEntity>, DataProvider<TEntity>>(
                  c => new DataProvider<TEntity>(
                     logger: c.GetService<ILogger<IDataProvider<TEntity>>>(),
-                    queryBuilder: c.GetService<IQueryBuilder<TEntity>>(),
-                    queryExecutor: c.GetService<IQueryExecutor>(),
-                    entityBuilder: c.GetService<IEntityBuilder<TEntity>>()
+                    queryBuilder: c.GetRequiredService<IQueryBuilder<TEntity>>(),
+                    queryExecutor: c.GetRequiredService<IQueryExecutor>(),
+                    entityBuilder: c.GetRequiredService<IEntityBuilder<TEntity>>()
                 ));
 
                 EntityConfigurationCount++;
