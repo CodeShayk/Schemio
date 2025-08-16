@@ -28,18 +28,24 @@ namespace Schemio.Core
         public IQueryResult QueryResult { get; private set; }
 
         /// <summary>
+        /// Indicates whether the transformation has been repeated.
+        /// </summary>
+        internal bool IsRepeated { get; set; }
+
+        /// <summary>
         /// Creates a new instance of TransformContext with the provided parameters.
         /// </summary>
         /// <param name="dataContext"></param>
         /// <param name="queryResult"></param>
         /// <param name="transformerType"></param>
         /// <param name="entity"></param>
-        public TransformContext(IDataContext dataContext, IQueryResult queryResult, ITransformer transformer, IEntity entity)
+        public TransformContext(IDataContext dataContext, IQueryResult queryResult, ITransformer transformer, IEntity entity, bool isRepeated)
         {
             DataContext = dataContext;
             QueryResult = queryResult;
             Transformer = transformer;
             Entity = entity;
+            IsRepeated = isRepeated;
         }
     }
 }

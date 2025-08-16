@@ -10,14 +10,30 @@ namespace Schemio.Core.Tests.DataProvider.Tests
         private EntityBuilder<Customer> _entityBuilder;
         private IEntityConfiguration<Customer> _entitySchema;
 
-        private static List<(Type result, int InvocationCount)> TransformerInvocations;
+        public class Invocations
+        {
+            public Invocations(Type result, int invocationCount, int preInvocationCount, int postInvocationCount)
+            {
+                Result = result;
+                InvocationCount = invocationCount;
+                PreInvocationCount = preInvocationCount;
+                PostInvocationCount = postInvocationCount;
+            }
+
+            public Type Result { get; set; }
+            public int InvocationCount { get; set; }
+            public int PreInvocationCount { get; set; }
+            public int PostInvocationCount { get; set; }
+        }
+
+        private static List<Invocations> TransformerInvocations;
 
         [SetUp]
         public void Setup()
         {
             _entitySchema = new MockCustomerSchema();
             _entityBuilder = new EntityBuilder<Customer>(_entitySchema);
-            TransformerInvocations = new List<(Type result, int InvocationCount)>();
+            TransformerInvocations = new List<Invocations>();
         }
 
         [Test]
@@ -33,21 +49,31 @@ namespace Schemio.Core.Tests.DataProvider.Tests
 
             var entity = _entityBuilder.Build(new DataContext(new EntityContext()), queryList);
 
-            var customerTransforms = TransformerInvocations.Where(x => x.result == typeof(CustomerRecord));
+            var customerTransforms = TransformerInvocations.Where(x => x.Result == typeof(CustomerRecord));
             Assert.That(customerTransforms.Count() == 1);
+            Assert.That(customerTransforms.ElementAt(0).PreInvocationCount == 1);
             Assert.That(customerTransforms.ElementAt(0).InvocationCount == 1);
+            Assert.That(customerTransforms.ElementAt(0).PostInvocationCount == 1);
 
-            var communicationTransforms = TransformerInvocations.Where(x => x.result == typeof(CommunicationRecord));
+            // Assert that the communication transform is invoked twice due to the repeat in PostTransform
+            var communicationTransforms = TransformerInvocations.Where(x => x.Result == typeof(CommunicationRecord));
             Assert.That(communicationTransforms.Count() == 1);
-            Assert.That(communicationTransforms.ElementAt(0).InvocationCount == 1);
+            Assert.That(communicationTransforms.ElementAt(0).PreInvocationCount == 2);
+            Assert.That(communicationTransforms.ElementAt(0).InvocationCount == 2);
+            Assert.That(communicationTransforms.ElementAt(0).PostInvocationCount == 2);
 
-            var orderCollectionTransforms = TransformerInvocations.Where(x => x.result == typeof(CollectionResult<OrderRecord>));
+            var orderCollectionTransforms = TransformerInvocations.Where(x => x.Result == typeof(CollectionResult<OrderRecord>));
             Assert.That(orderCollectionTransforms.Count() == 1);
+            Assert.That(orderCollectionTransforms.ElementAt(0).PreInvocationCount == 1);
             Assert.That(orderCollectionTransforms.ElementAt(0).InvocationCount == 1);
+            Assert.That(orderCollectionTransforms.ElementAt(0).PostInvocationCount == 1);
 
-            var orderItemsCollectionTransforms = TransformerInvocations.Where(x => x.result == typeof(CollectionResult<OrderItemRecord>));
+            // Assert that the order items transform is not invoked due to cancellation in PreTransform
+            var orderItemsCollectionTransforms = TransformerInvocations.Where(x => x.Result == typeof(CollectionResult<OrderItemRecord>));
             Assert.That(orderItemsCollectionTransforms.Count() == 1);
-            Assert.That(orderItemsCollectionTransforms.ElementAt(0).InvocationCount == 1);
+            Assert.That(orderItemsCollectionTransforms.ElementAt(0).PreInvocationCount == 1);
+            Assert.That(orderItemsCollectionTransforms.ElementAt(0).InvocationCount == 0);
+            Assert.That(orderItemsCollectionTransforms.ElementAt(0).PostInvocationCount == 0);
 
             Assert.That(entity, Is.Not.Null);
         }
@@ -58,7 +84,55 @@ namespace Schemio.Core.Tests.DataProvider.Tests
         {
             public override void Transform(TQueryResult queryResult, TEntity entity)
             {
-                TransformerInvocations.Add((queryResult.GetType(), 1));
+                var invocations = TransformerInvocations.Where(x => x.Result == queryResult.GetType());
+
+                if (!invocations.Any())
+                    return;
+
+                var transformInvocations = invocations
+                        .Select(x => new Invocations(x.Result, x.InvocationCount + 1, x.PreInvocationCount, x.PostInvocationCount)).ToList();
+
+                TransformerInvocations.RemoveAll(x => x.Result == queryResult.GetType());
+                TransformerInvocations.AddRange(transformInvocations);
+            }
+
+            public override void PreTransform(PreTransformContext context)
+            {
+                var invocation = TransformerInvocations.FirstOrDefault(x => x.Result == context.QueryResult.GetType());
+
+                if (invocation != null)
+                {
+                    TransformerInvocations.Remove(invocation);
+                    TransformerInvocations.Add(new Invocations(invocation.Result, invocation.InvocationCount, invocation.PreInvocationCount + 1, invocation.PostInvocationCount));
+                }
+                else
+                {
+                    TransformerInvocations.Add(new Invocations(context.QueryResult.GetType(), 0, 1, 0));
+                }
+
+                if (context.QueryResult is CollectionResult<OrderItemRecord> orderItems)
+                {
+                    context.Cancel();
+                }
+            }
+
+            public override void PostTransform(PostTransformContext context)
+            {
+                var invocations = TransformerInvocations.Where(x => x.Result == context.QueryResult.GetType());
+
+                if (!invocations.Any())
+                    return;
+
+                var transformInvocations = invocations
+                        .Select(x => new Invocations(x.Result, x.InvocationCount, x.PreInvocationCount, x.PostInvocationCount + 1)).ToList();
+
+                TransformerInvocations.RemoveAll(x => x.Result == context.QueryResult.GetType());
+                TransformerInvocations.AddRange(transformInvocations);
+
+                if (context.QueryResult is CommunicationRecord communication)
+                {
+                    context.Repeat();
+                }
             }
         }
 

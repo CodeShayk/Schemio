@@ -20,7 +20,7 @@ namespace Schemio.Core
         /// </summary>
         /// <param name="context">TransformContext</param>
         public PostTransformContext(TransformContext context) :
-            base(context.DataContext, context.QueryResult, context.Transformer, context.Entity)
+            base(context.DataContext, context.QueryResult, context.Transformer, context.Entity, context.IsRepeated)
         {
         }
     }

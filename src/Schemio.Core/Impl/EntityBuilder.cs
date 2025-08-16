@@ -44,7 +44,7 @@ namespace Schemio.Core.Impl
 
                 foreach (var queryResult in queryResults)
                     transformers.Where(transformer => IsMatch(((ITransformerQueryResult)transformer).SupportedQueryResult, queryResult.GetType())).ToList()
-                        .ForEach(transformer => TransformWithHooks(new TransformContext(context, queryResult, transformer, entity)));
+                        .ForEach(transformer => TransformWithHooks(new TransformContext(context, queryResult, transformer, entity, false)));
             }
 
             return entity;
@@ -78,15 +78,20 @@ namespace Schemio.Core.Impl
                 context.Transformer.Transform(context.QueryResult, context.Entity);
 
             // Post-transform hook can be used to perform any post-transformation logic if needed.
-            if (context.Transformer is ITransformerHooks transformerPostHook)
+            if (!preTransformContext.IsCancelled && context.Transformer is ITransformerHooks transformerPostHook)
             {
                 // Create a post-transform context to pass the data after transformation.
                 var postTransformContext = new PostTransformContext(context);
                 // Call the post-transform method with the context.
                 transformerPostHook.PostTransform(postTransformContext);
                 // If the post-transform context is repeat, transform again.
-                if (postTransformContext.IsRepeat)
-                    context.Transformer.Transform(context.QueryResult, context.Entity);
+                if (!postTransformContext.IsRepeated && postTransformContext.IsRepeat)
+                {
+                    // Mark as repeated to avoid infinite loop.
+                    postTransformContext.IsRepeated = true;
+                    // Repeat the transformation process.
+                    TransformWithHooks(postTransformContext);
+                }
             }
         }
     }
