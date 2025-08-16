@@ -15,7 +15,7 @@
     <PackageIcon>ninja-icon-16.png</PackageIcon>
     <PackageProjectUrl>https://github.com/CodeShayk/Schemio/wiki</PackageProjectUrl>
     <Copyright>Copyright (c) 2025 Code Shayk</Copyright>
-    <Description>Schemio is a powerful .NET library designed to aggregate data from heterogeneous data stores using a schema-driven approach. It enables developers to hydrate complex object graphs by fetching data from multiple sources (SQL databases, Web APIs, NoSQL stores) using XPath and JSONPath schema mappings.This package provides support for Entity Framework for querying database.This package provides support for Dapper to query SQL database. </Description>   
+    <Description>Schemio is a powerful .NET library designed to aggregate data from heterogeneous data stores using a schema-driven approach. It enables developers to hydrate complex object graphs by fetching data from multiple sources (SQL databases, Web APIs, NoSQL stores) using XPath and JSONPath schema mappings. This package provides support for Dapper to query SQL databases.</Description>   
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
