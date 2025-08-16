@@ -8,7 +8,7 @@
     <Title>Schemio with EntityFramework</Title>
     <Authors>Code Shayk</Authors>
     <Company>Code Shayk</Company>
-    <Description>Schemio is a powerful .NET library designed to aggregate data from heterogeneous data stores using a schema-driven approach. It enables developers to hydrate complex object graphs by fetching data from multiple sources (SQL databases, Web APIs, NoSQL stores) using XPath and JSONPath schema mappings.This package provides support for Entity Framework for querying database. </Description>
+    <Description>Schemio is a powerful .NET library designed to aggregate data from heterogeneous data stores using a schema-driven approach. It enables developers to hydrate complex object graphs by fetching data from multiple sources (SQL databases, Web APIs, NoSQL stores) using XPath and JSONPath schema mappings. This package provides support for Entity Framework for querying database. </Description>
     <Copyright>Copyright (c) 2025 Code Shayk</Copyright>
     <PackageProjectUrl>https://github.com/CodeShayk/Schemio/wiki</PackageProjectUrl>
     <PackageIcon>ninja-icon-16.png</PackageIcon>
